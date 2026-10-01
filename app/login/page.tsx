@@ -73,7 +73,13 @@ function LoginForm() {
         body: JSON.stringify({ userId, password }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Server error (${res.status} ${res.statusText})` };
+      }
+
       if (!res.ok) {
         setError(data.error || 'Authentication failed. Please check credentials.');
         setLoading(false);
@@ -81,8 +87,14 @@ function LoginForm() {
       }
 
       handleLoginSuccess(data.user);
-    } catch {
-      setError('An unexpected network error occurred. Please try again.');
+    } catch (err: any) {
+      console.error('Login error:', err);
+      const msg = err?.message || '';
+      if (msg.includes('fetch') || msg.includes('Network') || msg.includes('Load failed')) {
+        setError('Cannot connect to the RecursiveQnA server. Please ensure the development server is active.');
+      } else {
+        setError(msg || 'An unexpected network error occurred. Please try again.');
+      }
       setLoading(false);
     }
   };
@@ -100,7 +112,13 @@ function LoginForm() {
         body: JSON.stringify({ userId: demoUserId, password: demoPassword }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Server error (${res.status} ${res.statusText})` };
+      }
+
       if (!res.ok) {
         setError(data.error || 'Authentication failed.');
         setLoading(false);
@@ -108,8 +126,14 @@ function LoginForm() {
       }
 
       handleLoginSuccess(data.user);
-    } catch {
-      setError('An unexpected network error occurred during quick sign in.');
+    } catch (err: any) {
+      console.error('Quick login error:', err);
+      const msg = err?.message || '';
+      if (msg.includes('fetch') || msg.includes('Network') || msg.includes('Load failed')) {
+        setError('Cannot connect to the RecursiveQnA server. Please ensure the development server is active.');
+      } else {
+        setError(msg || 'An unexpected error occurred during quick sign in.');
+      }
       setLoading(false);
     }
   };
@@ -131,18 +155,28 @@ function LoginForm() {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Server error (${res.status} ${res.statusText})` };
+      }
+
       if (!res.ok) {
         setError(data.error || 'Registration failed.');
         setLoading(false);
         return;
       }
 
-      // Success
-      router.push('/');
-      router.refresh();
-    } catch {
-      setError('An unexpected network error occurred. Please try again.');
+      handleLoginSuccess(data.user);
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      const msg = err?.message || '';
+      if (msg.includes('fetch') || msg.includes('Network') || msg.includes('Load failed')) {
+        setError('Cannot connect to the RecursiveQnA server. Please ensure the development server is active.');
+      } else {
+        setError(msg || 'An unexpected network error occurred. Please try again.');
+      }
       setLoading(false);
     }
   };

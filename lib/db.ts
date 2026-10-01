@@ -195,6 +195,16 @@ if (userCount.count === 0) {
   } else if (existingAdmin.role !== 'admin') {
     db.prepare('UPDATE users SET role = ? WHERE id = ?').run('admin', 'admin');
   }
+
+  // Ensure demo student account exists
+  const existingStudent = db.prepare('SELECT id FROM users WHERE id = ?').get('alex_student');
+  if (!existingStudent) {
+    const studentPassHash = bcrypt.hashSync('student123', 10);
+    db.prepare(`
+      INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run('alex_student', 'Alex Rivera', studentPassHash, 'user', 'Mathematics & Computer Science', Date.now());
+  }
 }
 }
 

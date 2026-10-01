@@ -14,7 +14,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ThemeProvider$
 ;
 ;
 const metadata = {
-    title: 'EduQuest - Open Academic Q&A & Problem Solutions',
+    title: 'RecursiveQnA - Open Academic Q&A & Problem Solutions',
     description: 'A minimal, distraction-free educational platform where learners post questions in any field with text, photos, and videos, collaborate on solutions, and share insights under verified academic moderation.'
 };
 function RootLayout({ children }) {
