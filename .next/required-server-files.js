@@ -105,7 +105,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/abhayrajsingh/Documents/untitled folder",
+    "outputFileTracingRoot": "/Users/abhayrajsingh/Documents/recursiveqna",
     "enablePrerenderSourceMaps": true,
     "cacheComponents": false,
     "cacheLife": {
@@ -323,13 +323,13 @@ self.__SERVER_FILES_MANIFEST={
     "serverExternalPackages": [
       "better-sqlite3"
     ],
-    "repoRoot": "/Users/abhayrajsingh/Documents/untitled folder",
+    "repoRoot": "/Users/abhayrajsingh/Documents/recursiveqna",
     "turbopack": {
-      "root": "/Users/abhayrajsingh/Documents/untitled folder"
+      "root": "/Users/abhayrajsingh/Documents/recursiveqna"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "/Users/abhayrajsingh/Documents/untitled folder",
+  "appDir": "/Users/abhayrajsingh/Documents/recursiveqna",
   "relativeAppDir": "",
   "files": [
     ".next/package.json",

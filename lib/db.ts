@@ -1,18 +1,29 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 import bcrypt from 'bcryptjs';
 
-const dbPath = path.join(process.cwd(), 'data', 'eduquest.db');
+const dbPath = path.join(process.cwd(), 'data', 'recursiveqna.db');
+const legacyDbPath = path.join(process.cwd(), 'data', 'eduquest.db');
+
+// Seamlessly migrate legacy database file if new one does not exist yet
+if (!fs.existsSync(dbPath) && fs.existsSync(legacyDbPath)) {
+  try {
+    fs.copyFileSync(legacyDbPath, dbPath);
+  } catch (copyErr) {
+    console.error('Error migrating legacy database to recursiveqna.db:', copyErr);
+  }
+}
 
 interface GlobalWithDb {
-  __eduquest_db?: Database.Database;
-  __eduquest_db_initialized?: boolean;
+  __recursiveqna_db?: Database.Database;
+  __recursiveqna_db_initialized?: boolean;
 }
 
 const globalObj = globalThis as unknown as GlobalWithDb;
 
 function getDatabase(): Database.Database {
-  if (!globalObj.__eduquest_db) {
+  if (!globalObj.__recursiveqna_db) {
     const db = new Database(dbPath, { timeout: 20000 });
     // Enable WAL mode for high concurrency
     try {
@@ -22,15 +33,15 @@ function getDatabase(): Database.Database {
     } catch {
       // ignore if already configured
     }
-    globalObj.__eduquest_db = db;
+    globalObj.__recursiveqna_db = db;
   }
-  return globalObj.__eduquest_db;
+  return globalObj.__recursiveqna_db;
 }
 
 const db = getDatabase();
 
-if (!globalObj.__eduquest_db_initialized) {
-  globalObj.__eduquest_db_initialized = true;
+if (!globalObj.__recursiveqna_db_initialized) {
+  globalObj.__recursiveqna_db_initialized = true;
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
@@ -95,7 +106,7 @@ try {
 // Pre-seed Admin and Demo Student account if empty
 const userCount = db.prepare('SELECT count(*) as count FROM users').get() as { count: number };
 if (userCount.count === 0) {
-  const adminPassHash = bcrypt.hashSync('admin123', 10);
+  const adminPassHash = bcrypt.hashSync('admin', 10);
   const studentPassHash = bcrypt.hashSync('student123', 10);
   const now = Date.now();
 
@@ -172,7 +183,19 @@ if (userCount.count === 0) {
     'Richard Feynman famously called this "the most remarkable formula in mathematics". The geometric visualization on the complex unit circle makes it so intuitive!',
     now - 3600000 * 2
   );
+} else {
+  // Ensure root admin account always exists and retains admin role
+  const existingAdmin = db.prepare('SELECT id, role FROM users WHERE id = ?').get('admin') as { id: string; role: string } | undefined;
+  if (!existingAdmin) {
+    const adminPassHash = bcrypt.hashSync('admin', 10);
+    db.prepare(`
+      INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run('admin', 'Academic Administrator', adminPassHash, 'admin', 'Administration', Date.now());
+  } else if (existingAdmin.role !== 'admin') {
+    db.prepare('UPDATE users SET role = ? WHERE id = ?').run('admin', 'admin');
   }
+}
 }
 
 export default db;

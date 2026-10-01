@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import db from './db';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eduquest-academic-secret-key-2026-secure';
+const JWT_SECRET = process.env.JWT_SECRET || 'recursiveqna-academic-secret-key-2026-secure';
 
 export interface UserSession {
   id: string;
@@ -35,7 +35,7 @@ export function verifyToken(token: string): UserSession | null {
 
 export async function getCurrentUser(): Promise<UserSession | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get('edu_token')?.value;
+  const token = cookieStore.get('rqna_token')?.value || cookieStore.get('edu_token')?.value;
   if (!token) return null;
 
   const session = verifyToken(token);

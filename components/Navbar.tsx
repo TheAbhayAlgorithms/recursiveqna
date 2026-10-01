@@ -40,7 +40,7 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
             <GraduationCap size={22} />
           </div>
           <div>
-            <span>EduQuest</span>
+            <span>RecursiveQnA</span>
             <span style={{ 
               display: 'block', 
               fontSize: '11px', 

@@ -217,7 +217,7 @@ export default function AdminDashboardPage() {
             <Link href="/" className="btn btn-primary">
               Return to Platform Home
             </Link>
-            <Link href="/login" className="btn btn-outline">
+            <Link href="/login?redirect=/admin" className="btn btn-outline">
               Log in with Admin Account
             </Link>
           </div>

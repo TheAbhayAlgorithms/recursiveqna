@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('edu_theme') as Theme | null;
+    const savedTheme = (localStorage.getItem('rqna_theme') || localStorage.getItem('edu_theme')) as Theme | null;
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = () => {
     const nextTheme: Theme = theme === 'light' ? 'dark' : 'light';
     setTheme(nextTheme);
-    localStorage.setItem('edu_theme', nextTheme);
+    localStorage.setItem('rqna_theme', nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
   };
 

@@ -49,6 +49,14 @@ export async function POST(request: Request) {
       user: sessionUser,
     });
 
+    response.cookies.set('rqna_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 30 * 24 * 60 * 60,
+    });
+
     response.cookies.set('edu_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

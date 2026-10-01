@@ -3,7 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'EduQuest - Open Academic Q&A & Problem Solutions',
+  title: 'RecursiveQnA - Open Academic Q&A & Problem Solutions',
   description: 'A minimal, distraction-free educational platform where learners post questions in any field with text, photos, and videos, collaborate on solutions, and share insights under verified academic moderation.',
 };
 

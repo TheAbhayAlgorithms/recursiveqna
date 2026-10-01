@@ -32,12 +32,34 @@ function LoginForm() {
   const [fieldOfInterest, setFieldOfInterest] = useState('Mathematics');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
     if (searchParams.get('tab') === 'register') {
       setTab('register');
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.user) setCurrentUser(data.user);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleLoginSuccess = (userObj: any) => {
+    const redirectParam = searchParams.get('redirect');
+    if (redirectParam) {
+      router.push(redirectParam);
+    } else if (userObj?.role === 'admin') {
+      router.push('/admin');
+    } else {
+      router.push('/');
+    }
+    router.refresh();
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,11 +80,36 @@ function LoginForm() {
         return;
       }
 
-      // Successful login
-      router.push('/');
-      router.refresh();
+      handleLoginSuccess(data.user);
     } catch {
       setError('An unexpected network error occurred. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleQuickLogin = async (demoUserId: string, demoPassword: string) => {
+    setUserId(demoUserId);
+    setPassword(demoPassword);
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: demoUserId, password: demoPassword }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Authentication failed.');
+        setLoading(false);
+        return;
+      }
+
+      handleLoginSuccess(data.user);
+    } catch {
+      setError('An unexpected network error occurred during quick sign in.');
       setLoading(false);
     }
   };
@@ -116,7 +163,7 @@ function LoginForm() {
               <GraduationCap size={22} />
             </div>
             <div>
-              <span>EduQuest</span>
+              <span>RecursiveQnA</span>
               <span style={{ 
                 display: 'block', 
                 fontSize: '11px', 
@@ -180,6 +227,39 @@ function LoginForm() {
                   : 'Join the community to collaborate, solve problems, and exchange ideas.'}
               </p>
             </div>
+
+            {/* Current user session alert if already logged in */}
+            {currentUser && (
+              <div style={{
+                marginBottom: '18px',
+                padding: '10px 14px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--bg-accent-subtle)',
+                border: '1px solid var(--border-color)',
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '10px'
+              }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Currently authenticated:</div>
+                  <strong style={{ color: 'var(--text-primary)' }}>{currentUser.name}</strong>{' '}
+                  <span style={{ fontSize: '11px', color: currentUser.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)' }}>
+                    ({currentUser.role === 'admin' ? 'Admin' : `@${currentUser.id}`})
+                  </span>
+                </div>
+                {currentUser.role === 'admin' ? (
+                  <Link href="/admin" className="btn btn-primary" style={{ fontSize: '12px', padding: '5px 12px' }}>
+                    Admin Panel →
+                  </Link>
+                ) : (
+                  <Link href="/" className="btn btn-outline" style={{ fontSize: '12px', padding: '5px 12px' }}>
+                    Home →
+                  </Link>
+                )}
+              </div>
+            )}
 
             {/* Segmented Switcher */}
             <div style={{ 
@@ -298,6 +378,77 @@ function LoginForm() {
                   {loading ? 'Verifying Credentials...' : 'Sign In'}
                   <ArrowRight size={16} />
                 </button>
+
+                {/* Quick Presets / Demo & Admin Credentials */}
+                <div style={{
+                  marginTop: '20px',
+                  padding: '14px',
+                  background: 'var(--bg-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-light)'
+                }}>
+                  <div style={{ 
+                    fontSize: '11px', 
+                    fontWeight: 700, 
+                    color: 'var(--text-muted)', 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em', 
+                    marginBottom: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span>Quick Demo & Admin Logins</span>
+                    <span style={{ fontSize: '10px', fontWeight: 500, color: 'var(--color-primary)' }}>1-Click Login</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => handleQuickLogin('admin', 'admin')}
+                      className="btn btn-secondary"
+                      style={{ 
+                        fontSize: '12px', 
+                        padding: '8px 10px', 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        gap: '2px',
+                        border: '1px solid var(--border-color)',
+                        background: 'var(--bg-card)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 600, color: 'var(--color-danger)' }}>
+                        <ShieldCheck size={14} />
+                        <span>Admin</span>
+                      </div>
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>admin / admin</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => handleQuickLogin('alex_student', 'student123')}
+                      className="btn btn-secondary"
+                      style={{ 
+                        fontSize: '12px', 
+                        padding: '8px 10px', 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        gap: '2px',
+                        border: '1px solid var(--border-color)',
+                        background: 'var(--bg-card)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 600, color: 'var(--color-primary)' }}>
+                        <GraduationCap size={14} />
+                        <span>Student</span>
+                      </div>
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>alex_student / student123</span>
+                    </button>
+                  </div>
+                </div>
               </form>
             ) : (
               /* Register Form */
