@@ -122,15 +122,15 @@ async function POST(request) {
         }
         const cleanUserId = userId.trim().toLowerCase();
         const cleanPassword = typeof password === 'string' ? password.trim() : '';
-        let user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM users WHERE LOWER(id) = ?').get(cleanUserId);
+        let user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM users WHERE LOWER(id) = ?').get(cleanUserId);
         // Self-healing: Ensure root admin user exists
         if (!user && cleanUserId === 'admin') {
             const defaultHash = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash('admin', 10);
-            __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+            await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
         INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
         VALUES (?, ?, ?, ?, ?, ?)
       `).run('admin', 'Academic Administrator', defaultHash, 'admin', 'Administration', Date.now());
-            user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM users WHERE LOWER(id) = ?').get('admin');
+            user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM users WHERE LOWER(id) = ?').get('admin');
         }
         if (!user) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -156,7 +156,7 @@ async function POST(request) {
                 isValid = true;
                 try {
                     const newHash = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash(cleanPassword || password, 10);
-                    __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
+                    await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
                 } catch (updateErr) {
                     console.error('Failed to sync admin password hash:', updateErr);
                 }
@@ -248,7 +248,7 @@ async function getCurrentUser() {
     const session = verifyToken(token);
     if (!session) return null;
     // Verify user still exists in database
-    const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,

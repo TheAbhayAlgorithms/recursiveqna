@@ -136,7 +136,7 @@ async function POST(request) {
             });
         }
         // Verify question exists
-        const question = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id FROM questions WHERE id = ?').get(questionId);
+        const question = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id FROM questions WHERE id = ?').get(questionId);
         if (!question) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Question not found'
@@ -146,11 +146,11 @@ async function POST(request) {
         }
         const solutionId = 'sol_' + __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["default"].randomUUID();
         const now = Date.now();
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
       INSERT INTO solutions (id, question_id, user_id, user_name, content, image_url, video_url, is_verified, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(solutionId, questionId, user.id, user.name, content.trim(), imageUrl || null, videoUrl || null, user.role === 'admin' ? 1 : 0, now);
-        const created = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM solutions WHERE id = ?').get(solutionId);
+        const created = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT * FROM solutions WHERE id = ?').get(solutionId);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             solution: created
@@ -208,7 +208,7 @@ async function getCurrentUser() {
     const session = verifyToken(token);
     if (!session) return null;
     // Verify user still exists in database
-    const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // Verify question exists
-    const question = db.prepare('SELECT id FROM questions WHERE id = ?').get(questionId);
+    const question = await db.prepare('SELECT id FROM questions WHERE id = ?').get(questionId);
     if (!question) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const solutionId = 'sol_' + crypto.randomUUID();
     const now = Date.now();
 
-    db.prepare(`
+    await db.prepare(`
       INSERT INTO solutions (id, question_id, user_id, user_name, content, image_url, video_url, is_verified, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       now
     );
 
-    const created = db.prepare('SELECT * FROM solutions WHERE id = ?').get(solutionId);
+    const created = await db.prepare('SELECT * FROM solutions WHERE id = ?').get(solutionId);
 
     return NextResponse.json({
       success: true,

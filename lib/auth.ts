@@ -42,7 +42,7 @@ export async function getCurrentUser(): Promise<UserSession | null> {
   if (!session) return null;
 
   // Verify user still exists in database
-  const user = db.prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id) as {
+  const user = (await db.prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id)) as {
     id: string;
     name: string;
     role: 'admin' | 'user';

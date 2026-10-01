@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
-    const users = db.prepare(`
+    const users = await db.prepare(`
       SELECT 
         u.id,
         u.name,
@@ -49,7 +49,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'Cannot demote the primary root admin account' }, { status: 400 });
     }
 
-    db.prepare('UPDATE users SET role = ? WHERE id = ?').run(newRole, targetUserId);
+    await db.prepare('UPDATE users SET role = ? WHERE id = ?').run(newRole, targetUserId);
 
     return NextResponse.json({ success: true, message: `User role updated to ${newRole}` });
   } catch (err) {
@@ -76,7 +76,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Cannot delete your own active admin account' }, { status: 400 });
     }
 
-    db.prepare('DELETE FROM users WHERE id = ?').run(targetUserId);
+    await db.prepare('DELETE FROM users WHERE id = ?').run(targetUserId);
 
     return NextResponse.json({ success: true, message: 'User deleted successfully' });
   } catch (err) {

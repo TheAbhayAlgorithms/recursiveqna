@@ -125,7 +125,7 @@ async function GET() {
                 status: 403
             });
         }
-        const users = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+        const users = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
       SELECT 
         u.id,
         u.name,
@@ -178,7 +178,7 @@ async function PATCH(request) {
                 status: 400
             });
         }
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('UPDATE users SET role = ? WHERE id = ?').run(newRole, targetUserId);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('UPDATE users SET role = ? WHERE id = ?').run(newRole, targetUserId);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             message: `User role updated to ${newRole}`
@@ -218,7 +218,7 @@ async function DELETE(request) {
                 status: 400
             });
         }
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('DELETE FROM users WHERE id = ?').run(targetUserId);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('DELETE FROM users WHERE id = ?').run(targetUserId);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             message: 'User deleted successfully'
@@ -276,7 +276,7 @@ async function getCurrentUser() {
     const session = verifyToken(token);
     if (!session) return null;
     // Verify user still exists in database
-    const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,

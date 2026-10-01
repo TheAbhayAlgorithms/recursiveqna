@@ -1,211 +1,253 @@
-import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
 
-const dbPath = path.join(process.cwd(), 'data', 'recursiveqna.db');
-const legacyDbPath = path.join(process.cwd(), 'data', 'eduquest.db');
+const isPostgres = Boolean(process.env.DATABASE_URL);
 
-// Seamlessly migrate legacy database file if new one does not exist yet
-if (!fs.existsSync(dbPath) && fs.existsSync(legacyDbPath)) {
-  try {
-    fs.copyFileSync(legacyDbPath, dbPath);
-  } catch (copyErr) {
-    console.error('Error migrating legacy database to recursiveqna.db:', copyErr);
+interface StatementResult {
+  get: <T = any>(...params: any[]) => Promise<T | undefined>;
+  all: <T = any>(...params: any[]) => Promise<T[]>;
+  run: (...params: any[]) => Promise<{ changes?: number }>;
+}
+
+export interface UnifiedDb {
+  isPostgres: boolean;
+  get: <T = any>(sql: string, params?: any[]) => Promise<T | undefined>;
+  all: <T = any>(sql: string, params?: any[]) => Promise<T[]>;
+  run: (sql: string, params?: any[]) => Promise<{ changes?: number }>;
+  prepare: (sql: string) => StatementResult;
+  exec: (sql: string) => Promise<void>;
+}
+
+// Convert SQLite '?' parameter placeholders to PostgreSQL '$1, $2, ...'
+function convertPlaceholders(sql: string): string {
+  let index = 1;
+  return sql.replace(/\?/g, () => `$${index++}`);
+}
+
+function normalizeRow(row: any): any {
+  if (!row || typeof row !== 'object') return row;
+  const normalized: any = Array.isArray(row) ? [] : {};
+  for (const [key, value] of Object.entries(row)) {
+    if (
+      (key.toLowerCase().includes('count') || key.toLowerCase().endsWith('_count')) &&
+      typeof value === 'string' &&
+      !isNaN(Number(value))
+    ) {
+      normalized[key] = Number(value);
+    } else {
+      normalized[key] = value;
+    }
   }
+  return normalized;
 }
 
 interface GlobalWithDb {
-  __recursiveqna_db?: Database.Database;
-  __recursiveqna_db_initialized?: boolean;
+  __recursiveqna_unified_db?: UnifiedDb;
 }
 
 const globalObj = globalThis as unknown as GlobalWithDb;
 
-function getDatabase(): Database.Database {
-  if (!globalObj.__recursiveqna_db) {
-    const db = new Database(dbPath, { timeout: 20000 });
-    // Enable WAL mode for high concurrency
+function initDb(): UnifiedDb {
+  if (globalObj.__recursiveqna_unified_db) return globalObj.__recursiveqna_unified_db;
+
+  if (isPostgres) {
+    const postgres = require('postgres');
+    const sql = postgres(process.env.DATABASE_URL!, {
+      ssl: process.env.NODE_ENV === 'production' ? 'require' : { rejectUnauthorized: false },
+      max: 10,
+      idle_timeout: 20,
+    });
+
+    const get = async <T = any>(rawSql: string, params: any[] = []): Promise<T | undefined> => {
+      const converted = convertPlaceholders(rawSql);
+      const rows = await sql.unsafe(converted, params);
+      return rows[0] ? (normalizeRow(rows[0]) as T) : undefined;
+    };
+
+    const all = async <T = any>(rawSql: string, params: any[] = []): Promise<T[]> => {
+      const converted = convertPlaceholders(rawSql);
+      const rows = await sql.unsafe(converted, params);
+      return rows.map((r: any) => normalizeRow(r) as T);
+    };
+
+    const run = async (rawSql: string, params: any[] = []): Promise<{ changes?: number }> => {
+      const converted = convertPlaceholders(rawSql);
+      const res = await sql.unsafe(converted, params);
+      return { changes: res.count };
+    };
+
+    const exec = async (rawSql: string): Promise<void> => {
+      await sql.unsafe(rawSql);
+    };
+
+    const instance: UnifiedDb = {
+      isPostgres: true,
+      get,
+      all,
+      run,
+      prepare: (statementSql: string) => ({
+        get: (...params: any[]) => get(statementSql, params),
+        all: (...params: any[]) => all(statementSql, params),
+        run: (...params: any[]) => run(statementSql, params),
+      }),
+      exec,
+    };
+
+    globalObj.__recursiveqna_unified_db = instance;
+    return instance;
+  }
+
+  // --- SQLite Mode (Local development fallback) ---
+  const Database = require('better-sqlite3');
+  const dbPath = path.join(process.cwd(), 'data', 'recursiveqna.db');
+  const legacyDbPath = path.join(process.cwd(), 'data', 'eduquest.db');
+
+  if (!fs.existsSync(dbPath) && fs.existsSync(legacyDbPath)) {
     try {
-      db.pragma('journal_mode = WAL');
-      db.pragma('foreign_keys = ON');
-      db.pragma('busy_timeout = 20000');
-    } catch {
-      // ignore if already configured
-    }
-    globalObj.__recursiveqna_db = db;
+      fs.copyFileSync(legacyDbPath, dbPath);
+    } catch {}
   }
-  return globalObj.__recursiveqna_db;
-}
 
-const db = getDatabase();
+  const sqlite = new Database(dbPath, { timeout: 20000 });
+  try {
+    sqlite.pragma('journal_mode = WAL');
+    sqlite.pragma('foreign_keys = ON');
+    sqlite.pragma('busy_timeout = 20000');
+  } catch {}
 
-if (!globalObj.__recursiveqna_db_initialized) {
-  globalObj.__recursiveqna_db_initialized = true;
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    password_hash TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'user',
-    field_of_interest TEXT DEFAULT 'General',
-    created_at INTEGER NOT NULL
-  );
+  // Schema initialization for SQLite
+  sqlite.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      password_hash TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT 'user',
+      field_of_interest TEXT DEFAULT 'General',
+      created_at INTEGER NOT NULL
+    );
 
-  CREATE TABLE IF NOT EXISTS questions (
-    id TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    user_name TEXT NOT NULL,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    field TEXT NOT NULL,
-    image_url TEXT,
-    video_url TEXT,
-    created_at INTEGER NOT NULL,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-  );
+    CREATE TABLE IF NOT EXISTS questions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      user_name TEXT NOT NULL,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      field TEXT NOT NULL,
+      image_url TEXT,
+      video_url TEXT,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
 
-  CREATE TABLE IF NOT EXISTS solutions (
-    id TEXT PRIMARY KEY,
-    question_id TEXT NOT NULL,
-    user_id TEXT NOT NULL,
-    user_name TEXT NOT NULL,
-    content TEXT NOT NULL,
-    image_url TEXT,
-    video_url TEXT,
-    is_verified INTEGER DEFAULT 0,
-    created_at INTEGER NOT NULL,
-    FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-  );
+    CREATE TABLE IF NOT EXISTS solutions (
+      id TEXT PRIMARY KEY,
+      question_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      user_name TEXT NOT NULL,
+      content TEXT NOT NULL,
+      image_url TEXT,
+      video_url TEXT,
+      is_verified INTEGER DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
 
-  CREATE TABLE IF NOT EXISTS thoughts (
-    id TEXT PRIMARY KEY,
-    question_id TEXT NOT NULL,
-    solution_id TEXT,
-    user_id TEXT NOT NULL,
-    user_name TEXT NOT NULL,
-    content TEXT NOT NULL,
-    created_at INTEGER NOT NULL,
-    FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,
-    FOREIGN KEY(solution_id) REFERENCES solutions(id) ON DELETE CASCADE,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-  );
+    CREATE TABLE IF NOT EXISTS thoughts (
+      id TEXT PRIMARY KEY,
+      question_id TEXT NOT NULL,
+      solution_id TEXT,
+      user_id TEXT NOT NULL,
+      user_name TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,
+      FOREIGN KEY(solution_id) REFERENCES solutions(id) ON DELETE CASCADE,
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
 
-  CREATE INDEX IF NOT EXISTS idx_questions_field ON questions(field, created_at DESC);
-  CREATE INDEX IF NOT EXISTS idx_solutions_qid ON solutions(question_id, created_at ASC);
-  CREATE INDEX IF NOT EXISTS idx_thoughts_qid ON thoughts(question_id, created_at ASC);
-  CREATE INDEX IF NOT EXISTS idx_thoughts_sid ON thoughts(solution_id, created_at ASC);
-`);
-
-try {
-  db.exec(`ALTER TABLE thoughts ADD COLUMN solution_id TEXT;`);
-} catch {}
-
-
-// Pre-seed Admin and Demo Student account if empty
-const userCount = db.prepare('SELECT count(*) as count FROM users').get() as { count: number };
-if (userCount.count === 0) {
-  const adminPassHash = bcrypt.hashSync('admin', 10);
-  const studentPassHash = bcrypt.hashSync('student123', 10);
-  const now = Date.now();
-
-  const insertUser = db.prepare(`
-    INSERT OR IGNORE INTO users (id, name, password_hash, role, field_of_interest, created_at)
-    VALUES (?, ?, ?, ?, ?, ?)
+    CREATE INDEX IF NOT EXISTS idx_questions_field ON questions(field, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_solutions_qid ON solutions(question_id, created_at ASC);
+    CREATE INDEX IF NOT EXISTS idx_thoughts_qid ON thoughts(question_id, created_at ASC);
+    CREATE INDEX IF NOT EXISTS idx_thoughts_sid ON thoughts(solution_id, created_at ASC);
   `);
 
-  insertUser.run('admin', 'Academic Administrator', adminPassHash, 'admin', 'Administration', now);
-  insertUser.run('alex_student', 'Alex Rivera', studentPassHash, 'user', 'Mathematics & Computer Science', now);
-  insertUser.run('sophia_phy', 'Sophia Chen', studentPassHash, 'user', 'Physics & Engineering', now);
+  try {
+    sqlite.exec(`ALTER TABLE thoughts ADD COLUMN solution_id TEXT;`);
+  } catch {}
 
-  // Pre-seed sample realistic educational questions
-  const insertQuestion = db.prepare(`
-    INSERT OR IGNORE INTO questions (id, user_id, user_name, title, content, field, image_url, video_url, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  const q1Id = 'q_euler_identity';
-  insertQuestion.run(
-    q1Id,
-    'alex_student',
-    'Alex Rivera',
-    'How do we derive Euler’s Formula e^(i*pi) + 1 = 0 from Taylor series expansion?',
-    'I understand that Euler’s identity links five fundamental mathematical constants (e, i, pi, 1, and 0). However, I need a rigorous breakdown of how expanding e^(ix) via Maclaurin series separates into real and imaginary parts to produce cos(x) + i*sin(x). Could someone explain each step clearly?',
-    'Mathematics',
-    null,
-    null,
-    now - 3600000 * 5
-  );
-
-  const q2Id = 'q_dijkstra_astar';
-  insertQuestion.run(
-    q2Id,
-    'sophia_phy',
-    'Sophia Chen',
-    'When does A* search algorithm degrade to Dijkstra, and why must the heuristic be admissible?',
-    'We are analyzing pathfinding algorithms in our graph theory seminar. Could someone explain the theoretical constraint of admissibility (h(n) <= true cost) and consistency? What happens if h(n) = 0 for all nodes?',
-    'Computer Science',
-    null,
-    null,
-    now - 3600000 * 2
-  );
-
-  // Pre-seed sample solution
-  const insertSolution = db.prepare(`
-    INSERT OR IGNORE INTO solutions (id, question_id, user_id, user_name, content, image_url, video_url, is_verified, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  insertSolution.run(
-    'sol_1',
-    q1Id,
-    'admin',
-    'Academic Administrator',
-    'Here is the complete algebraic proof via Taylor series:\n\n1. The Taylor expansion of e^z around 0 is:\ne^z = 1 + z + z^2/2! + z^3/3! + z^4/4! + ...\n\n2. Substitute z = ix (where i^2 = -1, i^3 = -i, i^4 = 1):\ne^(ix) = 1 + ix - x^2/2! - ix^3/3! + x^4/4! + ix^5/5! - ...\n\n3. Regroup into real and imaginary terms:\nReal part: (1 - x^2/2! + x^4/4! - ...) = cos(x)\nImaginary part: i * (x - x^3/3! + x^5/5! - ...) = i * sin(x)\n\n4. Therefore: e^(ix) = cos(x) + i*sin(x).\nWhen x = π: e^(iπ) = cos(π) + i*sin(π) = -1 + 0 = -1.\nRearranging yields: e^(iπ) + 1 = 0. Q.E.D.',
-    null,
-    null,
-    1,
-    now - 3600000 * 3
-  );
-
-  // Pre-seed sample thought
-  const insertThought = db.prepare(`
-    INSERT OR IGNORE INTO thoughts (id, question_id, user_id, user_name, content, created_at)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `);
-
-  insertThought.run(
-    'th_1',
-    q1Id,
-    'sophia_phy',
-    'Sophia Chen',
-    'Richard Feynman famously called this "the most remarkable formula in mathematics". The geometric visualization on the complex unit circle makes it so intuitive!',
-    now - 3600000 * 2
-  );
-} else {
-  // Ensure root admin account always exists and retains admin role
-  const existingAdmin = db.prepare('SELECT id, role FROM users WHERE id = ?').get('admin') as { id: string; role: string } | undefined;
-  if (!existingAdmin) {
+  // Pre-seed Admin and Demo Student account if empty
+  const userCount = sqlite.prepare('SELECT count(*) as count FROM users').get() as { count: number };
+  if (userCount.count === 0) {
     const adminPassHash = bcrypt.hashSync('admin', 10);
-    db.prepare(`
-      INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run('admin', 'Academic Administrator', adminPassHash, 'admin', 'Administration', Date.now());
-  } else if (existingAdmin.role !== 'admin') {
-    db.prepare('UPDATE users SET role = ? WHERE id = ?').run('admin', 'admin');
-  }
-
-  // Ensure demo student account exists
-  const existingStudent = db.prepare('SELECT id FROM users WHERE id = ?').get('alex_student');
-  if (!existingStudent) {
     const studentPassHash = bcrypt.hashSync('student123', 10);
-    db.prepare(`
-      INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
+    const now = Date.now();
+
+    const insertUser = sqlite.prepare(`
+      INSERT OR IGNORE INTO users (id, name, password_hash, role, field_of_interest, created_at)
       VALUES (?, ?, ?, ?, ?, ?)
-    `).run('alex_student', 'Alex Rivera', studentPassHash, 'user', 'Mathematics & Computer Science', Date.now());
+    `);
+
+    insertUser.run('admin', 'Academic Administrator', adminPassHash, 'admin', 'Administration', now);
+    insertUser.run('alex_student', 'Alex Rivera', studentPassHash, 'user', 'Mathematics & Computer Science', now);
+    insertUser.run('sophia_phy', 'Sophia Chen', studentPassHash, 'user', 'Physics & Engineering', now);
+  } else {
+    // Ensure root admin account always exists and retains admin role
+    const existingAdmin = sqlite.prepare('SELECT id, role FROM users WHERE id = ?').get('admin') as { id: string; role: string } | undefined;
+    if (!existingAdmin) {
+      const adminPassHash = bcrypt.hashSync('admin', 10);
+      sqlite.prepare(`
+        INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run('admin', 'Academic Administrator', adminPassHash, 'admin', 'Administration', Date.now());
+    } else if (existingAdmin.role !== 'admin') {
+      sqlite.prepare('UPDATE users SET role = ? WHERE id = ?').run('admin', 'admin');
+    }
+
+    const existingStudent = sqlite.prepare('SELECT id FROM users WHERE id = ?').get('alex_student');
+    if (!existingStudent) {
+      const studentPassHash = bcrypt.hashSync('student123', 10);
+      sqlite.prepare(`
+        INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run('alex_student', 'Alex Rivera', studentPassHash, 'user', 'Mathematics & Computer Science', Date.now());
+    }
   }
-}
+
+  const get = async <T = any>(rawSql: string, params: any[] = []): Promise<T | undefined> => {
+    return sqlite.prepare(rawSql).get(...params) as T | undefined;
+  };
+
+  const all = async <T = any>(rawSql: string, params: any[] = []): Promise<T[]> => {
+    return sqlite.prepare(rawSql).all(...params) as T[];
+  };
+
+  const run = async (rawSql: string, params: any[] = []): Promise<{ changes?: number }> => {
+    const res = sqlite.prepare(rawSql).run(...params);
+    return { changes: res.changes };
+  };
+
+  const exec = async (rawSql: string): Promise<void> => {
+    sqlite.exec(rawSql);
+  };
+
+  const instance: UnifiedDb = {
+    isPostgres: false,
+    get,
+    all,
+    run,
+    prepare: (statementSql: string) => ({
+      get: (...params: any[]) => get(statementSql, params),
+      all: (...params: any[]) => all(statementSql, params),
+      run: (...params: any[]) => run(statementSql, params),
+    }),
+    exec,
+  };
+
+  globalObj.__recursiveqna_unified_db = instance;
+  return instance;
 }
 
+const db = initDb();
 export default db;

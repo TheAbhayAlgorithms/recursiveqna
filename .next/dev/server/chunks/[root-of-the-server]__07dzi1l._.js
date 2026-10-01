@@ -136,7 +136,7 @@ async function POST(request) {
             });
         }
         // Check if user ID already exists
-        const existing = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id FROM users WHERE LOWER(id) = ?').get(cleanUserId);
+        const existing = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id FROM users WHERE LOWER(id) = ?').get(cleanUserId);
         if (existing) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'This User ID is already taken. Please choose another.'
@@ -147,7 +147,7 @@ async function POST(request) {
         const passwordHash = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash(password, 10);
         const now = Date.now();
         const role = cleanUserId === 'admin' ? 'admin' : 'user';
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
       INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(cleanUserId, name.trim(), passwordHash, role, field_of_interest || 'General', now);
@@ -230,7 +230,7 @@ async function getCurrentUser() {
     const session = verifyToken(token);
     if (!session) return null;
     // Verify user still exists in database
-    const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,

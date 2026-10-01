@@ -20,12 +20,12 @@ export async function DELETE(
 
     const { id } = await params;
 
-    const solution = db.prepare('SELECT id FROM solutions WHERE id = ?').get(id);
+    const solution = await db.prepare('SELECT id FROM solutions WHERE id = ?').get(id);
     if (!solution) {
       return NextResponse.json({ error: 'Solution not found' }, { status: 404 });
     }
 
-    db.prepare('DELETE FROM solutions WHERE id = ?').run(id);
+    await db.prepare('DELETE FROM solutions WHERE id = ?').run(id);
 
     return NextResponse.json({
       success: true,
@@ -51,12 +51,12 @@ export async function PATCH(
     const { id } = await params;
     const { isVerified } = await request.json();
 
-    const solution = db.prepare(`
+    const solution = (await db.prepare(`
       SELECT s.*, q.user_id as question_author_id
       FROM solutions s
       JOIN questions q ON s.question_id = q.id
       WHERE s.id = ?
-    `).get(id) as { id: string; question_author_id: string; is_verified: number } | undefined;
+    `).get(id)) as { id: string; question_author_id: string; is_verified: number } | undefined;
 
     if (!solution) {
       return NextResponse.json({ error: 'Solution not found' }, { status: 404 });
@@ -71,7 +71,7 @@ export async function PATCH(
     }
 
     const newStatus = isVerified ? 1 : 0;
-    db.prepare('UPDATE solutions SET is_verified = ? WHERE id = ?').run(newStatus, id);
+    await db.prepare('UPDATE solutions SET is_verified = ? WHERE id = ?').run(newStatus, id);
 
     return NextResponse.json({
       success: true,

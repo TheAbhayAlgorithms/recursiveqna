@@ -18,7 +18,7 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    db.prepare('DELETE FROM thoughts WHERE id = ?').run(id);
+    await db.prepare('DELETE FROM thoughts WHERE id = ?').run(id);
 
     return NextResponse.json({
       success: true,

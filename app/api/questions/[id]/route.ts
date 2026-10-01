@@ -11,7 +11,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const question = db.prepare(`
+    const question = await db.prepare(`
       SELECT 
         q.*,
         u.role as user_role,
@@ -25,7 +25,7 @@ export async function GET(
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     }
 
-    const rawSolutions = db.prepare(`
+    const rawSolutions = (await db.prepare(`
       SELECT 
         s.*,
         u.role as user_role
@@ -33,9 +33,9 @@ export async function GET(
       LEFT JOIN users u ON s.user_id = u.id
       WHERE s.question_id = ?
       ORDER BY s.is_verified DESC, s.created_at ASC
-    `).all(id) as any[];
+    `).all(id)) as any[];
 
-    const rawThoughts = db.prepare(`
+    const rawThoughts = (await db.prepare(`
       SELECT 
         t.*,
         u.role as user_role
@@ -43,7 +43,7 @@ export async function GET(
       LEFT JOIN users u ON t.user_id = u.id
       WHERE t.question_id = ?
       ORDER BY t.created_at ASC
-    `).all(id) as any[];
+    `).all(id)) as any[];
 
     const solutions = rawSolutions.map((sol, index) => {
       const comments = rawThoughts.filter(t => 
@@ -85,15 +85,15 @@ export async function DELETE(
 
     const { id } = await params;
 
-    const existing = db.prepare('SELECT id FROM questions WHERE id = ?').get(id);
+    const existing = await db.prepare('SELECT id FROM questions WHERE id = ?').get(id);
     if (!existing) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     }
 
     // Delete associated solutions and thoughts first, then question
-    db.prepare('DELETE FROM thoughts WHERE question_id = ?').run(id);
-    db.prepare('DELETE FROM solutions WHERE question_id = ?').run(id);
-    db.prepare('DELETE FROM questions WHERE id = ?').run(id);
+    await db.prepare('DELETE FROM thoughts WHERE question_id = ?').run(id);
+    await db.prepare('DELETE FROM solutions WHERE question_id = ?').run(id);
+    await db.prepare('DELETE FROM questions WHERE id = ?').run(id);
 
     return NextResponse.json({
       success: true,

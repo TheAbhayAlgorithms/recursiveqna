@@ -121,7 +121,7 @@ async function GET(request) {
         const solutionId = searchParams.get('solutionId');
         const questionId = searchParams.get('questionId');
         if (solutionId) {
-            const thoughts = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+            const thoughts = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
         SELECT t.*, u.role as user_role
         FROM thoughts t
         LEFT JOIN users u ON t.user_id = u.id
@@ -133,7 +133,7 @@ async function GET(request) {
             });
         }
         if (questionId) {
-            const thoughts = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+            const thoughts = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
         SELECT t.*, u.role as user_role
         FROM thoughts t
         LEFT JOIN users u ON t.user_id = u.id
@@ -179,7 +179,7 @@ async function POST(request) {
         let finalQuestionId = rawQuestionId;
         // If solutionId is provided, verify solution and resolve question_id
         if (solutionId) {
-            const sol = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT question_id FROM solutions WHERE id = ?').get(solutionId);
+            const sol = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT question_id FROM solutions WHERE id = ?').get(solutionId);
             if (!sol) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                     error: 'Solution not found'
@@ -198,11 +198,11 @@ async function POST(request) {
         }
         const thoughtId = 'th_' + __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["default"].randomUUID();
         const now = Date.now();
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
       INSERT INTO thoughts (id, question_id, solution_id, user_id, user_name, content, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `).run(thoughtId, finalQuestionId, solutionId || null, user.id, user.name, content.trim(), now);
-        const created = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+        const created = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
       SELECT t.*, u.role as user_role 
       FROM thoughts t 
       LEFT JOIN users u ON t.user_id = u.id 
@@ -265,7 +265,7 @@ async function getCurrentUser() {
     const session = verifyToken(token);
     if (!session) return null;
     // Verify user still exists in database
-    const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,

@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const cleanUserId = userId.trim().toLowerCase();
     const cleanPassword = typeof password === 'string' ? password.trim() : '';
 
-    let user = db.prepare('SELECT * FROM users WHERE LOWER(id) = ?').get(cleanUserId) as {
+    let user = (await db.prepare('SELECT * FROM users WHERE LOWER(id) = ?').get(cleanUserId)) as {
       id: string;
       name: string;
       password_hash: string;
@@ -25,12 +25,12 @@ export async function POST(request: Request) {
     // Self-healing: Ensure root admin user exists
     if (!user && cleanUserId === 'admin') {
       const defaultHash = await bcrypt.hash('admin', 10);
-      db.prepare(`
+      await db.prepare(`
         INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
         VALUES (?, ?, ?, ?, ?, ?)
       `).run('admin', 'Academic Administrator', defaultHash, 'admin', 'Administration', Date.now());
 
-      user = db.prepare('SELECT * FROM users WHERE LOWER(id) = ?').get('admin') as any;
+      user = (await db.prepare('SELECT * FROM users WHERE LOWER(id) = ?').get('admin')) as any;
     }
 
     if (!user) {
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
         isValid = true;
         try {
           const newHash = await bcrypt.hash(cleanPassword || password, 10);
-          db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
+          await db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
         } catch (updateErr) {
           console.error('Failed to sync admin password hash:', updateErr);
         }

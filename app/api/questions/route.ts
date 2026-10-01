@@ -46,7 +46,7 @@ export async function GET(request: Request) {
 
     query += ` ORDER BY q.created_at DESC`;
 
-    const questions = db.prepare(query).all(...params);
+    const questions = await db.prepare(query).all(...params);
 
     return NextResponse.json({ questions });
   } catch (err) {
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     const now = Date.now();
     const cleanField = field && field.trim().length > 0 ? field.trim() : 'General';
 
-    db.prepare(`
+    await db.prepare(`
       INSERT INTO questions (id, user_id, user_name, title, content, field, image_url, video_url, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       now
     );
 
-    const created = db.prepare('SELECT * FROM questions WHERE id = ?').get(questionId);
+    const created = await db.prepare('SELECT * FROM questions WHERE id = ?').get(questionId);
 
     return NextResponse.json({
       success: true,

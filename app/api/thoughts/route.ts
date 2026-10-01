@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     const questionId = searchParams.get('questionId');
 
     if (solutionId) {
-      const thoughts = db.prepare(`
+      const thoughts = await db.prepare(`
         SELECT t.*, u.role as user_role
         FROM thoughts t
         LEFT JOIN users u ON t.user_id = u.id
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     }
 
     if (questionId) {
-      const thoughts = db.prepare(`
+      const thoughts = await db.prepare(`
         SELECT t.*, u.role as user_role
         FROM thoughts t
         LEFT JOIN users u ON t.user_id = u.id
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
     // If solutionId is provided, verify solution and resolve question_id
     if (solutionId) {
-      const sol = db.prepare('SELECT question_id FROM solutions WHERE id = ?').get(solutionId) as { question_id: string } | undefined;
+      const sol = (await db.prepare('SELECT question_id FROM solutions WHERE id = ?').get(solutionId)) as { question_id: string } | undefined;
       if (!sol) {
         return NextResponse.json({ error: 'Solution not found' }, { status: 404 });
       }
@@ -71,12 +71,12 @@ export async function POST(request: Request) {
     const thoughtId = 'th_' + crypto.randomUUID();
     const now = Date.now();
 
-    db.prepare(`
+    await db.prepare(`
       INSERT INTO thoughts (id, question_id, solution_id, user_id, user_name, content, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `).run(thoughtId, finalQuestionId, solutionId || null, user.id, user.name, content.trim(), now);
 
-    const created = db.prepare(`
+    const created = await db.prepare(`
       SELECT t.*, u.role as user_role 
       FROM thoughts t 
       LEFT JOIN users u ON t.user_id = u.id 

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user ID already exists
-    const existing = db.prepare('SELECT id FROM users WHERE LOWER(id) = ?').get(cleanUserId);
+    const existing = await db.prepare('SELECT id FROM users WHERE LOWER(id) = ?').get(cleanUserId);
     if (existing) {
       return NextResponse.json({ error: 'This User ID is already taken. Please choose another.' }, { status: 409 });
     }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     const now = Date.now();
     const role = cleanUserId === 'admin' ? 'admin' : 'user';
 
-    db.prepare(`
+    await db.prepare(`
       INSERT INTO users (id, name, password_hash, role, field_of_interest, created_at)
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(cleanUserId, name.trim(), passwordHash, role, field_of_interest || 'General', now);

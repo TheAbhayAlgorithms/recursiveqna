@@ -38,16 +38,46 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    const ext = path.extname(file.name) || (isImage ? '.jpg' : '.mp4');
+    const safeExt = ext.replace(/[^a-zA-Z0-9.]/g, '');
+    const uniqueName = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}${safeExt}`;
+
+    // 1. Try uploading to Supabase Storage if configured
+    const { getSupabase } = await import('@/lib/supabase');
+    const supabaseClient = getSupabase();
+    if (supabaseClient) {
+      try {
+        const { data: uploadData, error: uploadErr } = await supabaseClient.storage
+          .from('media')
+          .upload(uniqueName, buffer, {
+            contentType: mimeType,
+            upsert: true,
+          });
+
+        if (!uploadErr && uploadData) {
+          const { data: publicData } = supabaseClient.storage.from('media').getPublicUrl(uniqueName);
+          return NextResponse.json({
+            success: true,
+            url: publicData.publicUrl,
+            type: isImage ? 'image' : 'video',
+            originalName: file.name,
+            size: file.size,
+          });
+        } else if (uploadErr) {
+          console.warn('Supabase storage upload failed, falling back to local storage:', uploadErr.message);
+        }
+      } catch (sbErr) {
+        console.warn('Supabase storage exception, falling back to local storage:', sbErr);
+      }
+    }
+
+    // 2. Local fallback storage
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
     if (!fs.existsSync(uploadsDir)) {
       fs.mkdirSync(uploadsDir, { recursive: true });
     }
 
-    const ext = path.extname(file.name) || (isImage ? '.jpg' : '.mp4');
-    const safeExt = ext.replace(/[^a-zA-Z0-9.]/g, '');
-    const uniqueName = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}${safeExt}`;
     const filePath = path.join(uploadsDir, uniqueName);
-
     fs.writeFileSync(filePath, buffer);
 
     const publicUrl = `/uploads/${uniqueName}`;
