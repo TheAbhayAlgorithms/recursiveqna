@@ -15,12 +15,11 @@ import {
   AlertCircle,
   CheckCircle2
 } from 'lucide-react';
-import { useTheme } from '@/components/ThemeProvider';
+import ThemeToggle from '@/components/ThemeToggle';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { theme, toggleTheme } = useTheme();
 
   const initialTab = searchParams.get('tab') === 'register' ? 'register' : 'login';
   const [tab, setTab] = useState<'login' | 'register'>(initialTab);
@@ -170,16 +169,7 @@ function LoginForm() {
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button 
-              onClick={toggleTheme} 
-              className="btn-icon-only nav-theme-btn" 
-              title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode'}
-              aria-label="Toggle Day and Night mode"
-            >
-              <span className={`theme-toggle-circle ${theme}`} aria-hidden="true">
-                <span className="theme-toggle-dot" />
-              </span>
-            </button>
+            <ThemeToggle />
             <Link href="/" className="btn btn-outline" style={{ fontSize: '13px', padding: '6px 14px' }}>
               Back to Questions
             </Link>

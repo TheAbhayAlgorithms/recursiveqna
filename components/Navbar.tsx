@@ -2,10 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useTheme } from './ThemeProvider';
+import ThemeToggle from './ThemeToggle';
 import { 
-  Sun, 
-  Moon, 
   PlusCircle, 
   ShieldAlert, 
   GraduationCap, 
@@ -29,8 +27,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) {
-  const { theme, toggleTheme } = useTheme();
-
   return (
     <header className="nav-header">
       <div className="app-container nav-inner">
@@ -47,17 +43,8 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
 
         {/* Right Navigation & Controls */}
         <div className="nav-actions">
-          {/* Day / Night Theme Button */}
-          <button 
-            onClick={toggleTheme} 
-            className="btn-icon-only nav-theme-btn" 
-            title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode'}
-            aria-label="Toggle Day and Night mode"
-          >
-            <span className={`theme-toggle-circle ${theme}`} aria-hidden="true">
-              <span className="theme-toggle-dot" />
-            </span>
-          </button>
+          {/* Day / Night Theme Toggle */}
+          <ThemeToggle />
 
           {/* Ask Question CTA */}
           <button 

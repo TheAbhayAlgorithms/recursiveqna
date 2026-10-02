@@ -327,93 +327,125 @@ input, textarea, select {
   border-color: var(--border-hover);
 }
 
-/* Minimalist Circular Theme Toggle Button */
-.nav-theme-btn {
-  background: transparent !important;
-  border: 1px solid transparent !important;
-  border-radius: 50% !important;
+/* ============================================================
+   Minimal Simple Theme Toggle Switch Button
+   ============================================================ */
+.theme-toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 48px;
+  height: 26px;
+  padding: 2px;
+  border-radius: 9999px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-medium);
   cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  outline: none;
+  flex-shrink: 0;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease, transform var(--transition-fast);
+  user-select: none;
+  box-sizing: border-box;
 }
 
-.nav-theme-btn:hover {
-  background: var(--bg-subtle) !important;
-  border-color: var(--border-light) !important;
+.theme-toggle-switch:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
 }
 
-.nav-theme-btn:active {
-  transform: scale(0.92);
+.theme-toggle-switch:active {
+  transform: scale(0.96);
 }
 
-.theme-toggle-circle {
-  width: 18px;
-  height: 18px;
+.theme-toggle-switch:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Track container holding icons and thumb */
+.theme-toggle-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 0 4px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Background track hint icons */
+.theme-track-icon {
+  opacity: 0.45;
+  transition: opacity 0.25s ease, color 0.25s ease;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.theme-track-sun {
+  color: #f59e0b;
+}
+
+.theme-track-moon {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .theme-track-moon {
+  color: #a5b4fc;
+}
+
+/* Sliding Thumb */
+.theme-toggle-thumb {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.28s cubic-bezier(0.34, 1.45, 0.7, 1), background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   box-sizing: border-box;
-  position: relative;
 }
 
-.theme-toggle-dot {
-  border-radius: 50%;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  display: block;
+/* Light Mode: Thumb on left */
+.theme-toggle-switch.light .theme-toggle-thumb,
+[data-theme="light"] .theme-toggle-thumb {
+  transform: translateX(0);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark theme: minimalist hollow outline circle matching reference */
-[data-theme="dark"] .theme-toggle-circle,
-.theme-toggle-circle.dark {
-  border: 1.8px solid rgba(255, 255, 255, 0.75);
-  background: transparent;
+.theme-thumb-icon.sun {
+  color: #d97706;
+  transition: transform 0.25s ease;
 }
 
-[data-theme="dark"] .theme-toggle-dot,
-.theme-toggle-circle.dark .theme-toggle-dot {
-  width: 0;
-  height: 0;
-  opacity: 0;
-  transform: scale(0);
+/* Dark Mode: Thumb on right */
+.theme-toggle-switch.dark .theme-toggle-thumb,
+[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(22px);
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45), 0 0 8px rgba(99, 102, 241, 0.2);
 }
 
-[data-theme="dark"] .nav-theme-btn:hover .theme-toggle-circle,
-.nav-theme-btn:hover .theme-toggle-circle.dark {
-  border-color: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  transform: scale(1.08);
+.theme-thumb-icon.moon {
+  color: #93c5fd;
+  transition: transform 0.25s ease;
 }
 
-/* Light theme: single circular outline aligning size, themed with platform blue */
-[data-theme="light"] .theme-toggle-circle,
-.theme-toggle-circle.light {
-  border: 1.8px solid var(--color-accent);
-  background: var(--bg-accent-subtle);
+[data-theme="dark"] .theme-toggle-switch {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
-[data-theme="light"] .theme-toggle-dot,
-.theme-toggle-circle.light .theme-toggle-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--color-accent);
-  opacity: 1;
-  transform: scale(1);
-}
-
-[data-theme="light"] .nav-theme-btn:hover .theme-toggle-circle,
-.nav-theme-btn:hover .theme-toggle-circle.light {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
-  transform: scale(1.08);
-}
-
-[data-theme="light"] .nav-theme-btn:hover .theme-toggle-dot,
-.nav-theme-btn:hover .theme-toggle-circle.light .theme-toggle-dot {
-  background: var(--color-primary);
+[data-theme="dark"] .theme-toggle-switch:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
 /* ============================================================
@@ -797,12 +829,22 @@ input, textarea, select {
     margin-left: auto !important;
   }
 
-  /* Compact round action buttons */
-  .nav-theme-btn {
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 50% !important;
+  /* Compact theme toggle switch */
+  .theme-toggle-switch {
+    width: 44px !important;
+    height: 24px !important;
+    border-radius: 9999px !important;
     flex-shrink: 0 !important;
+  }
+
+  .theme-toggle-switch .theme-toggle-thumb {
+    width: 18px;
+    height: 18px;
+  }
+
+  .theme-toggle-switch.dark .theme-toggle-thumb,
+  [data-theme="dark"] .theme-toggle-thumb {
+    transform: translateX(18px);
   }
 
   .nav-logout-btn {
@@ -1117,7 +1159,6 @@ input, textarea, select {
     gap: 3px !important;
   }
 
-  .nav-theme-btn,
   .nav-ask-btn,
   .nav-admin-btn,
   .nav-logout-btn {
