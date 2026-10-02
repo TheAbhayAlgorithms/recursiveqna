@@ -471,6 +471,11 @@ input, textarea, select {
   text-transform: uppercase;
   letter-spacing: .04em;
   border-radius: var(--radius-full);
+  color: #4f46e5;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  background: #6366f11f;
+  border: 1px solid #6366f140;
   align-items: center;
   gap: 6px;
   padding: 4px 10px;
@@ -482,49 +487,495 @@ input, textarea, select {
 .badge-Physics {
   color: #6366f1;
   background: #6366f11f;
-  border: 1px solid #6366f140;
+  border: 1px solid #6366f147;
 }
 
 .badge-Chemistry {
   color: #9333ea;
   background: #9333ea1f;
-  border: 1px solid #9333ea40;
+  border: 1px solid #9333ea47;
 }
 
 .badge-Maths, .badge-Mathematics {
   color: #2563eb;
   background: #2563eb1f;
-  border: 1px solid #2563eb40;
+  border: 1px solid #2563eb47;
 }
 
 .badge-Computer, .badge-ComputerScience {
   color: #0d9488;
   background: #0d94881f;
-  border: 1px solid #0d948840;
+  border: 1px solid #0d948847;
 }
 
 .badge-Psychology {
   color: #db2777;
   background: #ec48991f;
-  border: 1px solid #ec489940;
+  border: 1px solid #ec489947;
 }
 
-.badge-Biology {
+.badge-Biology, .badge-BiologyandLifeScience, .badge-BiologyLifeScience, .badge-BiologyLifeSciences {
   color: #16a34a;
   background: #16a34a1f;
-  border: 1px solid #16a34a40;
+  border: 1px solid #16a34a47;
 }
 
-.badge-Literature {
+.badge-PersonalFinance, .badge-Finance {
+  color: #059669;
+  background: #0596691f;
+  border: 1px solid #05966947;
+}
+
+.badge-DigitalMarketing, .badge-Marketing {
+  color: #0284c7;
+  background: #0284c71f;
+  border: 1px solid #0284c747;
+}
+
+.badge-History {
+  color: #b45309;
+  background: #d977061f;
+  border: 1px solid #d9770647;
+}
+
+.badge-Languages, .badge-LanguagesandLinguistics, .badge-LanguagesLinguistics {
+  color: #7c3aed;
+  background: #7c3aed1f;
+  border: 1px solid #7c3aed47;
+}
+
+.badge-Nutrition, .badge-NutritionDiet, .badge-NutritionandDiet {
+  color: #4d7c0f;
+  background: #84cc1624;
+  border: 1px solid #84cc1652;
+}
+
+.badge-Cooking, .badge-CookingBaking, .badge-CookingandBaking {
+  color: #ea580c;
+  background: #f973161f;
+  border: 1px solid #f9731647;
+}
+
+.badge-Gaming {
+  color: #9333ea;
+  background: #a855f724;
+  border: 1px solid #a855f74d;
+}
+
+.badge-AnimeandManga, .badge-AnimeManga {
+  color: #e11d48;
+  background: #f43f5e1f;
+  border: 1px solid #f43f5e47;
+}
+
+.badge-Fashion, .badge-FashionStyle, .badge-FashionandStyle {
+  color: #c026d3;
+  background: #d946ef1f;
+  border: 1px solid #d946ef47;
+}
+
+.badge-Sports {
+  color: #dc2626;
+  background: #ef44441f;
+  border: 1px solid #ef444447;
+}
+
+.badge-Literature, .badge-LiteratureWriting, .badge-LiteratureandWriting {
   color: #c2410c;
   background: #c2410c1f;
-  border: 1px solid #c2410c40;
+  border: 1px solid #c2410c47;
 }
 
-.badge-General {
+.badge-Philosophy {
+  color: #4f46e5;
+  background: #4f46e51f;
+  border: 1px solid #4f46e547;
+}
+
+.badge-Music {
+  color: #0891b2;
+  background: #06b6d41f;
+  border: 1px solid #06b6d447;
+}
+
+.badge-MoviesTVShows, .badge-MoviesandTVShows {
+  color: #7c3aed;
+  background: #8b5cf61f;
+  border: 1px solid #8b5cf647;
+}
+
+.badge-Automotive {
   color: #475569;
   background: #4755691f;
-  border: 1px solid #47556940;
+  border: 1px solid #47556947;
+}
+
+.badge-InvestingCrypto, .badge-InvestingandCrypto {
+  color: #0f766e;
+  background: #0f766e1f;
+  border: 1px solid #0f766e47;
+}
+
+.badge-Entrepreneurship {
+  color: #a16207;
+  background: #ca8a041f;
+  border: 1px solid #ca8a0447;
+}
+
+.badge-CareerAdvice {
+  color: #1d4ed8;
+  background: #1d4ed81f;
+  border: 1px solid #1d4ed847;
+}
+
+.badge-Freelancing {
+  color: #0d9488;
+  background: #14b8a61f;
+  border: 1px solid #14b8a647;
+}
+
+.badge-Ecommerce, .badge-E-commerce {
+  color: #6d28d9;
+  background: #6d28d91f;
+  border: 1px solid #6d28d947;
+}
+
+.badge-PhysicalFitness {
+  color: #be123c;
+  background: #e11d481f;
+  border: 1px solid #e11d4847;
+}
+
+.badge-SkincareBeauty, .badge-SkincareandBeauty {
+  color: #e11d48;
+  background: #fb718524;
+  border: 1px solid #fb71854d;
+}
+
+.badge-Parenting {
+  color: #d97706;
+  background: #f59e0b1f;
+  border: 1px solid #f59e0b47;
+}
+
+.badge-PetsVetCare, .badge-PetsandVetCare {
+  color: #047857;
+  background: #10b9811f;
+  border: 1px solid #10b98147;
+}
+
+.badge-PhotographyVideography, .badge-PhotographyandVideography {
+  color: #4338ca;
+  background: #4f46e51f;
+  border: 1px solid #4f46e547;
+}
+
+.badge-GraphicDesignIllustration, .badge-GraphicDesignandIllustration {
+  color: #7e22ce;
+  background: #a855f71f;
+  border: 1px solid #a855f747;
+}
+
+.badge-TravelBackpacking, .badge-TravelandBackpacking {
+  color: #0f766e;
+  background: #14b8a61f;
+  border: 1px solid #14b8a647;
+}
+
+.badge-Gardening {
+  color: #15803d;
+  background: #22c55e1f;
+  border: 1px solid #22c55e47;
+}
+
+.badge-DIYCrafting, .badge-DIYandCrafting {
+  color: #c2410c;
+  background: #ea580c1f;
+  border: 1px solid #ea580c47;
+}
+
+.badge-BoardGamesChess, .badge-BoardGamesandChess {
+  color: #7e22ce;
+  background: #9333ea1f;
+  border: 1px solid #9333ea47;
+}
+
+.badge-LegalAdvice {
+  color: #334155;
+  background: #3341551f;
+  border: 1px solid #33415547;
+}
+
+.badge-CurrentEvents {
+  color: #1d4ed8;
+  background: #3b82f61f;
+  border: 1px solid #3b82f647;
+}
+
+.badge-Sociology {
+  color: #86198f;
+  background: #a21caf1f;
+  border: 1px solid #a21caf47;
+}
+
+.badge-EnvironmentalScience {
+  color: #166534;
+  background: #15803d1f;
+  border: 1px solid #15803d47;
+}
+
+.badge-RealEstateHousing, .badge-RealEstateandHousing {
+  color: #92400e;
+  background: #b453091f;
+  border: 1px solid #b4530947;
+}
+
+.badge-SelfImprovement, .badge-Self-Improvement {
+  color: #0369a1;
+  background: #0ea5e91f;
+  border: 1px solid #0ea5e947;
+}
+
+.badge-General, .badge-GeneralTrivia {
+  color: #475569;
+  background: #64748b1f;
+  border: 1px solid #64748b47;
+}
+
+[data-theme="dark"] .field-badge {
+  background-color: #ffffff12;
+}
+
+[data-theme="dark"] .badge-Physics {
+  color: #818cf8;
+  background: #818cf829;
+  border-color: #818cf859;
+}
+
+[data-theme="dark"] .badge-Chemistry {
+  color: #c084fc;
+  background: #c084fc29;
+  border-color: #c084fc59;
+}
+
+[data-theme="dark"] .badge-Maths, [data-theme="dark"] .badge-Mathematics {
+  color: #60a5fa;
+  background: #60a5fa29;
+  border-color: #60a5fa59;
+}
+
+[data-theme="dark"] .badge-Computer, [data-theme="dark"] .badge-ComputerScience {
+  color: #2dd4bf;
+  background: #2dd4bf29;
+  border-color: #2dd4bf59;
+}
+
+[data-theme="dark"] .badge-Psychology {
+  color: #f472b6;
+  background: #f472b629;
+  border-color: #f472b659;
+}
+
+[data-theme="dark"] .badge-Biology, [data-theme="dark"] .badge-BiologyandLifeScience, [data-theme="dark"] .badge-BiologyLifeScience, [data-theme="dark"] .badge-BiologyLifeSciences {
+  color: #4ade80;
+  background: #4ade8029;
+  border-color: #4ade8059;
+}
+
+[data-theme="dark"] .badge-PersonalFinance, [data-theme="dark"] .badge-Finance {
+  color: #34d399;
+  background: #34d39929;
+  border-color: #34d39959;
+}
+
+[data-theme="dark"] .badge-DigitalMarketing, [data-theme="dark"] .badge-Marketing {
+  color: #38bdf8;
+  background: #38bdf829;
+  border-color: #38bdf859;
+}
+
+[data-theme="dark"] .badge-History {
+  color: #fbbf24;
+  background: #fbbf2429;
+  border-color: #fbbf2459;
+}
+
+[data-theme="dark"] .badge-Languages, [data-theme="dark"] .badge-LanguagesandLinguistics, [data-theme="dark"] .badge-LanguagesLinguistics {
+  color: #a78bfa;
+  background: #a78bfa29;
+  border-color: #a78bfa59;
+}
+
+[data-theme="dark"] .badge-Nutrition, [data-theme="dark"] .badge-NutritionDiet, [data-theme="dark"] .badge-NutritionandDiet {
+  color: #a3e635;
+  background: #a3e63529;
+  border-color: #a3e63559;
+}
+
+[data-theme="dark"] .badge-Cooking, [data-theme="dark"] .badge-CookingBaking, [data-theme="dark"] .badge-CookingandBaking {
+  color: #fb923c;
+  background: #fb923c29;
+  border-color: #fb923c59;
+}
+
+[data-theme="dark"] .badge-Gaming {
+  color: #c084fc;
+  background: #c084fc29;
+  border-color: #c084fc59;
+}
+
+[data-theme="dark"] .badge-AnimeandManga, [data-theme="dark"] .badge-AnimeManga {
+  color: #fb7185;
+  background: #fb718529;
+  border-color: #fb718559;
+}
+
+[data-theme="dark"] .badge-Fashion, [data-theme="dark"] .badge-FashionStyle, [data-theme="dark"] .badge-FashionandStyle {
+  color: #e879f9;
+  background: #e879f929;
+  border-color: #e879f959;
+}
+
+[data-theme="dark"] .badge-Sports {
+  color: #f87171;
+  background: #f8717129;
+  border-color: #f8717159;
+}
+
+[data-theme="dark"] .badge-Literature, [data-theme="dark"] .badge-LiteratureWriting, [data-theme="dark"] .badge-LiteratureandWriting {
+  color: #fdba74;
+  background: #fdba7429;
+  border-color: #fdba7459;
+}
+
+[data-theme="dark"] .badge-Philosophy {
+  color: #818cf8;
+  background: #818cf829;
+  border-color: #818cf859;
+}
+
+[data-theme="dark"] .badge-Music {
+  color: #22d3ee;
+  background: #22d3ee29;
+  border-color: #22d3ee59;
+}
+
+[data-theme="dark"] .badge-MoviesTVShows, [data-theme="dark"] .badge-MoviesandTVShows {
+  color: #a78bfa;
+  background: #a78bfa29;
+  border-color: #a78bfa59;
+}
+
+[data-theme="dark"] .badge-Automotive {
+  color: #94a3b8;
+  background: #94a3b829;
+  border-color: #94a3b859;
+}
+
+.subject-chips-outer-wrapper {
+  align-items: center;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.subject-chips-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 2px;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.subject-chips-container::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.chips-arrow-fade {
+  z-index: 6;
+  pointer-events: none;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.chips-fade-left {
+  background: linear-gradient(to right, var(--bg-card) 60%, transparent);
+  padding-right: 24px;
+  left: 0;
+}
+
+.chips-fade-right {
+  background: linear-gradient(to left, var(--bg-card) 60%, transparent);
+  padding-left: 24px;
+  right: 0;
+}
+
+.chips-double-arrow-btn {
+  pointer-events: auto;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-medium);
+  width: 32px;
+  height: 32px;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 50%;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  transition: all .2s cubic-bezier(.16, 1, .3, 1);
+  display: inline-flex;
+  box-shadow: 0 2px 8px #0000001f;
+}
+
+.chips-double-arrow-btn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+  transform: scale(1.1);
+  box-shadow: 0 4px 14px #2563eb59;
+}
+
+.chips-double-arrow-btn:active {
+  transform: scale(.95);
+}
+
+.subject-chip-btn {
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  flex-shrink: 0;
+  padding: 7px 15px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.subject-chip-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.subject-chip-btn.is-selected {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px #2563eb40;
 }
 
 .form-group {

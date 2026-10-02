@@ -214,7 +214,7 @@ export default function QuestionDetailPage() {
           <article className="card" style={{ marginBottom: '32px' }}>
             {/* Field & Date Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <span className={`field-badge badge-${question.field.replace(/\s+/g, '')}`}>
+              <span className={`field-badge badge-${question.field.replace(/[^a-zA-Z0-9]/g, '')}`}>
                 {question.field}
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-muted)' }}>

@@ -52,7 +52,7 @@ export default function QuestionCard({
   const formattedDate = formatDate(question.created_at);
 
   const getBadgeClass = (field: string) => {
-    const clean = field.replace(/\s+/g, '');
+    const clean = field.replace(/[^a-zA-Z0-9]/g, '');
     return `field-badge badge-${clean}`;
   };
 

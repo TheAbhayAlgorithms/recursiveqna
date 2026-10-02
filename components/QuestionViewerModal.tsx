@@ -176,7 +176,7 @@ export default function QuestionViewerModal({
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flexShrink: 1 }}>
               {question?.field && (
-                <span className={`field-badge badge-${question.field.replace(/\s+/g, '')}`}>
+                <span className={`field-badge badge-${question.field.replace(/[^a-zA-Z0-9]/g, '')}`}>
                   {question.field}
                 </span>
               )}

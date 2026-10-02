@@ -16,6 +16,7 @@
   "/api/thoughts/[id]/route": "app/api/thoughts/[id]/route.js",
   "/api/thoughts/route": "app/api/thoughts/route.js",
   "/api/upload/route": "app/api/upload/route.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/question/[id]/page": "app/question/[id]/page.js"

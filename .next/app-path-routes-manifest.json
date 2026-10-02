@@ -16,6 +16,7 @@
   "/api/thoughts/[id]/route": "/api/thoughts/[id]",
   "/api/thoughts/route": "/api/thoughts",
   "/api/upload/route": "/api/upload",
+  "/icon.svg/route": "/icon.svg",
   "/login/page": "/login",
   "/page": "/",
   "/question/[id]/page": "/question/[id]"

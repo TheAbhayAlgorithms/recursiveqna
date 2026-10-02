@@ -520,7 +520,7 @@ export default function AdminDashboardPage() {
                             </Link>
                           </td>
                           <td style={{ padding: '14px 20px' }}>
-                            <span className={`field-badge badge-${q.field.replace(/\s+/g, '')}`}>
+                            <span className={`field-badge badge-${q.field.replace(/[^a-zA-Z0-9]/g, '')}`}>
                               {q.field}
                             </span>
                           </td>

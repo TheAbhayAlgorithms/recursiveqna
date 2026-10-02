@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import QuestionCard from '@/components/QuestionCard';
 import AskQuestionModal from '@/components/AskQuestionModal';
@@ -13,7 +13,9 @@ import {
   HelpCircle, 
   Layers,
   Filter,
-  GraduationCap
+  GraduationCap,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -23,6 +25,50 @@ export default function HomePage() {
   const [selectedField, setSelectedField] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  // Subject chips scroll and carousel state
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkChipsScrollability = useCallback(() => {
+    const el = chipsRef.current;
+    if (!el) return;
+    const hasLeft = el.scrollLeft > 6;
+    const hasRight = el.scrollLeft + el.clientWidth < el.scrollWidth - 6;
+    setCanScrollLeft(hasLeft);
+    setCanScrollRight(hasRight);
+  }, []);
+
+  useEffect(() => {
+    const el = chipsRef.current;
+    if (!el) return;
+
+    checkChipsScrollability();
+
+    el.addEventListener('scroll', checkChipsScrollability, { passive: true });
+    window.addEventListener('resize', checkChipsScrollability);
+
+    const resizeObserver = new ResizeObserver(checkChipsScrollability);
+    resizeObserver.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', checkChipsScrollability);
+      window.removeEventListener('resize', checkChipsScrollability);
+      resizeObserver.disconnect();
+    };
+  }, [checkChipsScrollability, availableFields]);
+
+  const handleChipsScroll = (direction: 'left' | 'right') => {
+    const el = chipsRef.current;
+    if (!el) return;
+    // Slide by ~82% of visible container width to bring the next batch of ~10 items smoothly into view
+    const slideAmount = Math.max(el.clientWidth * 0.82, 280);
+    el.scrollBy({
+      left: direction === 'right' ? slideAmount : -slideAmount,
+      behavior: 'smooth'
+    });
+  };
 
   // Modals state
   const [isAskModalOpen, setIsAskModalOpen] = useState(false);
@@ -174,38 +220,54 @@ export default function HomePage() {
                 />
               </div>
 
-              {/* Subject Field Chips - Dynamically showing only subjects with posted questions */}
-              <div className="subject-chips-container" style={{ 
-                display: 'flex', 
-                gap: '8px', 
-                overflowX: 'auto', 
-                paddingBottom: '6px',
-                WebkitOverflowScrolling: 'touch'
-              }}>
-                {['All', ...availableFields].map((f) => {
-                  const isSelected = selectedField === f;
-                  return (
+              {/* Subject Field Chips with Carousel Controls */}
+              <div className="subject-chips-outer-wrapper">
+                {canScrollLeft && (
+                  <div className="chips-arrow-fade chips-fade-left">
                     <button
-                      key={f}
-                      onClick={() => setSelectedField(f)}
-                      style={{
-                        padding: '7px 14px',
-                        borderRadius: 'var(--radius-full)',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all var(--transition-fast)',
-                        background: isSelected ? 'var(--color-accent)' : 'var(--bg-subtle)',
-                        color: isSelected ? '#ffffff' : 'var(--text-secondary)',
-                        border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--border-light)',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0
-                      }}
+                      type="button"
+                      onClick={() => handleChipsScroll('left')}
+                      className="chips-double-arrow-btn"
+                      aria-label="Previous categories"
+                      title="Previous categories"
                     >
-                      {f}
+                      <ChevronsLeft size={18} strokeWidth={2.4} />
                     </button>
-                  );
-                })}
+                  </div>
+                )}
+
+                <div
+                  ref={chipsRef}
+                  className="subject-chips-container"
+                >
+                  {['All', ...availableFields].map((f) => {
+                    const isSelected = selectedField === f;
+                    return (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => setSelectedField(f)}
+                        className={`subject-chip-btn ${isSelected ? 'is-selected' : ''}`}
+                      >
+                        {f}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {canScrollRight && (
+                  <div className="chips-arrow-fade chips-fade-right">
+                    <button
+                      type="button"
+                      onClick={() => handleChipsScroll('right')}
+                      className="chips-double-arrow-btn"
+                      aria-label="More categories"
+                      title="More categories"
+                    >
+                      <ChevronsRight size={18} strokeWidth={2.4} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
