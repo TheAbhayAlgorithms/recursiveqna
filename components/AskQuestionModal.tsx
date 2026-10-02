@@ -29,23 +29,29 @@ const FIELDS = [
   'Career Advice',
   'Freelancing',
   'E-commerce',
+  'Biology and Life Science',
   'Biology & Life Sciences',
   'History',
   'Literature & Writing',
+  'Languages',
   'Languages & Linguistics',
   'Philosophy',
   'Physical Fitness',
+  'Nutrition',
   'Nutrition & Diet',
   'Skincare & Beauty',
   'Parenting',
   'Pets & Vet Care',
+  'Cooking',
   'Cooking & Baking',
   'Gaming',
   'Movies & TV Shows',
   'Music',
   'Photography & Videography',
+  'Anime and Manga',
   'Anime & Manga',
   'Graphic Design & Illustration',
+  'Fashion',
   'Fashion & Style',
   'Travel & Backpacking',
   'Gardening',
@@ -73,7 +79,9 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
   const [field, setField] = useState('Physics');
   const [fieldSearch, setFieldSearch] = useState('Physics');
   const [isFieldDropdownOpen, setIsFieldDropdownOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -94,6 +102,68 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
   const filteredFields = FIELDS.filter((f) =>
     f.toLowerCase().includes(fieldSearch.toLowerCase().trim())
   );
+
+  // Reset highlightedIndex when search text changes
+  React.useEffect(() => {
+    setHighlightedIndex(0);
+  }, [fieldSearch]);
+
+  // Scroll active option into view when navigating with arrow keys
+  React.useEffect(() => {
+    if (isFieldDropdownOpen && listRef.current && highlightedIndex >= 0) {
+      const activeEl = listRef.current.children[highlightedIndex] as HTMLElement;
+      if (activeEl) {
+        activeEl.scrollIntoView({ block: 'nearest' });
+      }
+    }
+  }, [highlightedIndex, isFieldDropdownOpen]);
+
+  // Keyboard navigation for dropdown
+  const handleFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isFieldDropdownOpen) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setIsFieldDropdownOpen(true);
+        setHighlightedIndex(0);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (filteredFields.length === 0) return;
+      setHighlightedIndex((prev) => (prev < filteredFields.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (filteredFields.length === 0) return;
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : filteredFields.length - 1));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filteredFields.length > 0) {
+        const chosen = filteredFields[highlightedIndex] || filteredFields[0];
+        if (chosen) {
+          setField(chosen);
+          setFieldSearch(chosen);
+          setIsFieldDropdownOpen(false);
+        }
+      } else if (fieldSearch.trim()) {
+        setField(fieldSearch.trim());
+        setIsFieldDropdownOpen(false);
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      setIsFieldDropdownOpen(false);
+    } else if (e.key === 'Tab') {
+      if (filteredFields.length > 0) {
+        const chosen = filteredFields[highlightedIndex] || filteredFields[0];
+        if (chosen) {
+          setField(chosen);
+          setFieldSearch(chosen);
+        }
+      }
+      setIsFieldDropdownOpen(false);
+    }
+  };
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -252,8 +322,22 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
                   setFieldSearch(e.target.value);
                   setField(e.target.value);
                   setIsFieldDropdownOpen(true);
+                  setHighlightedIndex(0);
                 }}
-                onFocus={() => setIsFieldDropdownOpen(true)}
+                onFocus={() => {
+                  setIsFieldDropdownOpen(true);
+                  setHighlightedIndex(0);
+                }}
+                onKeyDown={handleFieldKeyDown}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={isFieldDropdownOpen}
+                aria-controls="fields-listbox"
+                aria-activedescendant={
+                  isFieldDropdownOpen && filteredFields.length > 0
+                    ? `field-option-${highlightedIndex}`
+                    : undefined
+                }
                 required
               />
               <button
@@ -282,6 +366,9 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
             {/* Filtered Dropdown list */}
             {isFieldDropdownOpen && (
               <div
+                ref={listRef}
+                id="fields-listbox"
+                role="listbox"
                 style={{
                   position: 'absolute',
                   top: '100%',
@@ -299,34 +386,41 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
                 }}
               >
                 {filteredFields.length > 0 ? (
-                  filteredFields.map((f) => {
+                  filteredFields.map((f, index) => {
                     const isSelected = field.toLowerCase() === f.toLowerCase();
+                    const isHighlighted = index === highlightedIndex;
                     return (
                       <div
                         key={f}
+                        id={`field-option-${index}`}
+                        role="option"
+                        aria-selected={isSelected || isHighlighted}
                         onClick={() => {
                           setField(f);
                           setFieldSearch(f);
                           setIsFieldDropdownOpen(false);
                         }}
+                        onMouseEnter={() => setHighlightedIndex(index)}
                         style={{
                           padding: '10px 14px',
                           fontSize: '13.5px',
                           cursor: 'pointer',
-                          background: isSelected ? 'var(--bg-subtle)' : 'transparent',
-                          color: isSelected ? 'var(--color-accent)' : 'var(--text-primary)',
-                          fontWeight: isSelected ? 600 : 400,
+                          background: isHighlighted
+                            ? 'var(--bg-card-hover)'
+                            : isSelected
+                            ? 'var(--bg-subtle)'
+                            : 'transparent',
+                          color: isHighlighted
+                            ? 'var(--color-primary)'
+                            : isSelected
+                            ? 'var(--color-accent)'
+                            : 'var(--text-primary)',
+                          fontWeight: isSelected || isHighlighted ? 600 : 400,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           borderBottom: '1px solid var(--border-light)',
                           transition: 'background var(--transition-fast)',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isSelected) e.currentTarget.style.background = 'var(--bg-card-hover)';
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isSelected) e.currentTarget.style.background = 'transparent';
                         }}
                       >
                         <span>{f}</span>
@@ -343,7 +437,7 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
                       textAlign: 'center',
                     }}
                   >
-                    No predefined match. Using custom: "<strong>{fieldSearch}</strong>"
+                    No predefined match. Press Enter to use custom: "<strong>{fieldSearch}</strong>"
                   </div>
                 )}
               </div>
@@ -473,21 +567,6 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
                 </button>
               </div>
             )}
-          </div>
-
-          {/* Academic Permanence Notice */}
-          <div style={{
-            padding: '12px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'var(--bg-subtle)',
-            border: '1px solid var(--border-light)',
-            fontSize: '12px',
-            color: 'var(--text-secondary)',
-            marginBottom: '24px',
-            lineHeight: 1.5
-          }}>
-            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Academic Integrity Policy: </span>
-            Once published, questions and verified contributions are preserved to assist other students. Only the platform administrator can delete questions.
           </div>
 
           {/* Action Buttons */}

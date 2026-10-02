@@ -1,1 +1,2 @@
 {"timestamp":"00:00:00.329","source":"Server","level":"LOG","message":""}
+{"timestamp":"01:47:53.392","source":"Server","level":"ERROR","message":"Login error: Error: write CONNECT_TIMEOUT aws-0-ap-northeast-2.pooler.supabase.com:6543"}

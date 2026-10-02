@@ -8,7 +8,6 @@ import AddSolutionModal from '@/components/AddSolutionModal';
 import QuestionViewerModal from '@/components/QuestionViewerModal';
 import { 
   Search, 
-  Sparkles, 
   BookOpen, 
   CheckCircle, 
   HelpCircle, 
@@ -130,21 +129,6 @@ export default function HomePage() {
         }}>
           <div className="app-container">
             <div style={{ maxWidth: '720px' }}>
-              <div style={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-full)',
-                background: 'var(--bg-accent-subtle)',
-                color: 'var(--color-accent)',
-                fontSize: '13px',
-                fontWeight: 600,
-                marginBottom: '14px'
-              }}>
-                <Sparkles size={15} style={{ flexShrink: 0 }} />
-                <span>Open Scholarly Exchange & Solutions</span>
-              </div>
               <h1 className="home-hero-title" style={{ 
                 fontSize: '32px', 
                 fontWeight: 800, 
