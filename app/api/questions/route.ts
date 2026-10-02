@@ -34,8 +34,15 @@ export async function GET(request: Request) {
     const params: (string | number)[] = [];
 
     if (field && field !== 'All' && field !== 'all') {
-      query += ` AND q.field = ?`;
-      params.push(field);
+      const cleanField = field.trim().toLowerCase();
+      if (cleanField === 'maths' || cleanField === 'mathematics') {
+        query += ` AND LOWER(q.field) IN ('maths', 'mathematics')`;
+      } else if (cleanField === 'computer' || cleanField === 'computer science') {
+        query += ` AND LOWER(q.field) IN ('computer', 'computer science')`;
+      } else {
+        query += ` AND LOWER(q.field) = ?`;
+        params.push(cleanField);
+      }
     }
 
     if (search && search.trim().length > 0) {

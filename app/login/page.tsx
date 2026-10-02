@@ -29,7 +29,6 @@ function LoginForm() {
   const [userId, setUserId] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [fieldOfInterest, setFieldOfInterest] = useState('Mathematics');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -112,7 +111,6 @@ function LoginForm() {
           userId,
           name,
           password,
-          field_of_interest: fieldOfInterest,
         }),
       });
 
@@ -412,25 +410,6 @@ function LoginForm() {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label" htmlFor="reg-field">
-                    Primary Academic Field
-                  </label>
-                  <select
-                    id="reg-field"
-                    value={fieldOfInterest}
-                    onChange={(e) => setFieldOfInterest(e.target.value)}
-                    className="form-select"
-                  >
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Literature">Literature</option>
-                    <option value="General">General Academic</option>
-                  </select>
-                </div>
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="reg-password">

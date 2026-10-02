@@ -19,13 +19,11 @@ import {
 
 const SUBJECT_FIELDS = [
   'All',
-  'Mathematics',
   'Physics',
-  'Computer Science',
-  'Biology',
   'Chemistry',
-  'Literature',
-  'General',
+  'Maths',
+  'Computer',
+  'Psychology',
 ];
 
 export default function HomePage() {

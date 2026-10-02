@@ -368,34 +368,42 @@ input, textarea, select {
   border-radius: var(--radius-full);
 }
 
-.badge-Mathematics {
-  background: rgba(37, 99, 235, 0.12);
-  color: #2563eb;
-  border: 1px solid rgba(37, 99, 235, 0.25);
-}
-
 .badge-Physics {
   background: rgba(99, 102, 241, 0.12);
   color: #6366f1;
   border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
+.badge-Chemistry {
+  background: rgba(147, 51, 234, 0.12);
+  color: #9333ea;
+  border: 1px solid rgba(147, 51, 234, 0.25);
+}
+
+.badge-Maths,
+.badge-Mathematics {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.badge-Computer,
 .badge-ComputerScience {
   background: rgba(13, 148, 136, 0.12);
   color: #0d9488;
   border: 1px solid rgba(13, 148, 136, 0.25);
 }
 
+.badge-Psychology {
+  background: rgba(236, 72, 153, 0.12);
+  color: #db2777;
+  border: 1px solid rgba(236, 72, 153, 0.25);
+}
+
 .badge-Biology {
   background: rgba(22, 163, 74, 0.12);
   color: #16a34a;
   border: 1px solid rgba(22, 163, 74, 0.25);
-}
-
-.badge-Chemistry {
-  background: rgba(147, 51, 234, 0.12);
-  color: #9333ea;
-  border: 1px solid rgba(147, 51, 234, 0.25);
 }
 
 .badge-Literature {

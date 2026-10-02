@@ -19,19 +19,17 @@ interface AskQuestionModalProps {
 }
 
 const FIELDS = [
-  'Mathematics',
   'Physics',
-  'Computer Science',
-  'Biology',
   'Chemistry',
-  'Literature',
-  'General',
+  'Maths',
+  'Computer',
+  'Psychology',
 ];
 
 export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }: AskQuestionModalProps) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [field, setField] = useState('Mathematics');
+  const [field, setField] = useState('Physics');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
