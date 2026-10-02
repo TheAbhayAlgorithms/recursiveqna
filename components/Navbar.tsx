@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 import { 
@@ -10,12 +10,17 @@ import {
   LogOut, 
   LogIn, 
   UserPlus,
-  BookOpen
+  BookOpen,
+  ChevronDown,
+  Mail,
+  Phone
 } from 'lucide-react';
 
 interface User {
   id: string;
   name: string;
+  email?: string;
+  phone?: string;
   role: 'admin' | 'user';
   field_of_interest?: string;
 }
@@ -28,6 +33,18 @@ interface NavbarProps {
 
 export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) {
   const [scrollPercentage, setScrollPercentage] = useState(0);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,12 +113,16 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
               </Link>
             )}
 
-            {/* User Status / Login Buttons */}
+            {/* User Status / Login Buttons with Profile Menu */}
             {user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div 
+              <div ref={profileRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileOpen((prev) => !prev)}
                   className="nav-user-badge"
-                  title={`${user.name} (@${user.id})`}
+                  style={{ cursor: 'pointer', background: 'var(--bg-subtle)', border: '1px solid var(--border-light)' }}
+                  aria-expanded={isProfileOpen}
+                  aria-label="User profile menu"
                 >
                   <div 
                     className="nav-user-avatar"
@@ -118,26 +139,91 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
                       {user.role === 'admin' ? 'Administrator' : `@${user.id}`}
                     </div>
                   </div>
-                </div>
-
-                <button 
-                  onClick={onLogout} 
-                  className="btn-icon-only nav-logout-btn" 
-                  title="Log Out"
-                  aria-label="Log Out"
-                >
-                  <LogOut size={15} />
+                  <ChevronDown size={14} style={{ color: 'var(--text-muted)', marginLeft: '2px', transform: isProfileOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
                 </button>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileOpen && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '260px',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-light)',
+                    borderRadius: 'var(--radius-md)',
+                    boxShadow: 'var(--shadow-lg)',
+                    padding: '16px',
+                    zIndex: 100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
+                  }}>
+                    {/* User Summary */}
+                    <div style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
+                      <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)' }}>{user.name}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>@{user.id}</div>
+                      {user.email && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)', marginTop: '6px' }}>
+                          <Mail size={13} style={{ flexShrink: 0, color: 'var(--text-muted)' }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</span>
+                        </div>
+                      )}
+                      {user.phone && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                          <Phone size={13} style={{ flexShrink: 0, color: 'var(--text-muted)' }} />
+                          <span>{user.phone}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Role badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Account Role:</span>
+                      <span style={{ 
+                        fontSize: '11px', 
+                        fontWeight: 700, 
+                        padding: '2px 8px', 
+                        borderRadius: 'var(--radius-full)',
+                        background: user.role === 'admin' ? 'rgba(220, 38, 38, 0.12)' : 'rgba(37, 99, 235, 0.12)',
+                        color: user.role === 'admin' ? 'var(--color-danger)' : 'var(--color-accent)'
+                      }}>
+                        {user.role === 'admin' ? 'Administrator' : 'Scholar'}
+                      </span>
+                    </div>
+
+                    {/* Sign out button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        if (onLogout) onLogout();
+                      }}
+                      className="btn btn-outline"
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        fontSize: '13px',
+                        padding: '8px 12px',
+                        color: 'var(--color-danger)',
+                        borderColor: 'rgba(220, 38, 38, 0.25)',
+                        marginTop: '4px'
+                      }}
+                    >
+                      <LogOut size={14} />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="nav-auth-buttons">
-                <Link href="/login" className="btn btn-outline nav-auth-btn">
+                <Link href="/login" className="btn btn-primary nav-auth-btn" style={{ fontSize: '13px', padding: '7px 16px', fontWeight: 600 }}>
                   <LogIn size={15} />
-                  <span>Log In</span>
-                </Link>
-                <Link href="/login?tab=register" className="btn btn-secondary nav-auth-btn">
-                  <UserPlus size={15} />
-                  <span>Register</span>
+                  <span>Sign In</span>
                 </Link>
               </div>
             )}

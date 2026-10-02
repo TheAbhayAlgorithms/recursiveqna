@@ -121,7 +121,9 @@ function initDb(): UnifiedDb {
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      password_hash TEXT NOT NULL,
+      email TEXT,
+      phone TEXT,
+      password_hash TEXT,
       role TEXT NOT NULL DEFAULT 'user',
       field_of_interest TEXT DEFAULT 'General',
       created_at INTEGER NOT NULL
@@ -167,14 +169,41 @@ function initDb(): UnifiedDb {
       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS otps (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      otp_hash TEXT NOT NULL,
+      expires_at INTEGER NOT NULL,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS rate_limits (
+      key TEXT PRIMARY KEY,
+      count INTEGER NOT NULL DEFAULT 1,
+      reset_at INTEGER NOT NULL,
+      last_requested_at INTEGER NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS idx_questions_field ON questions(field, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_solutions_qid ON solutions(question_id, created_at ASC);
     CREATE INDEX IF NOT EXISTS idx_thoughts_qid ON thoughts(question_id, created_at ASC);
     CREATE INDEX IF NOT EXISTS idx_thoughts_sid ON thoughts(solution_id, created_at ASC);
+    CREATE INDEX IF NOT EXISTS idx_otps_email ON otps(email);
+    CREATE INDEX IF NOT EXISTS idx_otps_expires ON otps(expires_at);
   `);
 
   try {
     sqlite.exec(`ALTER TABLE thoughts ADD COLUMN solution_id TEXT;`);
+  } catch {}
+  try {
+    sqlite.exec(`ALTER TABLE users ADD COLUMN email TEXT;`);
+  } catch {}
+  try {
+    sqlite.exec(`ALTER TABLE users ADD COLUMN phone TEXT;`);
+  } catch {}
+  try {
+    sqlite.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email);`);
   } catch {}
 
   // Pre-seed Admin and Demo Student account if empty

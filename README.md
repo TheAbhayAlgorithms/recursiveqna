@@ -162,7 +162,74 @@ PORT=3000
    http://localhost:3000
    ```
 
-The database (`data/recursiveqna.db`) will automatically initialize and seed with starter accounts and sample questions on the first run.
+The database will automatically initialize and apply schema migrations on first run.
+
+---
+
+## Email OTP Setup
+
+RecursiveQnA supports passwordless authentication via 6-digit Email OTP with cryptographic HMAC hashing, brute-force limits, and resend cooldowns.
+
+### Option 1: Running Locally with Mock Mode (Instant Testing)
+
+For local development, you do not need real SMTP credentials. The system can print the 6-digit code directly to your terminal console:
+
+1. In your `.env.local` file:
+   ```env
+   EMAIL_PROVIDER=mock
+   ```
+2. Enter your email on the login screen (`http://localhost:3000/login`).
+3. Check your terminal where `npm run dev` is running:
+   ```text
+   ======================================================
+    [MOCK EMAIL SERVICE - DEVELOPMENT ONLY]
+    To:      scholar@domain.com
+    OTP:     849201
+    Details: Valid for 5 minutes. Single-use only.
+   ======================================================
+   ```
+4. Enter the 6-digit code in the boxes to verify and log in.
+
+> **Security Note:** `EMAIL_PROVIDER=mock` is strictly prohibited in `NODE_ENV=production` and will throw a fatal security error if enabled in production.
+
+---
+
+### Option 2: Production SMTP with Gmail App Password
+
+To deliver actual emails through Google SMTP:
+
+1. Enable **2-Step Verification** on your Google Account: [Google Security Settings](https://myaccount.google.com/security).
+2. Generate an **App Password**:
+   - Go to [Google App Passwords](https://myaccount.google.com/apppasswords).
+   - Enter App name: `RecursiveQnA`.
+   - Copy the generated 16-character password (e.g. `abcd efgh ijkl mnop`).
+3. Add to `.env.local`:
+   ```env
+   EMAIL_PROVIDER=smtp
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=your-actual-email@gmail.com
+   SMTP_PASS=abcdefghijklmnop
+   EMAIL_FROM="RecursiveQnA Security" <your-actual-email@gmail.com>
+   ```
+
+---
+
+### Option 3: Production SMTP with Brevo (formerly Sendinblue)
+
+For scalable transactional email delivery with high inbox placement:
+
+1. Sign up for a free account at [Brevo](https://www.brevo.com/).
+2. Navigate to **Transactional** -> **Settings** -> **Configuration** (or **SMTP & API**).
+3. Copy your SMTP credentials and add to `.env.local`:
+   ```env
+   EMAIL_PROVIDER=smtp
+   SMTP_HOST=smtp-relay.brevo.com
+   SMTP_PORT=587
+   SMTP_USER=your-brevo-smtp-login@smtp-brevo.com
+   SMTP_PASS=your-brevo-master-smtp-key
+   EMAIL_FROM="RecursiveQnA" <verified-sender@yourdomain.com>
+   ```
 
 ---
 

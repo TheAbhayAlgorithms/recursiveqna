@@ -90,6 +90,11 @@ export default function AddSolutionModal({
         }),
       });
 
+      if (res.status === 401) {
+        window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+        return;
+      }
+
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Failed to submit solution');

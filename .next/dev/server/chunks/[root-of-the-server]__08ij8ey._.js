@@ -136,13 +136,24 @@ const dynamic = 'force-dynamic';
 async function GET() {
     try {
         const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getCurrentUser"])();
+        if (!user) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Not authenticated',
+                user: null
+            }, {
+                status: 401
+            });
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             user
         });
     } catch (err) {
         console.error('Auth check error:', err);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            error: 'Internal server error',
             user: null
+        }, {
+            status: 500
         });
     }
 }
@@ -151,8 +162,14 @@ async function GET() {
 "use strict";
 
 __turbopack_context__.s([
+    "clearAuthCookies",
+    ()=>clearAuthCookies,
     "getCurrentUser",
     ()=>getCurrentUser,
+    "requireAuth",
+    ()=>requireAuth,
+    "setAuthCookies",
+    ()=>setAuthCookies,
     "signToken",
     ()=>signToken,
     "verifyToken",
@@ -160,7 +177,9 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jsonwebtoken$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/jsonwebtoken/index.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/headers.js [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/db.ts [app-route] (ecmascript)");
+;
 ;
 ;
 ;
@@ -169,6 +188,8 @@ function signToken(user) {
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jsonwebtoken$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].sign({
         id: user.id,
         name: user.name,
+        email: user.email,
+        phone: user.phone,
         role: user.role,
         field_of_interest: user.field_of_interest
     }, JWT_SECRET, {
@@ -189,15 +210,55 @@ async function getCurrentUser() {
     if (!token) return null;
     const session = verifyToken(token);
     if (!session) return null;
-    // Verify user still exists in database
-    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, role, field_of_interest FROM users WHERE id = ?').get(session.id);
+    // Verify user still exists in database and fetch freshest details
+    const user = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('SELECT id, name, email, phone, role, field_of_interest FROM users WHERE id = ?').get(session.id);
     if (!user) return null;
     return {
         id: user.id,
         name: user.name,
+        email: user.email,
+        phone: user.phone,
         role: user.role,
         field_of_interest: user.field_of_interest
     };
+}
+async function requireAuth() {
+    const user = await getCurrentUser();
+    if (!user) {
+        return {
+            errorResponse: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Authentication required. Please log in to perform this action.'
+            }, {
+                status: 401
+            })
+        };
+    }
+    return {
+        user
+    };
+}
+function setAuthCookies(response, token) {
+    const isProduction = ("TURBOPACK compile-time value", "development") === 'production';
+    const cookieOptions = {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 30 * 24 * 60 * 60
+    };
+    response.cookies.set('rqna_token', token, cookieOptions);
+    response.cookies.set('edu_token', token, cookieOptions);
+}
+function clearAuthCookies(response) {
+    const clearOptions = {
+        httpOnly: true,
+        secure: ("TURBOPACK compile-time value", "development") === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 0
+    };
+    response.cookies.set('rqna_token', '', clearOptions);
+    response.cookies.set('edu_token', '', clearOptions);
 }
 }),
 "[project]/lib/db.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
@@ -300,7 +361,9 @@ function initDb() {
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      password_hash TEXT NOT NULL,
+      email TEXT,
+      phone TEXT,
+      password_hash TEXT,
       role TEXT NOT NULL DEFAULT 'user',
       field_of_interest TEXT DEFAULT 'General',
       created_at INTEGER NOT NULL
@@ -346,13 +409,40 @@ function initDb() {
       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS otps (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      otp_hash TEXT NOT NULL,
+      expires_at INTEGER NOT NULL,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS rate_limits (
+      key TEXT PRIMARY KEY,
+      count INTEGER NOT NULL DEFAULT 1,
+      reset_at INTEGER NOT NULL,
+      last_requested_at INTEGER NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS idx_questions_field ON questions(field, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_solutions_qid ON solutions(question_id, created_at ASC);
     CREATE INDEX IF NOT EXISTS idx_thoughts_qid ON thoughts(question_id, created_at ASC);
     CREATE INDEX IF NOT EXISTS idx_thoughts_sid ON thoughts(solution_id, created_at ASC);
+    CREATE INDEX IF NOT EXISTS idx_otps_email ON otps(email);
+    CREATE INDEX IF NOT EXISTS idx_otps_expires ON otps(expires_at);
   `);
     try {
         sqlite.exec(`ALTER TABLE thoughts ADD COLUMN solution_id TEXT;`);
+    } catch  {}
+    try {
+        sqlite.exec(`ALTER TABLE users ADD COLUMN email TEXT;`);
+    } catch  {}
+    try {
+        sqlite.exec(`ALTER TABLE users ADD COLUMN phone TEXT;`);
+    } catch  {}
+    try {
+        sqlite.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email);`);
     } catch  {}
     // Pre-seed Admin and Demo Student account if empty
     const userCount = sqlite.prepare('SELECT count(*) as count FROM users').get();

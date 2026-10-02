@@ -327,7 +327,17 @@ self.__SERVER_FILES_MANIFEST={
     "turbopack": {
       "root": "/Users/abhayrajsingh/Documents/recursiveqna"
     },
-    "distDirRoot": ".next"
+    "distDirRoot": ".next",
+    "_originalRewrites": {
+      "beforeFiles": [],
+      "afterFiles": [
+        {
+          "source": "/auth/:path*",
+          "destination": "/api/auth/:path*"
+        }
+      ],
+      "fallback": []
+    }
   },
   "appDir": "/Users/abhayrajsingh/Documents/recursiveqna",
   "relativeAppDir": "",

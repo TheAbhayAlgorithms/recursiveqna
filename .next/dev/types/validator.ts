@@ -146,6 +146,42 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/auth/resend-otp/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/resend-otp">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/resend-otp/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/send-otp/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/send-otp">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/send-otp/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/update-phone/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/update-phone">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/update-phone/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/verify-otp/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/verify-otp">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/verify-otp/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/questions/[id]/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/questions/[id]">> = Specific

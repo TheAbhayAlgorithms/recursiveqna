@@ -1,6 +1,11 @@
 self.__BUILD_MANIFEST = {
   "__rewrites": {
-    "afterFiles": [],
+    "afterFiles": [
+      {
+        "source": "/auth/:path*",
+        "destination": "/api/auth/:path*"
+      }
+    ],
     "beforeFiles": [],
     "fallback": []
   },

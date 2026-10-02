@@ -1,2 +1,23 @@
-{"timestamp":"00:00:00.329","source":"Server","level":"LOG","message":""}
-{"timestamp":"01:47:53.392","source":"Server","level":"ERROR","message":"Login error: Error: write CONNECT_TIMEOUT aws-0-ap-northeast-2.pooler.supabase.com:6543"}
+{"timestamp":"00:00:00.452","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:40.149","source":"Server","level":"WARN","message":"⚠ The \"middleware\" file convention is deprecated. Please use \"proxy\" instead.\n\n  To migrate automatically, run:\n  npx @next/codemod@canary middleware-to-proxy .\n\n  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy"}
+{"timestamp":"00:00:40.183","source":"Server","level":"LOG","message":"✓ Compiled in 6ms"}
+{"timestamp":"00:05:01.141","source":"Server","level":"LOG","message":"  Reload env: .env.local"}
+{"timestamp":"00:07:16.105","source":"Server","level":"LOG","message":"\n======================================================"}
+{"timestamp":"00:07:16.108","source":"Server","level":"LOG","message":" [MOCK EMAIL SERVICE - DEVELOPMENT ONLY]"}
+{"timestamp":"00:07:16.108","source":"Server","level":"LOG","message":" To:      test_1790974409657@recursiveqna.org"}
+{"timestamp":"00:07:16.108","source":"Server","level":"LOG","message":" OTP:     497654"}
+{"timestamp":"00:07:16.108","source":"Server","level":"LOG","message":" Details: Valid for 5 minutes. Single-use only."}
+{"timestamp":"00:07:16.109","source":"Server","level":"LOG","message":"======================================================\n"}
+{"timestamp":"00:08:08.379","source":"Server","level":"LOG","message":"\n======================================================"}
+{"timestamp":"00:08:08.380","source":"Server","level":"LOG","message":" [MOCK EMAIL SERVICE - DEVELOPMENT ONLY]"}
+{"timestamp":"00:08:08.380","source":"Server","level":"LOG","message":" To:      test_1790974464765@recursiveqna.org"}
+{"timestamp":"00:08:08.381","source":"Server","level":"LOG","message":" OTP:     415785"}
+{"timestamp":"00:08:08.381","source":"Server","level":"LOG","message":" Details: Valid for 5 minutes. Single-use only."}
+{"timestamp":"00:08:08.381","source":"Server","level":"LOG","message":"======================================================\n"}
+{"timestamp":"00:10:58.729","source":"Server","level":"LOG","message":"\n======================================================"}
+{"timestamp":"00:10:58.729","source":"Server","level":"LOG","message":" [MOCK EMAIL SERVICE - DEVELOPMENT ONLY]"}
+{"timestamp":"00:10:58.730","source":"Server","level":"LOG","message":" To:      test_1790974635342@recursiveqna.org"}
+{"timestamp":"00:10:58.730","source":"Server","level":"LOG","message":" OTP:     698474"}
+{"timestamp":"00:10:58.730","source":"Server","level":"LOG","message":" Details: Valid for 5 minutes. Single-use only."}
+{"timestamp":"00:10:58.731","source":"Server","level":"LOG","message":"======================================================\n"}
+{"timestamp":"00:15:22.109","source":"Server","level":"LOG","message":"  Reload env: .env.local"}
