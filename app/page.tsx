@@ -236,7 +236,7 @@ export default function HomePage() {
 
         {/* Questions Feed Container */}
         <section className="app-container" style={{ marginTop: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div className="questions-feed-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>
               {selectedField === 'All' ? 'Recent Questions' : `${selectedField} Questions`}
             </h2>

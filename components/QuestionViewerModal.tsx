@@ -15,6 +15,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import AddSolutionModal from './AddSolutionModal';
+import { formatDate } from '@/lib/formatDate';
 
 interface QuestionViewerModalProps {
   isOpen: boolean;
@@ -377,7 +378,7 @@ export default function QuestionViewerModal({
                                   {sol.user_name}
                                 </span>
                                 <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                  • {new Date(sol.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                  • {formatDate(sol.created_at)}
                                 </span>
                                 {sol.is_verified === 1 && (
                                   <span style={{ 
@@ -507,7 +508,7 @@ export default function QuestionViewerModal({
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted)' }}>
                         <Clock size={13} />
-                        <span>{new Date(question.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        <span>{formatDate(question.created_at)}</span>
                       </div>
                     </div>
 

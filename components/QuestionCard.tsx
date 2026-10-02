@@ -16,6 +16,7 @@ import {
   PlusCircle,
   Eye
 } from 'lucide-react';
+import { formatDate } from '@/lib/formatDate';
 
 interface Question {
   id: string;
@@ -48,11 +49,7 @@ export default function QuestionCard({
   onAddSolution,
   onViewQuestion
 }: QuestionCardProps) {
-  const formattedDate = new Date(question.created_at).toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const formattedDate = formatDate(question.created_at);
 
   const getBadgeClass = (field: string) => {
     const clean = field.replace(/\s+/g, '');
@@ -66,15 +63,15 @@ export default function QuestionCard({
   };
 
   return (
-    <article className="card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <article className="card question-card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Header Info */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="card-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <span className={getBadgeClass(question.field)}>
             {question.field}
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-muted)' }}>
-            <Clock size={14} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12.5px', color: 'var(--text-muted)' }}>
+            <Clock size={13} style={{ flexShrink: 0 }} />
             <span>{formattedDate}</span>
           </div>
         </div>
@@ -86,7 +83,7 @@ export default function QuestionCard({
             className="btn btn-danger-outline btn-sm"
             title="Admin deletion - permanently purge this question"
           >
-            <Trash2 size={14} />
+            <Trash2 size={13} />
             <span>Delete (Admin)</span>
           </button>
         )}
@@ -95,15 +92,18 @@ export default function QuestionCard({
       {/* Question Title & Content */}
       <div>
         <h3 
+          className="card-question-title"
           onClick={() => handleOpenViewer('question')}
           style={{ 
-            fontSize: '18px', 
+            fontSize: '17.5px', 
             fontWeight: 700, 
             color: 'var(--text-primary)', 
-            marginBottom: '8px',
-            lineHeight: 1.4,
+            marginBottom: '6px',
+            lineHeight: 1.35,
             cursor: 'pointer',
-            transition: 'color var(--transition-fast)'
+            transition: 'color var(--transition-fast)',
+            wordBreak: 'break-word',
+            overflowWrap: 'anywhere'
           }}
           onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-accent)')}
           onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
@@ -112,16 +112,19 @@ export default function QuestionCard({
         </h3>
 
         <p 
+          className="card-question-content"
           onClick={() => handleOpenViewer('question')}
           style={{ 
             fontSize: '14px', 
             color: 'var(--text-secondary)', 
-            lineHeight: 1.6,
+            lineHeight: 1.55,
             display: '-webkit-box',
             WebkitLineClamp: 3,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            wordBreak: 'break-word',
+            overflowWrap: 'anywhere'
           }}
         >
           {question.content}

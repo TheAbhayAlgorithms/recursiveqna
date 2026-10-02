@@ -17,6 +17,7 @@ import {
   Copy,
   Check
 } from 'lucide-react';
+import { formatDate } from '@/lib/formatDate';
 
 export default function QuestionDetailPage() {
   const params = useParams();
@@ -218,7 +219,7 @@ export default function QuestionDetailPage() {
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-muted)' }}>
                 <Clock size={14} />
-                <span>{new Date(question.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                <span>{formatDate(question.created_at)}</span>
               </div>
             </div>
 
@@ -394,7 +395,7 @@ export default function QuestionDetailPage() {
                             {sol.user_name}
                           </div>
                           <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                            {new Date(sol.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            {formatDate(sol.created_at)}
                           </div>
                         </div>
 
