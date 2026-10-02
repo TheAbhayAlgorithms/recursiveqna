@@ -172,15 +172,11 @@ function LoginForm() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button 
               onClick={toggleTheme} 
-              className="btn-icon-only" 
+              className="btn-icon-only nav-theme-btn" 
               title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode'}
               aria-label="Toggle Day and Night mode"
             >
-              {theme === 'light' ? (
-                <Moon size={18} style={{ color: 'var(--text-secondary)' }} />
-              ) : (
-                <Sun size={18} style={{ color: '#f59e0b' }} />
-              )}
+              <span className={`theme-toggle-circle ${theme}`} aria-hidden="true" />
             </button>
             <Link href="/" className="btn btn-outline" style={{ fontSize: '13px', padding: '6px 14px' }}>
               Back to Questions

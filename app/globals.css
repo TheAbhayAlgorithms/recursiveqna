@@ -327,6 +327,62 @@ input, textarea, select {
   border-color: var(--border-hover);
 }
 
+/* Minimalist Circular Theme Toggle Button */
+.nav-theme-btn {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 50% !important;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.nav-theme-btn:hover {
+  background: var(--bg-subtle) !important;
+  border-color: var(--border-light) !important;
+}
+
+.nav-theme-btn:active {
+  transform: scale(0.92);
+}
+
+.theme-toggle-circle {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+/* Dark theme: minimalist hollow outline circle matching reference */
+[data-theme="dark"] .theme-toggle-circle {
+  border: 1.8px solid rgba(255, 255, 255, 0.72);
+  background: transparent;
+}
+
+[data-theme="dark"] .nav-theme-btn:hover .theme-toggle-circle {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+/* Light theme: sleek solid filled circle */
+[data-theme="light"] .theme-toggle-circle {
+  border: 1.8px solid var(--text-primary);
+  background: var(--text-primary);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .nav-theme-btn:hover .theme-toggle-circle {
+  border-color: #000000;
+  background: #000000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.22);
+  transform: scale(1.08);
+}
+
 /* ============================================================
    Cards & Layout Components
    ============================================================ */
@@ -709,7 +765,13 @@ input, textarea, select {
   }
 
   /* Compact round action buttons */
-  .nav-theme-btn,
+  .nav-theme-btn {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+  }
+
   .nav-logout-btn {
     width: 36px !important;
     height: 36px !important;
