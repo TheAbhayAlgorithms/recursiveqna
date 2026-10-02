@@ -328,124 +328,72 @@ input, textarea, select {
 }
 
 /* ============================================================
-   Minimal Simple Theme Toggle Switch Button
+   Navbar Theme Button (Single Icon Button matching adjacent buttons)
    ============================================================ */
-.theme-toggle-switch {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 48px;
-  height: 26px;
-  padding: 2px;
-  border-radius: 9999px;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-medium);
+.nav-theme-btn {
   cursor: pointer;
-  outline: none;
   flex-shrink: 0;
-  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease, transform var(--transition-fast);
-  user-select: none;
-  box-sizing: border-box;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all var(--transition-fast);
 }
 
-.theme-toggle-switch:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+.nav-theme-btn:active {
+  transform: scale(0.92);
 }
 
-.theme-toggle-switch:active {
-  transform: scale(0.96);
-}
-
-.theme-toggle-switch:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-/* Track container holding icons and thumb */
-.theme-toggle-track {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  padding: 0 4px;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-/* Background track hint icons */
-.theme-track-icon {
-  opacity: 0.45;
-  transition: opacity 0.25s ease, color 0.25s ease;
-  pointer-events: none;
+.theme-btn-icon {
+  transition: transform 0.25s cubic-bezier(0.34, 1.45, 0.7, 1), color 0.2s ease;
   flex-shrink: 0;
 }
 
-.theme-track-sun {
+.nav-theme-btn:hover .theme-btn-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.theme-btn-icon.sun {
   color: #f59e0b;
 }
 
-.theme-track-moon {
-  color: #94a3b8;
+.theme-btn-icon.moon {
+  color: var(--text-secondary);
 }
 
-[data-theme="dark"] .theme-track-moon {
-  color: #a5b4fc;
+.nav-theme-btn:hover .theme-btn-icon.moon {
+  color: var(--color-primary);
 }
 
-/* Sliding Thumb */
-.theme-toggle-thumb {
+/* ============================================================
+   Navbar Scroll Indicator (Responsive Screen Percentage)
+   ============================================================ */
+.nav-scroll-indicator-container {
   position: absolute;
-  top: 1px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.28s cubic-bezier(0.34, 1.45, 0.7, 1), background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  box-sizing: border-box;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--border-light);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 105;
 }
 
-/* Light Mode: Thumb on left */
-.theme-toggle-switch.light .theme-toggle-thumb,
-[data-theme="light"] .theme-toggle-thumb {
-  transform: translateX(0);
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.08);
+.nav-scroll-indicator-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent, #3b82f6), #60a5fa);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.55);
+  transition: width 60ms linear;
+  border-radius: 0 2px 2px 0;
 }
 
-.theme-thumb-icon.sun {
-  color: #d97706;
-  transition: transform 0.25s ease;
+[data-theme="dark"] .nav-scroll-indicator-container {
+  background: rgba(255, 255, 255, 0.06);
 }
 
-/* Dark Mode: Thumb on right */
-.theme-toggle-switch.dark .theme-toggle-thumb,
-[data-theme="dark"] .theme-toggle-thumb {
-  transform: translateX(22px);
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45), 0 0 8px rgba(99, 102, 241, 0.2);
-}
-
-.theme-thumb-icon.moon {
-  color: #93c5fd;
-  transition: transform 0.25s ease;
-}
-
-[data-theme="dark"] .theme-toggle-switch {
-  background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-[data-theme="dark"] .theme-toggle-switch:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+[data-theme="dark"] .nav-scroll-indicator-bar {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.55);
 }
 
 /* ============================================================
@@ -829,24 +777,8 @@ input, textarea, select {
     margin-left: auto !important;
   }
 
-  /* Compact theme toggle switch */
-  .theme-toggle-switch {
-    width: 44px !important;
-    height: 24px !important;
-    border-radius: 9999px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .theme-toggle-switch .theme-toggle-thumb {
-    width: 18px;
-    height: 18px;
-  }
-
-  .theme-toggle-switch.dark .theme-toggle-thumb,
-  [data-theme="dark"] .theme-toggle-thumb {
-    transform: translateX(18px);
-  }
-
+  /* Compact action buttons matching each other */
+  .nav-theme-btn,
   .nav-logout-btn {
     width: 36px !important;
     height: 36px !important;
@@ -1159,6 +1091,7 @@ input, textarea, select {
     gap: 3px !important;
   }
 
+  .nav-theme-btn,
   .nav-ask-btn,
   .nav-admin-btn,
   .nav-logout-btn {

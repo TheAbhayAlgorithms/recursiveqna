@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 import { 
@@ -27,6 +27,30 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) {
+  const [scrollPercentage, setScrollPercentage] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const doc = document.documentElement;
+      const totalScroll = doc.scrollHeight - window.innerHeight;
+      if (totalScroll <= 0) {
+        setScrollPercentage(0);
+        return;
+      }
+      const scrolled = window.scrollY || doc.scrollTop;
+      const pct = Math.min(100, Math.max(0, (scrolled / totalScroll) * 100));
+      setScrollPercentage(pct);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
   return (
     <header className="nav-header">
       <div className="app-container nav-inner">
@@ -117,6 +141,21 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
             </div>
           )}
         </div>
+      </div>
+
+      {/* Scroll indicator directly below navbar */}
+      <div 
+        className="nav-scroll-indicator-container"
+        role="progressbar"
+        aria-valuenow={Math.round(scrollPercentage)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Page scroll progress"
+      >
+        <div 
+          className="nav-scroll-indicator-bar"
+          style={{ width: `${scrollPercentage}%` }}
+        />
       </div>
     </header>
   );

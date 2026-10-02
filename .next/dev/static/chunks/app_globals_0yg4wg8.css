@@ -296,116 +296,67 @@ input, textarea, select {
   border-color: var(--border-hover);
 }
 
-.theme-toggle-switch {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-medium);
+.nav-theme-btn {
   cursor: pointer;
-  width: 48px;
-  height: 26px;
-  transition: background-color .25s ease, border-color .25s ease, box-shadow .2s ease, transform var(--transition-fast);
-  -webkit-user-select: none;
-  user-select: none;
-  box-sizing: border-box;
-  border-radius: 9999px;
-  outline: none;
+  transition: all var(--transition-fast);
   flex-shrink: 0;
-  align-items: center;
-  padding: 2px;
-  display: inline-flex;
-  position: relative;
+  justify-content: center !important;
+  align-items: center !important;
+  display: flex !important;
 }
 
-.theme-toggle-switch:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px #2563eb1f;
+.nav-theme-btn:active {
+  transform: scale(.92);
 }
 
-.theme-toggle-switch:active {
-  transform: scale(.96);
-}
-
-.theme-toggle-switch:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.theme-toggle-track {
-  box-sizing: border-box;
-  pointer-events: none;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0 4px;
-  display: flex;
-  position: relative;
-}
-
-.theme-track-icon {
-  opacity: .45;
-  pointer-events: none;
+.theme-btn-icon {
   flex-shrink: 0;
-  transition: opacity .25s, color .25s;
+  transition: transform .25s cubic-bezier(.34, 1.45, .7, 1), color .2s;
 }
 
-.theme-track-sun {
+.nav-theme-btn:hover .theme-btn-icon {
+  transform: rotate(15deg)scale(1.1);
+}
+
+.theme-btn-icon.sun {
   color: #f59e0b;
 }
 
-.theme-track-moon {
-  color: #94a3b8;
+.theme-btn-icon.moon {
+  color: var(--text-secondary);
 }
 
-[data-theme="dark"] .theme-track-moon {
-  color: #a5b4fc;
+.nav-theme-btn:hover .theme-btn-icon.moon {
+  color: var(--color-primary);
 }
 
-.theme-toggle-thumb {
-  box-sizing: border-box;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
-  transition: transform .28s cubic-bezier(.34, 1.45, .7, 1), background-color .25s, box-shadow .25s, border-color .25s;
-  display: flex;
+.nav-scroll-indicator-container {
+  background: var(--border-light);
+  pointer-events: none;
+  z-index: 105;
+  width: 100%;
+  height: 3px;
   position: absolute;
-  top: 1px;
-  left: 2px;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
 }
 
-.theme-toggle-switch.light .theme-toggle-thumb, [data-theme="light"] .theme-toggle-thumb {
-  background: #fff;
-  border: 1px solid #00000014;
-  transform: translateX(0);
-  box-shadow: 0 1px 3px #0000002e, 0 1px 2px #00000014;
+.nav-scroll-indicator-bar {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent, #3b82f6), #60a5fa);
+  border-radius: 0 2px 2px 0;
+  height: 100%;
+  transition: width 60ms linear;
+  box-shadow: 0 0 10px #2563eb8c;
 }
 
-.theme-thumb-icon.sun {
-  color: #d97706;
-  transition: transform .25s;
+[data-theme="dark"] .nav-scroll-indicator-container {
+  background: #ffffff0f;
 }
 
-.theme-toggle-switch.dark .theme-toggle-thumb, [data-theme="dark"] .theme-toggle-thumb {
-  background: #0f172a;
-  border: 1px solid #ffffff29;
-  transform: translateX(22px);
-  box-shadow: 0 1px 4px #00000073, 0 0 8px #6366f133;
-}
-
-.theme-thumb-icon.moon {
-  color: #93c5fd;
-  transition: transform .25s;
-}
-
-[data-theme="dark"] .theme-toggle-switch {
-  background: #1e293b;
-  border-color: #ffffff24;
-}
-
-[data-theme="dark"] .theme-toggle-switch:hover {
-  border-color: #ffffff59;
-  box-shadow: 0 0 0 2px #ffffff14;
+[data-theme="dark"] .nav-scroll-indicator-bar {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+  box-shadow: 0 0 10px #60a5fa8c;
 }
 
 .card {
@@ -758,23 +709,7 @@ input, textarea, select {
     display: flex !important;
   }
 
-  .theme-toggle-switch {
-    border-radius: 9999px !important;
-    flex-shrink: 0 !important;
-    width: 44px !important;
-    height: 24px !important;
-  }
-
-  .theme-toggle-switch .theme-toggle-thumb {
-    width: 18px;
-    height: 18px;
-  }
-
-  .theme-toggle-switch.dark .theme-toggle-thumb, [data-theme="dark"] .theme-toggle-thumb {
-    transform: translateX(18px);
-  }
-
-  .nav-logout-btn {
+  .nav-theme-btn, .nav-logout-btn {
     border-radius: var(--radius-md) !important;
     flex-shrink: 0 !important;
     width: 36px !important;
@@ -1064,7 +999,7 @@ input, textarea, select {
     font-size: 12px !important;
   }
 
-  .nav-ask-btn, .nav-admin-btn, .nav-logout-btn {
+  .nav-theme-btn, .nav-ask-btn, .nav-admin-btn, .nav-logout-btn {
     width: 34px !important;
     height: 34px !important;
   }
