@@ -52,111 +52,115 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
     };
   }, []);
   return (
-    <header className="nav-header">
-      <div className="app-container nav-inner">
-        {/* Brand */}
-        <Link href="/" className="brand-logo">
-          <div className="brand-icon">
-            <GraduationCap size={20} />
-          </div>
-          <div className="brand-text-wrapper">
-            <span className="brand-title">RecursiveQnA</span>
-            <span className="brand-subtitle">ACADEMIA Q&A</span>
-          </div>
-        </Link>
+    <>
+      <header className="nav-header">
+        <div className="app-container nav-inner">
+          {/* Brand */}
+          <Link href="/" className="brand-logo">
+            <div className="brand-icon">
+              <GraduationCap size={20} />
+            </div>
+            <div className="brand-text-wrapper">
+              <span className="brand-title">RecursiveQnA</span>
+              <span className="brand-subtitle">ACADEMIA Q&A</span>
+            </div>
+          </Link>
 
-        {/* Right Navigation & Controls */}
-        <div className="nav-actions">
-          {/* Day / Night Theme Toggle */}
-          <ThemeToggle />
+          {/* Right Navigation & Controls */}
+          <div className="nav-actions">
+            {/* Day / Night Theme Toggle */}
+            <ThemeToggle />
 
-          {/* Ask Question CTA */}
-          <button 
-            onClick={onOpenAskModal}
-            className="btn btn-primary nav-ask-btn"
-            title="Ask Question"
-          >
-            <PlusCircle size={16} />
-            <span className="nav-btn-full">Ask Question</span>
-            <span className="nav-btn-compact">Ask</span>
-          </button>
-
-          {/* Admin Dashboard Link (Only visible if Admin) */}
-          {user?.role === 'admin' && (
-            <Link 
-              href="/admin" 
-              className="btn btn-secondary nav-admin-btn" 
-              style={{ borderColor: 'var(--color-primary)' }}
-              title="Admin Panel"
+            {/* Ask Question CTA */}
+            <button 
+              onClick={onOpenAskModal}
+              className="btn btn-primary nav-ask-btn"
+              title="Ask Question"
             >
-              <ShieldAlert size={16} style={{ color: 'var(--color-primary)' }} />
-              <span className="nav-btn-full">Admin Panel</span>
-              <span className="nav-btn-compact">Admin</span>
-            </Link>
-          )}
+              <PlusCircle size={16} />
+              <span className="nav-btn-full">Ask Question</span>
+              <span className="nav-btn-compact">Ask</span>
+            </button>
 
-          {/* User Status / Login Buttons */}
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div 
-                className="nav-user-badge"
-                title={`${user.name} (@${user.id})`}
+            {/* Admin Dashboard Link (Only visible if Admin) */}
+            {user?.role === 'admin' && (
+              <Link 
+                href="/admin" 
+                className="btn btn-secondary nav-admin-btn" 
+                style={{ borderColor: 'var(--color-primary)' }}
+                title="Admin Panel"
               >
+                <ShieldAlert size={16} style={{ color: 'var(--color-primary)' }} />
+                <span className="nav-btn-full">Admin Panel</span>
+                <span className="nav-btn-compact">Admin</span>
+              </Link>
+            )}
+
+            {/* User Status / Login Buttons */}
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div 
-                  className="nav-user-avatar"
-                  style={{ 
-                    background: user.role === 'admin' ? 'var(--color-danger)' : 'var(--color-primary)', 
-                    color: 'white'
-                  }}
+                  className="nav-user-badge"
+                  title={`${user.name} (@${user.id})`}
                 >
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div className="nav-user-info">
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>{user.name}</div>
-                  <div style={{ fontSize: '10px', color: user.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)', whiteSpace: 'nowrap' }}>
-                    {user.role === 'admin' ? 'Administrator' : `@${user.id}`}
+                  <div 
+                    className="nav-user-avatar"
+                    style={{ 
+                      background: user.role === 'admin' ? 'var(--color-danger)' : 'var(--color-primary)', 
+                      color: 'white'
+                    }}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="nav-user-info">
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>{user.name}</div>
+                    <div style={{ fontSize: '10px', color: user.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                      {user.role === 'admin' ? 'Administrator' : `@${user.id}`}
+                    </div>
                   </div>
                 </div>
+
+                <button 
+                  onClick={onLogout} 
+                  className="btn-icon-only nav-logout-btn" 
+                  title="Log Out"
+                  aria-label="Log Out"
+                >
+                  <LogOut size={15} />
+                </button>
               </div>
-
-              <button 
-                onClick={onLogout} 
-                className="btn-icon-only nav-logout-btn" 
-                title="Log Out"
-                aria-label="Log Out"
-              >
-                <LogOut size={15} />
-              </button>
-            </div>
-          ) : (
-            <div className="nav-auth-buttons">
-              <Link href="/login" className="btn btn-outline nav-auth-btn">
-                <LogIn size={15} />
-                <span>Log In</span>
-              </Link>
-              <Link href="/login?tab=register" className="btn btn-secondary nav-auth-btn">
-                <UserPlus size={15} />
-                <span>Register</span>
-              </Link>
-            </div>
-          )}
+            ) : (
+              <div className="nav-auth-buttons">
+                <Link href="/login" className="btn btn-outline nav-auth-btn">
+                  <LogIn size={15} />
+                  <span>Log In</span>
+                </Link>
+                <Link href="/login?tab=register" className="btn btn-secondary nav-auth-btn">
+                  <UserPlus size={15} />
+                  <span>Register</span>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Scroll indicator directly below navbar */}
-      <div 
-        className="nav-scroll-indicator-container"
-        role="progressbar"
-        aria-valuenow={Math.round(scrollPercentage)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Page scroll progress"
-      >
+        {/* Scroll indicator directly below navbar */}
         <div 
-          className="nav-scroll-indicator-bar"
-          style={{ width: `${scrollPercentage}%` }}
-        />
-      </div>
-    </header>
+          className="nav-scroll-indicator-container"
+          role="progressbar"
+          aria-valuenow={Math.round(scrollPercentage)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Page scroll progress"
+        >
+          <div 
+            className="nav-scroll-indicator-bar"
+            style={{ width: `${scrollPercentage}%` }}
+          />
+        </div>
+      </header>
+      {/* Document flow spacer to account for fixed navbar height */}
+      <div className="nav-header-spacer" aria-hidden="true" />
+    </>
   );
 }
