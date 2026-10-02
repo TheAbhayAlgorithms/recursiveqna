@@ -17,7 +17,8 @@ import {
   Lock,
   Layers,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  KeyRound
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -33,10 +34,18 @@ export default function AdminDashboardPage() {
   const [thoughts, setThoughts] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
 
-  // Active Tab: 'overview' | 'questions' | 'solutions' | 'thoughts' | 'users'
-  const [activeTab, setActiveTab] = useState<'overview' | 'questions' | 'solutions' | 'thoughts' | 'users'>('overview');
+  // Active Tab: 'overview' | 'questions' | 'solutions' | 'thoughts' | 'users' | 'security'
+  const [activeTab, setActiveTab] = useState<'overview' | 'questions' | 'solutions' | 'thoughts' | 'users' | 'security'>('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoadingData, setIsLoadingData] = useState(false);
+
+  // Password change states
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [pwdLoading, setPwdLoading] = useState(false);
+  const [pwdError, setPwdError] = useState<string | null>(null);
+  const [pwdSuccess, setPwdSuccess] = useState<string | null>(null);
 
   // Authenticate Admin
   useEffect(() => {
@@ -174,6 +183,47 @@ export default function AdminDashboardPage() {
       loadAdminData();
     } catch {
       alert('Error deleting user');
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwdError(null);
+    setPwdSuccess(null);
+
+    if (!currentPassword) {
+      setPwdError('Please enter your current password.');
+      return;
+    }
+    if (!newPassword || newPassword.length < 4) {
+      setPwdError('New password must be at least 4 characters long.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPwdError('New passwords do not match.');
+      return;
+    }
+
+    setPwdLoading(true);
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPwdError(data.error || 'Failed to update password.');
+      } else {
+        setPwdSuccess('Password changed successfully! Keep your new credentials safe.');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      }
+    } catch (err: any) {
+      setPwdError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setPwdLoading(false);
     }
   };
 
@@ -344,6 +394,7 @@ export default function AdminDashboardPage() {
               { id: 'solutions', label: `Solutions (${solutions.length})`, icon: CheckCircle2 },
               { id: 'thoughts', label: `Thoughts (${thoughts.length})`, icon: MessageSquare },
               { id: 'users', label: `Users (${usersList.length})`, icon: Users },
+              { id: 'security', label: 'Security & Password', icon: Lock },
             ].map((tab) => {
               const IconComp = tab.icon;
               const isActive = activeTab === tab.id;
@@ -690,6 +741,148 @@ export default function AdminDashboardPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* TAB 6: SECURITY / CHANGE PASSWORD */}
+          {activeTab === 'security' && (
+            <div className="card" style={{ maxWidth: '580px', margin: '0 auto', padding: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+                <div style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '12px',
+                  background: 'var(--color-primary-subtle)',
+                  color: 'var(--color-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <KeyRound size={22} />
+                </div>
+                <div>
+                  <h2 style={{ fontSize: '20px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                    Change Admin Password
+                  </h2>
+                  <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
+                    Update the root administrator password in your Supabase database.
+                  </p>
+                </div>
+              </div>
+
+              {pwdError && (
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-danger-bg)',
+                  color: 'var(--color-danger)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <AlertTriangle size={16} />
+                  <span>{pwdError}</span>
+                </div>
+              )}
+
+              {pwdSuccess && (
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  color: '#16a34a',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <CheckCircle2 size={16} />
+                  <span>{pwdSuccess}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Enter current password (default: admin)"
+                    required
+                    className="input-field"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter strong new password"
+                    required
+                    minLength={4}
+                    className="input-field"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter new password"
+                    required
+                    minLength={4}
+                    className="input-field"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+
+                <div style={{
+                  padding: '12px 14px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-subtle)',
+                  border: '1px solid var(--border-light)',
+                  fontSize: '12px',
+                  color: 'var(--text-secondary)',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                  marginTop: '4px'
+                }}>
+                  <Lock size={15} style={{ marginTop: '2px', flexShrink: 0 }} />
+                  <span>
+                    This modifies the bcrypt hash in your connected Supabase PostgreSQL database immediately. Quick demo logins have been removed, so please ensure you remember your new password.
+                  </span>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={pwdLoading}
+                  className="btn btn-primary"
+                  style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                >
+                  <KeyRound size={16} />
+                  <span>{pwdLoading ? 'Updating Password...' : 'Update Admin Password'}</span>
+                </button>
+              </form>
             </div>
           )}
         </div>

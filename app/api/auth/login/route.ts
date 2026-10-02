@@ -43,19 +43,6 @@ export async function POST(request: Request) {
       isValid = await bcrypt.compare(cleanPassword, user.password_hash);
     }
 
-    // Support flexible admin credentials: 'admin', 'admin123', 'pass', 'password'
-    if (!isValid && (user.id === 'admin' || user.role === 'admin')) {
-      const acceptedAdminPasswords = ['admin', 'admin123', 'pass', 'password'];
-      if (acceptedAdminPasswords.includes(password) || acceptedAdminPasswords.includes(cleanPassword)) {
-        isValid = true;
-        try {
-          const newHash = await bcrypt.hash(cleanPassword || password, 10);
-          await db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
-        } catch (updateErr) {
-          console.error('Failed to sync admin password hash:', updateErr);
-        }
-      }
-    }
 
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid User ID or password' }, { status: 401 });

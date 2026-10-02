@@ -99,45 +99,6 @@ function LoginForm() {
     }
   };
 
-  const handleQuickLogin = async (demoUserId: string, demoPassword: string) => {
-    setUserId(demoUserId);
-    setPassword(demoPassword);
-    setError(null);
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: demoUserId, password: demoPassword }),
-      });
-
-      let data: any = {};
-      try {
-        data = await res.json();
-      } catch {
-        data = { error: `Server error (${res.status} ${res.statusText})` };
-      }
-
-      if (!res.ok) {
-        setError(data.error || 'Authentication failed.');
-        setLoading(false);
-        return;
-      }
-
-      handleLoginSuccess(data.user);
-    } catch (err: any) {
-      console.error('Quick login error:', err);
-      const msg = err?.message || '';
-      if (msg.includes('fetch') || msg.includes('Network') || msg.includes('Load failed')) {
-        setError('Cannot connect to the RecursiveQnA server. Please ensure the development server is active.');
-      } else {
-        setError(msg || 'An unexpected error occurred during quick sign in.');
-      }
-      setLoading(false);
-    }
-  };
-
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -413,76 +374,6 @@ function LoginForm() {
                   <ArrowRight size={16} />
                 </button>
 
-                {/* Quick Presets / Demo & Admin Credentials */}
-                <div style={{
-                  marginTop: '20px',
-                  padding: '14px',
-                  background: 'var(--bg-subtle)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-light)'
-                }}>
-                  <div style={{ 
-                    fontSize: '11px', 
-                    fontWeight: 700, 
-                    color: 'var(--text-muted)', 
-                    textTransform: 'uppercase', 
-                    letterSpacing: '0.05em', 
-                    marginBottom: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
-                    <span>Quick Demo & Admin Logins</span>
-                    <span style={{ fontSize: '10px', fontWeight: 500, color: 'var(--color-primary)' }}>1-Click Login</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => handleQuickLogin('admin', 'admin')}
-                      className="btn btn-secondary"
-                      style={{ 
-                        fontSize: '12px', 
-                        padding: '8px 10px', 
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: '2px',
-                        border: '1px solid var(--border-color)',
-                        background: 'var(--bg-card)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 600, color: 'var(--color-danger)' }}>
-                        <ShieldCheck size={14} />
-                        <span>Admin</span>
-                      </div>
-                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>admin / admin</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => handleQuickLogin('alex_student', 'student123')}
-                      className="btn btn-secondary"
-                      style={{ 
-                        fontSize: '12px', 
-                        padding: '8px 10px', 
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: '2px',
-                        border: '1px solid var(--border-color)',
-                        background: 'var(--bg-card)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 600, color: 'var(--color-primary)' }}>
-                        <GraduationCap size={14} />
-                        <span>Student</span>
-                      </div>
-                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>alex_student / student123</span>
-                    </button>
-                  </div>
-                </div>
               </form>
             ) : (
               /* Register Form */
