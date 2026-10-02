@@ -148,6 +148,7 @@ function HomePage() {
                 },
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                        className: "home-hero-section",
                         style: {
                             background: 'var(--bg-card)',
                             borderBottom: '1px solid var(--border-light)',
@@ -172,11 +173,14 @@ function HomePage() {
                                                 color: 'var(--color-accent)',
                                                 fontSize: '13px',
                                                 fontWeight: 600,
-                                                marginBottom: '16px'
+                                                marginBottom: '14px'
                                             },
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                    size: 16
+                                                    size: 15,
+                                                    style: {
+                                                        flexShrink: 0
+                                                    }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 152,
@@ -196,13 +200,14 @@ function HomePage() {
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                            className: "home-hero-title",
                                             style: {
                                                 fontSize: '32px',
                                                 fontWeight: 800,
                                                 letterSpacing: '-0.03em',
                                                 color: 'var(--text-primary)',
-                                                lineHeight: 1.2,
-                                                marginBottom: '12px'
+                                                lineHeight: 1.25,
+                                                marginBottom: '10px'
                                             },
                                             children: "Explore Questions, Share Insights, and Verify Academic Solutions."
                                         }, void 0, false, {
@@ -211,8 +216,9 @@ function HomePage() {
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "home-hero-desc",
                                             style: {
-                                                fontSize: '16px',
+                                                fontSize: '15px',
                                                 color: 'var(--text-secondary)',
                                                 lineHeight: 1.6
                                             },
@@ -230,13 +236,14 @@ function HomePage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
-                                        marginTop: '28px',
+                                        marginTop: '24px',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        gap: '16px'
+                                        gap: '14px'
                                     },
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "home-search-wrapper",
                                             style: {
                                                 position: 'relative',
                                                 maxWidth: '640px'
@@ -264,8 +271,7 @@ function HomePage() {
                                                     className: "form-input",
                                                     style: {
                                                         paddingLeft: '44px',
-                                                        height: '48px',
-                                                        fontSize: '15px'
+                                                        height: '48px'
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
@@ -279,18 +285,20 @@ function HomePage() {
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "subject-chips-container",
                                             style: {
                                                 display: 'flex',
                                                 gap: '8px',
                                                 overflowX: 'auto',
-                                                paddingBottom: '4px'
+                                                paddingBottom: '6px',
+                                                WebkitOverflowScrolling: 'touch'
                                             },
                                             children: SUBJECT_FIELDS.map((f)=>{
                                                 const isSelected = selectedField === f;
                                                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     onClick: ()=>setSelectedField(f),
                                                     style: {
-                                                        padding: '8px 16px',
+                                                        padding: '7px 14px',
                                                         borderRadius: 'var(--radius-full)',
                                                         fontSize: '13px',
                                                         fontWeight: 600,
@@ -299,12 +307,13 @@ function HomePage() {
                                                         background: isSelected ? 'var(--color-accent)' : 'var(--bg-subtle)',
                                                         color: isSelected ? '#ffffff' : 'var(--text-secondary)',
                                                         border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--border-light)',
-                                                        whiteSpace: 'nowrap'
+                                                        whiteSpace: 'nowrap',
+                                                        flexShrink: 0
                                                     },
                                                     children: f
                                                 }, f, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 205,
+                                                    lineNumber: 211,
                                                     columnNumber: 21
                                                 }, this);
                                             })
@@ -353,7 +362,7 @@ function HomePage() {
                                         children: selectedField === 'All' ? 'Recent Questions' : `${selectedField} Questions`
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 233,
+                                        lineNumber: 240,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -370,13 +379,13 @@ function HomePage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 236,
+                                        lineNumber: 243,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 232,
+                                lineNumber: 239,
                                 columnNumber: 11
                             }, this),
                             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -388,7 +397,7 @@ function HomePage() {
                                 children: "Loading educational repository..."
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 242,
+                                lineNumber: 249,
                                 columnNumber: 13
                             }, this) : questions.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "card",
@@ -413,12 +422,12 @@ function HomePage() {
                                             size: 28
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 258,
+                                            lineNumber: 265,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 254,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -430,7 +439,7 @@ function HomePage() {
                                         children: "No questions found in this category"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 267,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -443,7 +452,7 @@ function HomePage() {
                                         children: "Be the first to post a question or inquiry. Attach photos of textbook problems, handwritten equations, or video explanations."
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 270,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -455,13 +464,13 @@ function HomePage() {
                                         children: "Post the First Question"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 266,
+                                        lineNumber: 273,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 246,
+                                lineNumber: 253,
                                 columnNumber: 13
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
@@ -493,18 +502,18 @@ function HomePage() {
                                         }
                                     }, q.id, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 279,
+                                        lineNumber: 286,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 277,
+                                lineNumber: 284,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 231,
+                        lineNumber: 238,
                         columnNumber: 9
                     }, this)
                 ]
@@ -537,7 +546,7 @@ function HomePage() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 306,
+                lineNumber: 313,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AskQuestionModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -546,7 +555,7 @@ function HomePage() {
                 onQuestionCreated: loadQuestions
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 323,
+                lineNumber: 330,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AddSolutionModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -564,7 +573,7 @@ function HomePage() {
                 onSolutionAdded: loadQuestions
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 330,
+                lineNumber: 337,
                 columnNumber: 7
             }, this)
         ]
@@ -862,6 +871,7 @@ function AddSolutionModal({ isOpen, questionId, questionTitle, onClose, onSoluti
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "modal-upload-buttons",
                                     style: {
                                         display: 'flex',
                                         gap: '10px',
@@ -1516,6 +1526,7 @@ function AskQuestionModal({ isOpen, onClose, onQuestionCreated }) {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "modal-upload-buttons",
                                     style: {
                                         display: 'flex',
                                         gap: '10px',
@@ -1856,7 +1867,7 @@ function Navbar({ user, onOpenAskModal, onLogout }) {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "brand-icon",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$graduation$2d$cap$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__GraduationCap$3e$__["GraduationCap"], {
-                                size: 22
+                                size: 20
                             }, void 0, false, {
                                 fileName: "[project]/components/Navbar.tsx",
                                 lineNumber: 40,
@@ -1868,8 +1879,10 @@ function Navbar({ user, onOpenAskModal, onLogout }) {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "brand-text-wrapper",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "brand-title",
                                     children: "RecursiveQnA"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
@@ -1877,13 +1890,7 @@ function Navbar({ user, onOpenAskModal, onLogout }) {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    style: {
-                                        display: 'block',
-                                        fontSize: '11px',
-                                        fontWeight: 500,
-                                        color: 'var(--text-muted)',
-                                        letterSpacing: '0.04em'
-                                    },
+                                    className: "brand-subtitle",
                                     children: "ACADEMIA Q&A"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
@@ -1907,254 +1914,252 @@ function Navbar({ user, onOpenAskModal, onLogout }) {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: toggleTheme,
-                            className: "btn-icon-only",
+                            className: "btn-icon-only nav-theme-btn",
                             title: theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode',
                             "aria-label": "Toggle Day and Night mode",
                             children: theme === 'light' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__["Moon"], {
-                                size: 18,
+                                size: 17,
                                 style: {
                                     color: 'var(--text-secondary)'
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/Navbar.tsx",
-                                lineNumber: 66,
+                                lineNumber: 58,
                                 columnNumber: 15
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sun$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sun$3e$__["Sun"], {
-                                size: 18,
+                                size: 17,
                                 style: {
                                     color: '#f59e0b'
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/Navbar.tsx",
-                                lineNumber: 68,
+                                lineNumber: 60,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 59,
+                            lineNumber: 51,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: onOpenAskModal,
-                            className: "btn btn-primary",
-                            style: {
-                                fontWeight: 600
-                            },
+                            className: "btn btn-primary nav-ask-btn",
+                            title: "Ask Question",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlusCircle$3e$__["PlusCircle"], {
-                                    size: 18
+                                    size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 78,
+                                    lineNumber: 70,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "nav-btn-full",
                                     children: "Ask Question"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 79,
+                                    lineNumber: 71,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "nav-btn-compact",
+                                    children: "Ask"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Navbar.tsx",
+                                    lineNumber: 72,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 73,
+                            lineNumber: 65,
                             columnNumber: 11
                         }, this),
                         user?.role === 'admin' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                             href: "/admin",
-                            className: "btn btn-secondary",
+                            className: "btn btn-secondary nav-admin-btn",
                             style: {
                                 borderColor: 'var(--color-primary)'
                             },
+                            title: "Admin Panel",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2d$alert$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShieldAlert$3e$__["ShieldAlert"], {
-                                    size: 17,
+                                    size: 16,
                                     style: {
                                         color: 'var(--color-primary)'
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 83,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "nav-btn-full",
                                     children: "Admin Panel"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 86,
+                                    lineNumber: 84,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "nav-btn-compact",
+                                    children: "Admin"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Navbar.tsx",
+                                    lineNumber: 85,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 84,
+                            lineNumber: 77,
                             columnNumber: 13
                         }, this),
                         user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '8px'
+                                gap: '6px'
                             },
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        padding: '6px 12px',
-                                        background: 'var(--bg-subtle)',
-                                        borderRadius: 'var(--radius-md)',
-                                        border: '1px solid var(--border-light)',
-                                        fontSize: '13px'
-                                    },
+                                    className: "nav-user-badge",
+                                    title: `${user.name} (@${user.id})`,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "nav-user-avatar",
                                             style: {
-                                                width: '24px',
-                                                height: '24px',
-                                                borderRadius: '50%',
                                                 background: user.role === 'admin' ? 'var(--color-danger)' : 'var(--color-primary)',
-                                                color: 'white',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontWeight: 700,
-                                                fontSize: '11px'
+                                                color: 'white'
                                             },
                                             children: user.name.charAt(0).toUpperCase()
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 105,
+                                            lineNumber: 96,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                lineHeight: 1.2
-                                            },
+                                            className: "nav-user-info",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     style: {
                                                         fontWeight: 600,
-                                                        color: 'var(--text-primary)'
+                                                        color: 'var(--text-primary)',
+                                                        whiteSpace: 'nowrap'
                                                     },
                                                     children: user.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Navbar.tsx",
-                                                    lineNumber: 122,
+                                                    lineNumber: 106,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     style: {
                                                         fontSize: '10px',
-                                                        color: user.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)'
+                                                        color: user.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)',
+                                                        whiteSpace: 'nowrap'
                                                     },
                                                     children: user.role === 'admin' ? 'Administrator' : `@${user.id}`
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Navbar.tsx",
-                                                    lineNumber: 123,
+                                                    lineNumber: 107,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 121,
+                                            lineNumber: 105,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 93,
+                                    lineNumber: 92,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: onLogout,
-                                    className: "btn-icon-only",
+                                    className: "btn-icon-only nav-logout-btn",
                                     title: "Log Out",
                                     "aria-label": "Log Out",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__["LogOut"], {
-                                        size: 16
+                                        size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 135,
+                                        lineNumber: 119,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 129,
+                                    lineNumber: 113,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 92,
+                            lineNumber: 91,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px'
-                            },
+                            className: "nav-auth-buttons",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/login",
-                                    className: "btn btn-outline",
+                                    className: "btn btn-outline nav-auth-btn",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$in$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogIn$3e$__["LogIn"], {
-                                            size: 16
+                                            size: 15
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 141,
+                                            lineNumber: 125,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Log In"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 142,
+                                            lineNumber: 126,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 140,
+                                    lineNumber: 124,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/login?tab=register",
-                                    className: "btn btn-secondary",
+                                    className: "btn btn-secondary nav-auth-btn",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2d$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__UserPlus$3e$__["UserPlus"], {
-                                            size: 16
+                                            size: 15
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 145,
+                                            lineNumber: 129,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Register"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 146,
+                                            lineNumber: 130,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Navbar.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 128,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 139,
+                            lineNumber: 123,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/Navbar.tsx",
-                    lineNumber: 57,
+                    lineNumber: 49,
                     columnNumber: 9
                 }, this)
             ]
@@ -2446,24 +2451,10 @@ function QuestionCard({ question, isAdmin, onDelete, onAddSolution, onViewQuesti
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderTop: '1px solid var(--border-light)',
-                    paddingTop: '14px',
-                    marginTop: '4px',
-                    flexWrap: 'wrap',
-                    gap: '12px'
-                },
+                className: "card-footer",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            fontSize: '13px'
-                        },
+                        className: "card-footer-author",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
@@ -2476,23 +2467,25 @@ function QuestionCard({ question, isAdmin, onDelete, onAddSolution, onViewQuesti
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     fontSize: '11px',
-                                    fontWeight: 700
+                                    fontWeight: 700,
+                                    flexShrink: 0
                                 },
                                 children: question.user_name.charAt(0).toUpperCase()
                             }, void 0, false, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 196,
+                                lineNumber: 185,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 style: {
                                     fontWeight: 600,
-                                    color: 'var(--text-primary)'
+                                    color: 'var(--text-primary)',
+                                    wordBreak: 'break-word'
                                 },
                                 children: question.user_name
                             }, void 0, false, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 210,
+                                lineNumber: 200,
                                 columnNumber: 11
                             }, this),
                             question.user_role === 'admin' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2502,37 +2495,36 @@ function QuestionCard({ question, isAdmin, onDelete, onAddSolution, onViewQuesti
                                     color: 'var(--color-danger)',
                                     padding: '2px 6px',
                                     borderRadius: '4px',
-                                    fontWeight: 700
+                                    fontWeight: 700,
+                                    flexShrink: 0
                                 },
                                 children: "Admin"
                             }, void 0, false, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 212,
+                                lineNumber: 202,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/QuestionCard.tsx",
-                        lineNumber: 195,
+                        lineNumber: 184,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            flexWrap: 'wrap'
-                        },
+                        className: "card-action-bar",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: `solutions-count-badge ${(question.verified_solutions_count || 0) > 0 ? 'has-verified' : ''}`,
                                 title: `${question.solutions_count} solutions recorded`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
-                                        size: 14
+                                        size: 14,
+                                        style: {
+                                            flexShrink: 0
+                                        }
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 233,
+                                        lineNumber: 223,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2543,71 +2535,77 @@ function QuestionCard({ question, isAdmin, onDelete, onAddSolution, onViewQuesti
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 234,
+                                        lineNumber: 224,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 229,
+                                lineNumber: 219,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
                                 onClick: ()=>handleOpenViewer('solutions'),
-                                className: "btn btn-secondary btn-sm",
+                                className: "btn btn-secondary btn-sm card-action-btn",
                                 title: "View submitted solutions for this question",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
-                                        size: 14
+                                        size: 14,
+                                        style: {
+                                            flexShrink: 0
+                                        }
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 244,
+                                        lineNumber: 234,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "View Solution"
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 245,
+                                        lineNumber: 235,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 238,
+                                lineNumber: 228,
                                 columnNumber: 11
                             }, this),
                             onAddSolution && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
                                 onClick: ()=>onAddSolution(question.id, question.title),
-                                className: "btn btn-primary btn-sm",
+                                className: "btn btn-primary btn-sm card-action-btn",
                                 title: "Add a solution",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlusCircle$3e$__["PlusCircle"], {
-                                        size: 14
+                                        size: 14,
+                                        style: {
+                                            flexShrink: 0
+                                        }
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 256,
+                                        lineNumber: 246,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Add Solution"
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionCard.tsx",
-                                        lineNumber: 257,
+                                        lineNumber: 247,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/QuestionCard.tsx",
-                                lineNumber: 250,
+                                lineNumber: 240,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/QuestionCard.tsx",
-                        lineNumber: 226,
+                        lineNumber: 217,
                         columnNumber: 9
                     }, this)
                 ]
@@ -2791,6 +2789,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                     },
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "modal-header viewer-modal-header",
                             style: {
                                 padding: '14px 20px',
                                 borderBottom: '1px solid var(--border-light)',
@@ -2799,14 +2798,16 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                 justifyContent: 'space-between',
                                 background: 'var(--bg-card)',
                                 flexWrap: 'wrap',
-                                gap: '10px'
+                                gap: '8px'
                             },
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '10px'
+                                        gap: '8px',
+                                        minWidth: 0,
+                                        flexShrink: 1
                                     },
                                     children: [
                                         question?.field && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2818,10 +2819,14 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "viewer-header-title",
                                             style: {
                                                 fontSize: '13px',
                                                 fontWeight: 600,
-                                                color: 'var(--text-muted)'
+                                                color: 'var(--text-muted)',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis'
                                             },
                                             children: "Academic Solutions & Problem Details"
                                         }, void 0, false, {
@@ -2839,7 +2844,8 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                     style: {
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '8px'
+                                        gap: '6px',
+                                        flexShrink: 0
                                     },
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2864,6 +2870,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                     columnNumber: 91
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "viewer-btn-label",
                                                     children: copied ? 'Copied' : 'Share'
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/QuestionViewerModal.tsx",
@@ -2889,6 +2896,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "viewer-btn-label",
                                                     children: "Delete"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/QuestionViewerModal.tsx",
@@ -2934,21 +2942,25 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "viewer-tabs-bar",
                             style: {
                                 display: 'flex',
                                 background: 'var(--bg-subtle)',
                                 borderBottom: '1px solid var(--border-light)',
-                                padding: '0 20px',
+                                padding: '0 16px',
                                 gap: '8px',
-                                overflowX: 'auto'
+                                overflowX: 'auto',
+                                WebkitOverflowScrolling: 'touch'
                             },
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>setActiveTab('solutions'),
+                                    className: `viewer-tab-btn ${activeTab === 'solutions' ? 'active' : ''}`,
                                     style: {
                                         display: 'flex',
                                         alignItems: 'center',
+                                        justifyContent: 'center',
                                         gap: '8px',
                                         padding: '12px 16px',
                                         fontSize: '14px',
@@ -2958,14 +2970,15 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                         cursor: 'pointer',
                                         color: activeTab === 'solutions' ? 'var(--color-accent)' : 'var(--text-secondary)',
                                         borderBottom: activeTab === 'solutions' ? '2.5px solid var(--color-accent)' : '2.5px solid transparent',
-                                        transition: 'all var(--transition-fast)'
+                                        transition: 'all var(--transition-fast)',
+                                        whiteSpace: 'nowrap'
                                     },
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                            lineNumber: 246,
+                                            lineNumber: 250,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2976,21 +2989,23 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                            lineNumber: 247,
+                                            lineNumber: 251,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/QuestionViewerModal.tsx",
-                                    lineNumber: 228,
+                                    lineNumber: 229,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>setActiveTab('question'),
+                                    className: `viewer-tab-btn ${activeTab === 'question' ? 'active' : ''}`,
                                     style: {
                                         display: 'flex',
                                         alignItems: 'center',
+                                        justifyContent: 'center',
                                         gap: '8px',
                                         padding: '12px 16px',
                                         fontSize: '14px',
@@ -3000,27 +3015,28 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                         cursor: 'pointer',
                                         color: activeTab === 'question' ? 'var(--color-accent)' : 'var(--text-secondary)',
                                         borderBottom: activeTab === 'question' ? '2.5px solid var(--color-accent)' : '2.5px solid transparent',
-                                        transition: 'all var(--transition-fast)'
+                                        transition: 'all var(--transition-fast)',
+                                        whiteSpace: 'nowrap'
                                     },
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                            lineNumber: 268,
+                                            lineNumber: 275,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Problem Details"
                                         }, void 0, false, {
                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                            lineNumber: 269,
+                                            lineNumber: 276,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/QuestionViewerModal.tsx",
-                                    lineNumber: 250,
+                                    lineNumber: 254,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -3044,7 +3060,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                 children: "Loading solutions and problem details..."
                             }, void 0, false, {
                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                lineNumber: 276,
+                                lineNumber: 283,
                                 columnNumber: 15
                             }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
@@ -3060,20 +3076,20 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                        lineNumber: 281,
+                                        lineNumber: 288,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: error
                                     }, void 0, false, {
                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                        lineNumber: 282,
+                                        lineNumber: 289,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                lineNumber: 280,
+                                lineNumber: 287,
                                 columnNumber: 15
                             }, this) : question ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                 children: [
@@ -3104,7 +3120,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 292,
+                                                                lineNumber: 299,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3115,13 +3131,13 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 children: "Step-by-step proofs, calculations, and walkthroughs"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 295,
+                                                                lineNumber: 302,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 291,
+                                                        lineNumber: 298,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3136,26 +3152,26 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 308,
+                                                                lineNumber: 315,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Add Solution"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 309,
+                                                                lineNumber: 316,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 300,
+                                                        lineNumber: 307,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 290,
+                                                lineNumber: 297,
                                                 columnNumber: 21
                                             }, this),
                                             solutions.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3175,7 +3191,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 321,
+                                                        lineNumber: 328,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
@@ -3188,7 +3204,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         children: "No solutions submitted yet"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 322,
+                                                        lineNumber: 329,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3201,7 +3217,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         children: "Do you know how to solve this problem? Share your explanation, diagram, or video solution!"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 325,
+                                                        lineNumber: 332,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3214,13 +3230,13 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         children: "Submit First Solution"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 328,
+                                                        lineNumber: 335,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 321,
                                                 columnNumber: 23
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
@@ -3270,7 +3286,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                 children: sol.user_name.charAt(0).toUpperCase()
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 355,
+                                                                                lineNumber: 362,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3282,7 +3298,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                 children: sol.user_name
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 369,
+                                                                                lineNumber: 376,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3300,7 +3316,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 372,
+                                                                                lineNumber: 379,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             sol.is_verified === 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3320,20 +3336,20 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                         size: 12
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                        lineNumber: 387,
+                                                                                        lineNumber: 394,
                                                                                         columnNumber: 37
                                                                                     }, this),
                                                                                     "VERIFIED"
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 376,
+                                                                                lineNumber: 383,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 354,
+                                                                        lineNumber: 361,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3357,20 +3373,20 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                         size: 12
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                        lineNumber: 402,
+                                                                                        lineNumber: 409,
                                                                                         columnNumber: 37
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         children: sol.is_verified === 1 ? 'Unverify' : 'Verify'
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                        lineNumber: 403,
+                                                                                        lineNumber: 410,
                                                                                         columnNumber: 37
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 396,
+                                                                                lineNumber: 403,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             isAdmin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3387,32 +3403,32 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                         size: 12
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                        lineNumber: 414,
+                                                                                        lineNumber: 421,
                                                                                         columnNumber: 37
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         children: "Delete"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                        lineNumber: 415,
+                                                                                        lineNumber: 422,
                                                                                         columnNumber: 37
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 408,
+                                                                                lineNumber: 415,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 394,
+                                                                        lineNumber: 401,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 353,
+                                                                lineNumber: 360,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3426,7 +3442,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 children: sol.content
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 422,
+                                                                lineNumber: 429,
                                                                 columnNumber: 29
                                                             }, this),
                                                             sol.image_url && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3446,7 +3462,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                         children: "Solution Diagram / Handwritten Steps:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 435,
+                                                                        lineNumber: 442,
                                                                         columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3462,18 +3478,18 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                             className: "media-image"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                            lineNumber: 443,
+                                                                            lineNumber: 450,
                                                                             columnNumber: 35
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 438,
+                                                                        lineNumber: 445,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 434,
+                                                                lineNumber: 441,
                                                                 columnNumber: 31
                                                             }, this),
                                                             sol.video_url && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3492,7 +3508,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                         children: "Solution Video Walkthrough:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 451,
+                                                                        lineNumber: 458,
                                                                         columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3503,35 +3519,35 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                             className: "media-video"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                            lineNumber: 455,
+                                                                            lineNumber: 462,
                                                                             columnNumber: 35
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 454,
+                                                                        lineNumber: 461,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 450,
+                                                                lineNumber: 457,
                                                                 columnNumber: 31
                                                             }, this)
                                                         ]
                                                     }, sol.id, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 342,
+                                                        lineNumber: 349,
                                                         columnNumber: 27
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 340,
+                                                lineNumber: 347,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                        lineNumber: 288,
+                                        lineNumber: 295,
                                         columnNumber: 19
                                     }, this),
                                     activeTab === 'question' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3569,7 +3585,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 children: question.user_name.charAt(0).toUpperCase()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 472,
+                                                                lineNumber: 479,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3595,13 +3611,13 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                                 children: "Admin"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                                lineNumber: 490,
+                                                                                lineNumber: 497,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 487,
+                                                                        lineNumber: 494,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3612,19 +3628,19 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                         children: question.user_field || 'Academic Learner'
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                        lineNumber: 495,
+                                                                        lineNumber: 502,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 486,
+                                                                lineNumber: 493,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 471,
+                                                        lineNumber: 478,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3640,7 +3656,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 size: 13
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 502,
+                                                                lineNumber: 509,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3651,19 +3667,19 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 })
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 503,
+                                                                lineNumber: 510,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 501,
+                                                        lineNumber: 508,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 470,
+                                                lineNumber: 477,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -3677,7 +3693,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                 children: question.title
                                             }, void 0, false, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 508,
+                                                lineNumber: 515,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3691,7 +3707,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                 children: question.content
                                             }, void 0, false, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 513,
+                                                lineNumber: 520,
                                                 columnNumber: 21
                                             }, this),
                                             question.image_url && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3712,7 +3728,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         children: "Attached Diagram / Problem Photo:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 526,
+                                                        lineNumber: 533,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3728,18 +3744,18 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                             className: "media-image"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                            lineNumber: 534,
+                                                            lineNumber: 541,
                                                             columnNumber: 27
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 529,
+                                                        lineNumber: 536,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 525,
+                                                lineNumber: 532,
                                                 columnNumber: 23
                                             }, this),
                                             question.video_url && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3760,7 +3776,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                         children: "Attached Video Walkthrough:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 542,
+                                                        lineNumber: 549,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3771,18 +3787,18 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                             className: "media-video"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                            lineNumber: 546,
+                                                            lineNumber: 553,
                                                             columnNumber: 27
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 545,
+                                                        lineNumber: 552,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 541,
+                                                lineNumber: 548,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3806,7 +3822,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 567,
+                                                                lineNumber: 574,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3817,13 +3833,13 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 568,
+                                                                lineNumber: 575,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 562,
+                                                        lineNumber: 569,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3838,43 +3854,43 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 579,
+                                                                lineNumber: 586,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Add Solution"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                                lineNumber: 580,
+                                                                lineNumber: 587,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                        lineNumber: 571,
+                                                        lineNumber: 578,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                                lineNumber: 552,
+                                                lineNumber: 559,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/QuestionViewerModal.tsx",
-                                        lineNumber: 468,
+                                        lineNumber: 475,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                                lineNumber: 285,
+                                lineNumber: 292,
                                 columnNumber: 15
                             }, this) : null
                         }, void 0, false, {
                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                            lineNumber: 274,
+                            lineNumber: 281,
                             columnNumber: 11
                         }, this)
                     ]
@@ -3899,7 +3915,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                 }
             }, void 0, false, {
                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                lineNumber: 593,
+                lineNumber: 600,
                 columnNumber: 9
             }, this),
             previewImage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3927,7 +3943,7 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                             }
                         }, void 0, false, {
                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                            lineNumber: 613,
+                            lineNumber: 620,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3945,18 +3961,18 @@ function QuestionViewerModal({ isOpen, questionId, initialTab = 'solutions', cur
                             children: "Close ✕"
                         }, void 0, false, {
                             fileName: "[project]/components/QuestionViewerModal.tsx",
-                            lineNumber: 618,
+                            lineNumber: 625,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/QuestionViewerModal.tsx",
-                    lineNumber: 612,
+                    lineNumber: 619,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/QuestionViewerModal.tsx",
-                lineNumber: 607,
+                lineNumber: 614,
                 columnNumber: 9
             }, this)
         ]

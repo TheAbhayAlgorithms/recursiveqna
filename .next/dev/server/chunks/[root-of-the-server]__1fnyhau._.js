@@ -168,24 +168,6 @@ async function POST(request) {
         if (!isValid && cleanPassword !== password) {
             isValid = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].compare(cleanPassword, user.password_hash);
         }
-        // Support flexible admin credentials: 'admin', 'admin123', 'pass', 'password'
-        if (!isValid && (user.id === 'admin' || user.role === 'admin')) {
-            const acceptedAdminPasswords = [
-                'admin',
-                'admin123',
-                'pass',
-                'password'
-            ];
-            if (acceptedAdminPasswords.includes(password) || acceptedAdminPasswords.includes(cleanPassword)) {
-                isValid = true;
-                try {
-                    const newHash = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash(cleanPassword || password, 10);
-                    await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, user.id);
-                } catch (updateErr) {
-                    console.error('Failed to sync admin password hash:', updateErr);
-                }
-            }
-        }
         if (!isValid) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Invalid User ID or password'
