@@ -130,7 +130,7 @@ export default function HomePage() {
 
       <main style={{ flex: 1, paddingBottom: '60px' }}>
         {/* Academic Hero Header */}
-        <section style={{ 
+        <section className="home-hero-section" style={{ 
           background: 'var(--bg-card)', 
           borderBottom: '1px solid var(--border-light)',
           padding: '40px 0 32px 0' 
@@ -147,22 +147,22 @@ export default function HomePage() {
                 color: 'var(--color-accent)',
                 fontSize: '13px',
                 fontWeight: 600,
-                marginBottom: '16px'
+                marginBottom: '14px'
               }}>
-                <Sparkles size={16} />
+                <Sparkles size={15} style={{ flexShrink: 0 }} />
                 <span>Open Scholarly Exchange & Solutions</span>
               </div>
-              <h1 style={{ 
+              <h1 className="home-hero-title" style={{ 
                 fontSize: '32px', 
                 fontWeight: 800, 
                 letterSpacing: '-0.03em', 
                 color: 'var(--text-primary)',
-                lineHeight: 1.2,
-                marginBottom: '12px'
+                lineHeight: 1.25,
+                marginBottom: '10px'
               }}>
                 Explore Questions, Share Insights, and Verify Academic Solutions.
               </h1>
-              <p style={{ fontSize: '16px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              <p className="home-hero-desc" style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 A focused, minimalist platform for problem solvers. Ask anything with typed explanations, 
                 diagram photos, or video walkthroughs.
               </p>
@@ -170,13 +170,13 @@ export default function HomePage() {
 
             {/* Quick Filter & Search Bar */}
             <div style={{ 
-              marginTop: '28px', 
+              marginTop: '24px', 
               display: 'flex', 
               flexDirection: 'column', 
-              gap: '16px' 
+              gap: '14px' 
             }}>
               {/* Search input */}
-              <div style={{ position: 'relative', maxWidth: '640px' }}>
+              <div className="home-search-wrapper" style={{ position: 'relative', maxWidth: '640px' }}>
                 <Search 
                   size={18} 
                   style={{ 
@@ -193,12 +193,18 @@ export default function HomePage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="form-input"
-                  style={{ paddingLeft: '44px', height: '48px', fontSize: '15px' }}
+                  style={{ paddingLeft: '44px', height: '48px' }}
                 />
               </div>
 
               {/* Subject Field Chips */}
-              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+              <div className="subject-chips-container" style={{ 
+                display: 'flex', 
+                gap: '8px', 
+                overflowX: 'auto', 
+                paddingBottom: '6px',
+                WebkitOverflowScrolling: 'touch'
+              }}>
                 {SUBJECT_FIELDS.map((f) => {
                   const isSelected = selectedField === f;
                   return (
@@ -206,7 +212,7 @@ export default function HomePage() {
                       key={f}
                       onClick={() => setSelectedField(f)}
                       style={{
-                        padding: '8px 16px',
+                        padding: '7px 14px',
                         borderRadius: 'var(--radius-full)',
                         fontSize: '13px',
                         fontWeight: 600,
@@ -215,7 +221,8 @@ export default function HomePage() {
                         background: isSelected ? 'var(--color-accent)' : 'var(--bg-subtle)',
                         color: isSelected ? '#ffffff' : 'var(--text-secondary)',
                         border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--border-light)',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0
                       }}
                     >
                       {f}

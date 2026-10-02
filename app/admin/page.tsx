@@ -333,7 +333,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Stats Bar */}
-          <div style={{ 
+          <div className="admin-stats-grid" style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
             gap: '16px', 
@@ -381,11 +381,12 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Navigation Tabs */}
-          <div style={{ 
+          <div className="admin-tabs-nav" style={{ 
             display: 'flex', 
             borderBottom: '1px solid var(--border-light)', 
-            marginBottom: '24px',
+            marginBottom: '24px', 
             overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
             gap: '8px'
           }}>
             {[
@@ -746,7 +747,7 @@ export default function AdminDashboardPage() {
 
           {/* TAB 6: SECURITY / CHANGE PASSWORD */}
           {activeTab === 'security' && (
-            <div className="card" style={{ maxWidth: '580px', margin: '0 auto', padding: '32px' }}>
+            <div className="card admin-security-card" style={{ maxWidth: '580px', margin: '0 auto', padding: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
                 <div style={{
                   width: '46px',

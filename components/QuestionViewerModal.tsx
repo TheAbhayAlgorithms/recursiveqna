@@ -163,35 +163,35 @@ export default function QuestionViewerModal({
           }}
         >
           {/* Top Modal Header */}
-          <div style={{ 
-            padding: '14px 20px', 
-            borderBottom: '1px solid var(--border-light)', 
-            display: 'flex', 
-            alignItems: 'center', 
+          <div className="modal-header viewer-modal-header" style={{
+            padding: '14px 20px',
+            borderBottom: '1px solid var(--border-light)',
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'space-between',
             background: 'var(--bg-card)',
             flexWrap: 'wrap',
-            gap: '10px'
+            gap: '8px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flexShrink: 1 }}>
               {question?.field && (
                 <span className={`field-badge badge-${question.field.replace(/\s+/g, '')}`}>
                   {question.field}
                 </span>
               )}
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span className="viewer-header-title" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Academic Solutions & Problem Details
               </span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
               <button
                 onClick={handleCopyLink}
                 className="btn btn-secondary btn-sm"
                 title="Copy shareable link"
               >
                 {copied ? <Check size={14} style={{ color: 'var(--color-success)' }} /> : <Copy size={14} />}
-                <span>{copied ? 'Copied' : 'Share'}</span>
+                <span className="viewer-btn-label">{copied ? 'Copied' : 'Share'}</span>
               </button>
 
               {isAdmin && (
@@ -201,7 +201,7 @@ export default function QuestionViewerModal({
                   title="Admin delete question"
                 >
                   <Trash2 size={14} />
-                  <span>Delete</span>
+                  <span className="viewer-btn-label">Delete</span>
                 </button>
               )}
 
@@ -217,20 +217,23 @@ export default function QuestionViewerModal({
           </div>
 
           {/* Interactive Navigation Tabs */}
-          <div style={{ 
+          <div className="viewer-tabs-bar" style={{ 
             display: 'flex', 
             background: 'var(--bg-subtle)', 
             borderBottom: '1px solid var(--border-light)',
-            padding: '0 20px',
+            padding: '0 16px',
             gap: '8px',
-            overflowX: 'auto'
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch'
           }}>
             <button
               type="button"
               onClick={() => setActiveTab('solutions')}
+              className={`viewer-tab-btn ${activeTab === 'solutions' ? 'active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '8px',
                 padding: '12px 16px',
                 fontSize: '14px',
@@ -240,7 +243,8 @@ export default function QuestionViewerModal({
                 cursor: 'pointer',
                 color: activeTab === 'solutions' ? 'var(--color-accent)' : 'var(--text-secondary)',
                 borderBottom: activeTab === 'solutions' ? '2.5px solid var(--color-accent)' : '2.5px solid transparent',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--transition-fast)',
+                whiteSpace: 'nowrap'
               }}
             >
               <CheckCircle2 size={16} />
@@ -250,9 +254,11 @@ export default function QuestionViewerModal({
             <button
               type="button"
               onClick={() => setActiveTab('question')}
+              className={`viewer-tab-btn ${activeTab === 'question' ? 'active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '8px',
                 padding: '12px 16px',
                 fontSize: '14px',
@@ -262,7 +268,8 @@ export default function QuestionViewerModal({
                 cursor: 'pointer',
                 color: activeTab === 'question' ? 'var(--color-accent)' : 'var(--text-secondary)',
                 borderBottom: activeTab === 'question' ? '2.5px solid var(--color-accent)' : '2.5px solid transparent',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--transition-fast)',
+                whiteSpace: 'nowrap'
               }}
             >
               <BookOpen size={16} />

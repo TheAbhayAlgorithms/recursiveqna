@@ -546,3 +546,408 @@ input, textarea, select {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* ============================================================
+   Navbar & Component Responsive Baseline
+   ============================================================ */
+.brand-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.nav-btn-compact {
+  display: none;
+}
+
+.nav-btn-full {
+  display: inline;
+}
+
+.nav-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+  transition: all var(--transition-fast);
+}
+
+.nav-user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.nav-auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-light);
+  padding-top: 14px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-footer-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.card-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   Mobile Phone Responsiveness & Screen Visibility Adjustments
+   ============================================================ */
+
+/* 1. Universal iOS Zoom Prevention (Inputs must be >= 16px to prevent safari auto-zoom) */
+@media screen and (max-width: 768px) {
+  input,
+  textarea,
+  select,
+  .form-input,
+  .form-textarea,
+  .form-select,
+  .input-field {
+    font-size: 16px !important;
+  }
+}
+
+/* 2. Tablet & Large Phone Adjustments (<= 768px) */
+@media screen and (max-width: 768px) {
+  .app-container {
+    padding: 0 16px;
+  }
+
+  .app-container-narrow {
+    padding: 0 14px;
+  }
+
+  .card {
+    padding: 18px 16px;
+  }
+
+  .nav-inner {
+    height: 64px;
+    gap: 10px;
+  }
+
+  .brand-logo {
+    gap: 8px;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-title {
+    font-size: 17px;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+}
+
+/* 3. Mobile Phones (<= 640px) */
+@media screen and (max-width: 640px) {
+  .app-container {
+    padding: 0 12px;
+  }
+
+  .app-container-narrow {
+    padding: 0 10px;
+  }
+
+  /* Compact Navbar */
+  .nav-header {
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .nav-inner {
+    height: 58px;
+    gap: 6px;
+  }
+
+  .brand-title {
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  /* Swap labels to compact version */
+  .nav-btn-full {
+    display: none !important;
+  }
+
+  .nav-btn-compact {
+    display: inline !important;
+  }
+
+  .nav-ask-btn,
+  .nav-admin-btn {
+    padding: 0 10px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    gap: 5px !important;
+  }
+
+  .nav-user-info {
+    display: none !important;
+  }
+
+  .nav-user-badge {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .nav-user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+  }
+
+  .nav-theme-btn,
+  .nav-logout-btn {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .nav-auth-buttons {
+    gap: 6px;
+  }
+
+  .nav-auth-btn {
+    padding: 0 9px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    gap: 4px !important;
+  }
+
+  /* Home Hero on Mobile */
+  .home-hero-section {
+    padding: 24px 0 20px 0 !important;
+  }
+
+  .home-hero-title {
+    font-size: 22px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .home-hero-desc {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+  }
+
+  .subject-chips-container {
+    padding-bottom: 4px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .subject-chips-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Question Cards on Mobile */
+  .card {
+    padding: 16px 14px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .card-footer {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .card-footer-author {
+    justify-content: flex-start !important;
+  }
+
+  .card-action-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .card-action-bar .solutions-count-badge {
+    grid-column: span 2 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  .card-action-bar .card-action-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 34px !important;
+    font-size: 12.5px !important;
+    padding: 0 8px !important;
+  }
+
+  /* Modals on Mobile */
+  .modal-overlay {
+    padding: 8px !important;
+    align-items: flex-end !important;
+  }
+
+  .modal-content {
+    max-height: 94vh !important;
+    border-radius: 18px 18px 10px 10px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .modal-body {
+    padding: 16px 14px !important;
+  }
+
+  .viewer-header-title {
+    display: none !important;
+  }
+
+  .viewer-btn-label {
+    display: none !important;
+  }
+
+  .viewer-tabs-bar {
+    padding: 0 8px !important;
+    gap: 4px !important;
+  }
+
+  .viewer-tabs-bar .viewer-tab-btn {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 10px 6px !important;
+    font-size: 13px !important;
+    gap: 5px !important;
+  }
+
+  .modal-upload-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .modal-upload-buttons .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Admin Dashboard on Mobile */
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .admin-stats-grid .card {
+    padding: 12px !important;
+  }
+
+  .admin-stats-grid .card > div:last-child {
+    font-size: 22px !important;
+  }
+
+  .admin-tabs-nav {
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px !important;
+  }
+
+  .admin-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-tabs-nav button {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .admin-security-card {
+    padding: 20px 16px !important;
+  }
+}
+
+/* 4. Ultra-Compact Mobile Phones (<= 390px, e.g. iPhone SE, iPhone 12/13/14 mini, 375px screens) */
+@media screen and (max-width: 390px) {
+  .brand-title {
+    font-size: 15px !important;
+  }
+
+  .nav-ask-btn .nav-btn-compact,
+  .nav-admin-btn .nav-btn-compact {
+    display: none !important;
+  }
+
+  .nav-ask-btn,
+  .nav-admin-btn {
+    width: 34px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .nav-actions {
+    gap: 4px !important;
+  }
+
+  .home-hero-title {
+    font-size: 20px !important;
+  }
+}

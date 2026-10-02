@@ -213,7 +213,7 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
               Media Attachments (Photo or Video)
             </label>
 
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <div className="modal-upload-buttons" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <input
                 type="file"
                 ref={imageInputRef}

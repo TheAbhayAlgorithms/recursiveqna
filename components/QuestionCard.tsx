@@ -179,20 +179,9 @@ export default function QuestionCard({
       )}
 
       {/* Footer: Author, Solutions, Thoughts, and Action Buttons */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          borderTop: '1px solid var(--border-light)',
-          paddingTop: '14px',
-          marginTop: '4px',
-          flexWrap: 'wrap',
-          gap: '12px'
-        }}
-      >
+      <div className="card-footer">
         {/* Author info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+        <div className="card-footer-author">
           <div style={{ 
             width: '24px', 
             height: '24px', 
@@ -203,11 +192,12 @@ export default function QuestionCard({
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '11px',
-            fontWeight: 700
+            fontWeight: 700,
+            flexShrink: 0
           }}>
             {question.user_name.charAt(0).toUpperCase()}
           </div>
-          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{question.user_name}</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)', wordBreak: 'break-word' }}>{question.user_name}</span>
           {question.user_role === 'admin' && (
             <span style={{ 
               fontSize: '10px', 
@@ -215,7 +205,8 @@ export default function QuestionCard({
               color: 'var(--color-danger)', 
               padding: '2px 6px', 
               borderRadius: '4px',
-              fontWeight: 700
+              fontWeight: 700,
+              flexShrink: 0
             }}>
               Admin
             </span>
@@ -223,14 +214,13 @@ export default function QuestionCard({
         </div>
 
         {/* Action Controls: strictly the 3 options requested */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          
+        <div className="card-action-bar">
           {/* Option 1: Number of solutions showing */}
           <div 
             className={`solutions-count-badge ${(question.verified_solutions_count || 0) > 0 ? 'has-verified' : ''}`}
             title={`${question.solutions_count} solutions recorded`}
           >
-            <CheckCircle2 size={14} />
+            <CheckCircle2 size={14} style={{ flexShrink: 0 }} />
             <span>{question.solutions_count} {question.solutions_count === 1 ? 'Solution' : 'Solutions'}</span>
           </div>
 
@@ -238,10 +228,10 @@ export default function QuestionCard({
           <button 
             type="button"
             onClick={() => handleOpenViewer('solutions')}
-            className="btn btn-secondary btn-sm"
+            className="btn btn-secondary btn-sm card-action-btn"
             title="View submitted solutions for this question"
           >
-            <Eye size={14} />
+            <Eye size={14} style={{ flexShrink: 0 }} />
             <span>View Solution</span>
           </button>
 
@@ -250,14 +240,13 @@ export default function QuestionCard({
             <button
               type="button"
               onClick={() => onAddSolution(question.id, question.title)}
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary btn-sm card-action-btn"
               title="Add a solution"
             >
-              <PlusCircle size={14} />
+              <PlusCircle size={14} style={{ flexShrink: 0 }} />
               <span>Add Solution</span>
             </button>
           )}
-
         </div>
       </div>
     </article>

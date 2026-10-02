@@ -176,7 +176,7 @@ export default function AddSolutionModal({
               Solution Media (Diagram, Handwritten Work, or Video Walkthrough)
             </label>
 
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <div className="modal-upload-buttons" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <input
                 type="file"
                 ref={imageInputRef}
