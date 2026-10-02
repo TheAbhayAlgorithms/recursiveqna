@@ -176,7 +176,9 @@ function LoginForm() {
               title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode'}
               aria-label="Toggle Day and Night mode"
             >
-              <span className={`theme-toggle-circle ${theme}`} aria-hidden="true" />
+              <span className={`theme-toggle-circle ${theme}`} aria-hidden="true">
+                <span className="theme-toggle-dot" />
+              </span>
             </button>
             <Link href="/" className="btn btn-outline" style={{ fontSize: '13px', padding: '6px 14px' }}>
               Back to Questions

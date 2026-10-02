@@ -54,7 +54,9 @@ export default function Navbar({ user, onOpenAskModal, onLogout }: NavbarProps) 
             title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Day Mode'}
             aria-label="Toggle Day and Night mode"
           >
-            <span className={`theme-toggle-circle ${theme}`} aria-hidden="true" />
+            <span className={`theme-toggle-circle ${theme}`} aria-hidden="true">
+              <span className="theme-toggle-dot" />
+            </span>
           </button>
 
           {/* Ask Question CTA */}
