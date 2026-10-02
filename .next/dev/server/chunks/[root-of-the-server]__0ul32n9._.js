@@ -165,8 +165,15 @@ async function GET(request) {
     `;
         const params = [];
         if (field && field !== 'All' && field !== 'all') {
-            query += ` AND q.field = ?`;
-            params.push(field);
+            const cleanField = field.trim().toLowerCase();
+            if (cleanField === 'maths' || cleanField === 'mathematics') {
+                query += ` AND LOWER(q.field) IN ('maths', 'mathematics')`;
+            } else if (cleanField === 'computer' || cleanField === 'computer science') {
+                query += ` AND LOWER(q.field) IN ('computer', 'computer science')`;
+            } else {
+                query += ` AND LOWER(q.field) = ?`;
+                params.push(cleanField);
+            }
         }
         if (search && search.trim().length > 0) {
             query += ` AND (q.title LIKE ? OR q.content LIKE ? OR q.field LIKE ?)`;
@@ -175,8 +182,17 @@ async function GET(request) {
         }
         query += ` ORDER BY q.created_at DESC`;
         const questions = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(query).all(...params);
+        // Get all distinct fields currently present in the questions table
+        const distinctRows = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].prepare(`
+      SELECT DISTINCT field 
+      FROM questions 
+      WHERE field IS NOT NULL AND TRIM(field) != ''
+      ORDER BY field ASC
+    `).all();
+        const availableFields = distinctRows.map((r)=>r.field).filter(Boolean);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            questions
+            questions,
+            availableFields
         });
     } catch (err) {
         console.error('Fetch questions error:', err);
