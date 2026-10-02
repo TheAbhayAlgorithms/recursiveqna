@@ -17,18 +17,10 @@ import {
   GraduationCap
 } from 'lucide-react';
 
-const SUBJECT_FIELDS = [
-  'All',
-  'Physics',
-  'Chemistry',
-  'Maths',
-  'Computer',
-  'Psychology',
-];
-
 export default function HomePage() {
   const [user, setUser] = useState<any>(null);
   const [questions, setQuestions] = useState<any[]>([]);
+  const [availableFields, setAvailableFields] = useState<string[]>([]);
   const [selectedField, setSelectedField] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +66,9 @@ export default function HomePage() {
       const res = await fetch(`/api/questions?${params.toString()}`);
       const data = await res.json();
       setQuestions(data.questions || []);
+      if (Array.isArray(data.availableFields)) {
+        setAvailableFields(data.availableFields);
+      }
     } catch (err) {
       console.error('Failed to load questions', err);
     } finally {
@@ -195,7 +190,7 @@ export default function HomePage() {
                 />
               </div>
 
-              {/* Subject Field Chips */}
+              {/* Subject Field Chips - Dynamically showing only subjects with posted questions */}
               <div className="subject-chips-container" style={{ 
                 display: 'flex', 
                 gap: '8px', 
@@ -203,7 +198,7 @@ export default function HomePage() {
                 paddingBottom: '6px',
                 WebkitOverflowScrolling: 'touch'
               }}>
-                {SUBJECT_FIELDS.map((f) => {
+                {['All', ...availableFields].map((f) => {
                   const isSelected = selectedField === f;
                   return (
                     <button

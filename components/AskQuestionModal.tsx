@@ -9,7 +9,10 @@ import {
   AlertCircle, 
   UploadCloud, 
   CheckCircle2,
-  Trash2
+  Trash2,
+  Search,
+  ChevronDown,
+  Check
 } from 'lucide-react';
 
 interface AskQuestionModalProps {
@@ -19,6 +22,44 @@ interface AskQuestionModalProps {
 }
 
 const FIELDS = [
+  'Personal Finance',
+  'Investing & Crypto',
+  'Entrepreneurship',
+  'Digital Marketing',
+  'Career Advice',
+  'Freelancing',
+  'E-commerce',
+  'Biology & Life Sciences',
+  'History',
+  'Literature & Writing',
+  'Languages & Linguistics',
+  'Philosophy',
+  'Physical Fitness',
+  'Nutrition & Diet',
+  'Skincare & Beauty',
+  'Parenting',
+  'Pets & Vet Care',
+  'Cooking & Baking',
+  'Gaming',
+  'Movies & TV Shows',
+  'Music',
+  'Photography & Videography',
+  'Anime & Manga',
+  'Graphic Design & Illustration',
+  'Fashion & Style',
+  'Travel & Backpacking',
+  'Gardening',
+  'DIY & Crafting',
+  'Automotive',
+  'Sports',
+  'Board Games & Chess',
+  'Legal Advice',
+  'Current Events',
+  'Sociology',
+  'Environmental Science',
+  'Real Estate & Housing',
+  'Self-Improvement',
+  'General Trivia',
   'Physics',
   'Chemistry',
   'Maths',
@@ -30,11 +71,29 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [field, setField] = useState('Physics');
+  const [fieldSearch, setFieldSearch] = useState('Physics');
+  const [isFieldDropdownOpen, setIsFieldDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Close dropdown on outside click
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsFieldDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const filteredFields = FIELDS.filter((f) =>
+    f.toLowerCase().includes(fieldSearch.toLowerCase().trim())
+  );
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -163,20 +222,132 @@ export default function AskQuestionModal({ isOpen, onClose, onQuestionCreated }:
             </div>
           )}
 
-          {/* Academic Field Selector */}
-          <div className="form-group">
-            <label className="form-label">Subject / Field of Study</label>
-            <select
-              value={field}
-              onChange={(e) => setField(e.target.value)}
-              className="form-select"
-            >
-              {FIELDS.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </select>
+          {/* Searchable Academic Field Selector */}
+          <div className="form-group" ref={dropdownRef} style={{ position: 'relative' }}>
+            <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+              <span>Subject / Field of Study</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 400 }}>
+                Type a few letters to filter subjects
+              </span>
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Search
+                size={16}
+                style={{
+                  position: 'absolute',
+                  left: '14px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'var(--text-muted)',
+                  pointerEvents: 'none',
+                }}
+              />
+              <input
+                type="text"
+                className="form-input"
+                style={{ paddingLeft: '40px', paddingRight: '40px' }}
+                placeholder="Type to filter (e.g. Physics, Investing, Gaming, Maths)..."
+                value={fieldSearch}
+                onChange={(e) => {
+                  setFieldSearch(e.target.value);
+                  setField(e.target.value);
+                  setIsFieldDropdownOpen(true);
+                }}
+                onFocus={() => setIsFieldDropdownOpen(true)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setIsFieldDropdownOpen((prev) => !prev)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                tabIndex={-1}
+                aria-label="Toggle subjects dropdown"
+              >
+                <ChevronDown size={16} />
+              </button>
+            </div>
+
+            {/* Filtered Dropdown list */}
+            {isFieldDropdownOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  maxHeight: '220px',
+                  overflowY: 'auto',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-light)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-lg)',
+                  zIndex: 100,
+                  marginTop: '4px',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {filteredFields.length > 0 ? (
+                  filteredFields.map((f) => {
+                    const isSelected = field.toLowerCase() === f.toLowerCase();
+                    return (
+                      <div
+                        key={f}
+                        onClick={() => {
+                          setField(f);
+                          setFieldSearch(f);
+                          setIsFieldDropdownOpen(false);
+                        }}
+                        style={{
+                          padding: '10px 14px',
+                          fontSize: '13.5px',
+                          cursor: 'pointer',
+                          background: isSelected ? 'var(--bg-subtle)' : 'transparent',
+                          color: isSelected ? 'var(--color-accent)' : 'var(--text-primary)',
+                          fontWeight: isSelected ? 600 : 400,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderBottom: '1px solid var(--border-light)',
+                          transition: 'background var(--transition-fast)',
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) e.currentTarget.style.background = 'var(--bg-card-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <span>{f}</span>
+                        {isSelected && <Check size={14} style={{ color: 'var(--color-accent)' }} />}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div
+                    style={{
+                      padding: '12px 14px',
+                      fontSize: '13px',
+                      color: 'var(--text-muted)',
+                      textAlign: 'center',
+                    }}
+                  >
+                    No predefined match. Using custom: "<strong>{fieldSearch}</strong>"
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Question Title */}

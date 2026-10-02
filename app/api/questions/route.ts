@@ -55,7 +55,16 @@ export async function GET(request: Request) {
 
     const questions = await db.prepare(query).all(...params);
 
-    return NextResponse.json({ questions });
+    // Get all distinct fields currently present in the questions table
+    const distinctRows = (await db.prepare(`
+      SELECT DISTINCT field 
+      FROM questions 
+      WHERE field IS NOT NULL AND TRIM(field) != ''
+      ORDER BY field ASC
+    `).all()) as { field: string }[];
+    const availableFields = distinctRows.map((r: any) => r.field).filter(Boolean);
+
+    return NextResponse.json({ questions, availableFields });
   } catch (err) {
     console.error('Fetch questions error:', err);
     return NextResponse.json({ error: 'Failed to fetch questions' }, { status: 500 });
