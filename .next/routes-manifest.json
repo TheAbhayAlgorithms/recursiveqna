@@ -105,6 +105,12 @@
       "namedRegex": "^/api/auth/change\\-password(?:/)?$"
     },
     {
+      "page": "/api/auth/google",
+      "regex": "^/api/auth/google(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/google(?:/)?$"
+    },
+    {
       "page": "/api/auth/login",
       "regex": "^/api/auth/login(?:/)?$",
       "routeKeys": {},
@@ -175,6 +181,12 @@
       "regex": "^/api/upload(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/upload(?:/)?$"
+    },
+    {
+      "page": "/auth/callback",
+      "regex": "^/auth/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/callback(?:/)?$"
     },
     {
       "page": "/icon.svg",

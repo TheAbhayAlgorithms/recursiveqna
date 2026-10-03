@@ -1,61 +1,66 @@
 'use client';
 
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
   GraduationCap, 
-  Mail, 
-  ArrowRight, 
-  ShieldCheck, 
-  AlertCircle, 
-  CheckCircle2, 
-  RotateCcw, 
-  Phone, 
   Lock, 
   User as UserIcon,
-  ChevronRight,
+  AlertCircle, 
+  CheckCircle2, 
+  ArrowRight,
+  ShieldCheck,
+  RefreshCw,
   Sparkles
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import { getSupabase } from '@/lib/supabase';
 
-type AuthStep = 'EMAIL' | 'OTP' | 'OPTIONAL_PHONE';
+function GoogleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+      <path
+        fill="#4285F4"
+        d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.87c2.27-2.09 3.67-5.17 3.67-9.15z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.87-3.05c-1.08.72-2.45 1.16-4.06 1.16-3.13 0-5.78-2.11-6.73-4.96H1.28v3.15C3.25 21.3 7.31 24 12 24z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.28C.46 8.23 0 10.06 0 12s.46 3.77 1.28 5.39l3.99-3.15z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.28 6.61l3.99 3.15c.95-2.85 3.6-4.96 6.73-4.96z"
+      />
+    </svg>
+  );
+}
 
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get('redirect') || '/';
 
-  // Step state
-  const [step, setStep] = useState<AuthStep>('EMAIL');
-
-  // Input states
-  const [email, setEmail] = useState('');
-  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);
-  const [phone, setPhone] = useState('');
-
-  // Admin password login fallback state
+  // State
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
+  const [showDevFallback, setShowDevFallback] = useState(false);
+  const [devEmail, setDevEmail] = useState('imabbhhhay@gmail.com');
+
+  // Admin password credentials
   const [adminUserId, setAdminUserId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
 
-  // UI status states
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [resendCooldown, setResendCooldown] = useState(0);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-
-  // References for OTP 6-box input
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  // Check if already authenticated
+  // Check existing session
   useEffect(() => {
     fetch('/api/auth/me')
-      .then((res) => {
-        if (res.ok) return res.json();
-        return null;
-      })
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.user) {
           setCurrentUser(data.user);
@@ -63,15 +68,6 @@ function LoginFormContent() {
       })
       .catch(() => {});
   }, []);
-
-  // Resend cooldown timer countdown
-  useEffect(() => {
-    if (resendCooldown <= 0) return;
-    const interval = setInterval(() => {
-      setResendCooldown((prev) => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [resendCooldown]);
 
   const handleFinishLogin = (userObj: any) => {
     if (redirectParam && redirectParam !== '/') {
@@ -84,230 +80,89 @@ function LoginFormContent() {
     router.refresh();
   };
 
-  // Step 1: Send OTP
-  const handleSendOtp = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (loading) return; // Prevent concurrent duplicate submissions
+  // Google Sign-In Handler via Supabase OAuth
+  const handleGoogleSignIn = async () => {
+    if (loading) return;
     setError(null);
-    setSuccessMessage(null);
-
-    const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail || !cleanEmail.includes('@')) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: cleanEmail }),
+      const supabase = getSupabase();
+      if (!supabase) {
+        throw new Error('Supabase client is not configured.');
+      }
+
+      const callbackUrl = `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectParam)}`;
+      
+      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: callbackUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'select_account',
+          },
+        },
       });
 
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        // If an OTP was already dispatched within cooldown, transition directly to OTP step
-        if (data.cooldownRemaining || (data.error && data.error.toLowerCase().includes('wait'))) {
-          setStep('OTP');
-          setResendCooldown(data.cooldownRemaining || 30);
-          setSuccessMessage('A verification code was recently sent to your email. Enter it below.');
-          setError(null);
-          setTimeout(() => {
-            inputRefs.current[0]?.focus();
-          }, 100);
+      if (oauthError) {
+        const msg = oauthError.message || '';
+        if (msg.toLowerCase().includes('not enabled') || msg.toLowerCase().includes('unsupported provider')) {
+          setError('Google OAuth provider is not yet enabled in your Supabase project dashboard. You can enable it under Authentication > Providers > Google, or use the dev quick sign-in below.');
+          setShowDevFallback(true);
           setLoading(false);
           return;
         }
-
-        setError(data.error || 'Failed to send verification code. Please try again.');
-        setLoading(false);
-        return;
+        throw oauthError;
       }
 
-      setSuccessMessage(data.message || 'Verification code sent to your email.');
-      setStep('OTP');
-      setResendCooldown(30);
-      setOtpDigits(['', '', '', '', '', '']);
-
-      // Focus first digit box after transition
-      setTimeout(() => {
-        inputRefs.current[0]?.focus();
-      }, 100);
+      // If data.url is returned, navigate to Google auth
+      if (data?.url) {
+        window.location.href = data.url;
+      }
     } catch (err: any) {
-      console.error('Send OTP error:', err);
-      setError('Network error. Unable to connect to authentication service.');
-    } finally {
+      console.error('Google Sign In Error:', err);
+      setError(err?.message || 'Failed to initiate Google sign in. Please try again.');
       setLoading(false);
     }
   };
 
-  // Step 2: Resend OTP
-  const handleResendOtp = async () => {
-    if (resendCooldown > 0 || loading) return;
-    setError(null);
-    setSuccessMessage(null);
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/auth/resend-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim().toLowerCase() }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        setError(data.error || 'Failed to resend verification code.');
-        if (data.cooldownRemaining) {
-          setResendCooldown(data.cooldownRemaining);
-        }
-        return;
-      }
-
-      setSuccessMessage(data.message || 'A fresh verification code was sent to your email.');
-      setResendCooldown(30);
-      setOtpDigits(['', '', '', '', '', '']);
-      inputRefs.current[0]?.focus();
-    } catch (err) {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Step 3: Verify OTP code
-  const handleVerifyOtp = async (codeToVerify?: string) => {
-    const fullCode = codeToVerify || otpDigits.join('');
-    if (fullCode.length !== 6) {
-      setError('Please enter all 6 digits of your verification code.');
+  // Fallback Dev Quick Sign-in (for development or if Supabase Google Provider is pending)
+  const handleDevQuickLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!devEmail || !devEmail.includes('@')) {
+      setError('Please enter a valid Google email address.');
       return;
     }
 
-    setError(null);
     setLoading(true);
+    setError(null);
 
     try {
-      const res = await fetch('/api/auth/verify-otp', {
+      const res = await fetch('/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          code: fullCode,
+          email: devEmail.trim().toLowerCase(),
+          name: devEmail.split('@')[0],
+          isDevFallback: true,
         }),
       });
 
       const data = await res.json().catch(() => ({}));
-
       if (!res.ok) {
-        setError(data.error || 'Invalid verification code. Please check and try again.');
-        setLoading(false);
-        // If code failed, clear boxes and focus first
-        if (data.status === 'EXPIRED' || data.status === 'TOO_MANY_ATTEMPTS') {
-          setOtpDigits(['', '', '', '', '', '']);
-        }
-        inputRefs.current[0]?.focus();
-        return;
+        throw new Error(data.error || 'Failed to authenticate.');
       }
 
-      // If this is user's first login or they have no mobile number, offer optional phone setup
-      if (data.isFirstLogin && !data.user?.phone) {
-        setCurrentUser(data.user);
-        setStep('OPTIONAL_PHONE');
-        setLoading(false);
-      } else {
-        handleFinishLogin(data.user);
-      }
-    } catch (err) {
-      console.error('Verify error:', err);
-      setError('Network error during verification. Please try again.');
+      handleFinishLogin(data.user);
+    } catch (err: any) {
+      setError(err?.message || 'Authentication error.');
       setLoading(false);
     }
   };
 
-  // Handle OTP Box Input Change
-  const handleDigitChange = (index: number, value: string) => {
-    const cleaned = value.replace(/[^0-9]/g, '');
-
-    // Handle single digit entry
-    const newDigits = [...otpDigits];
-    newDigits[index] = cleaned.slice(-1); // Take only the latest digit
-    setOtpDigits(newDigits);
-    setError(null);
-
-    // Auto-advance focus to next input
-    if (cleaned && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-
-    // Auto-submit if all 6 digits are filled
-    const combined = newDigits.join('');
-    if (combined.length === 6) {
-      handleVerifyOtp(combined);
-    }
-  };
-
-  // Handle backspace navigation
-  const handleDigitKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace') {
-      if (!otpDigits[index] && index > 0) {
-        const newDigits = [...otpDigits];
-        newDigits[index - 1] = '';
-        setOtpDigits(newDigits);
-        inputRefs.current[index - 1]?.focus();
-      }
-    } else if (e.key === 'ArrowLeft' && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'ArrowRight' && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  // Handle paste of 6-digit code
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
-    if (!pasted) return;
-
-    const newDigits = [...otpDigits];
-    for (let i = 0; i < pasted.length; i++) {
-      newDigits[i] = pasted[i];
-    }
-    setOtpDigits(newDigits);
-
-    if (pasted.length === 6) {
-      inputRefs.current[5]?.focus();
-      handleVerifyOtp(pasted);
-    } else {
-      inputRefs.current[Math.min(pasted.length, 5)]?.focus();
-    }
-  };
-
-  // Step 3: Save Optional Phone
-  const handleSavePhone = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    setLoading(true);
-
-    try {
-      const cleanPhone = phone.trim();
-      if (cleanPhone) {
-        await fetch('/api/auth/update-phone', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: cleanPhone }),
-        });
-      }
-      handleFinishLogin(currentUser);
-    } catch {
-      handleFinishLogin(currentUser);
-    }
-  };
-
-  // Legacy fallback password login (for root administrator)
-  const handleLegacyPasswordLogin = async (e: React.FormEvent) => {
+  // Administrator Password Login
+  const handleAdminPasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -327,7 +182,7 @@ function LoginFormContent() {
       }
 
       handleFinishLogin(data.user);
-    } catch (err) {
+    } catch {
       setError('Connection error. Please try again.');
       setLoading(false);
     }
@@ -335,7 +190,7 @@ function LoginFormContent() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-main)' }}>
-      {/* Top minimal header */}
+      {/* Header */}
       <header style={{ 
         height: '68px', 
         borderBottom: '1px solid var(--border-light)', 
@@ -373,61 +228,44 @@ function LoginFormContent() {
 
       {/* Main Container */}
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
-        <div style={{ width: '100%', maxWidth: '460px' }}>
+        <div style={{ width: '100%', maxWidth: '440px' }}>
           
           {/* Card */}
-          <div className="card" style={{ padding: '36px 30px', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)', borderRadius: 'var(--radius-lg)' }}>
+          <div className="card" style={{ padding: '36px 32px', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)', borderRadius: 'var(--radius-lg)' }}>
             
             {/* Header info */}
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '28px' }}>
               <div style={{ 
-                width: '52px', 
-                height: '52px', 
-                borderRadius: '14px', 
+                width: '56px', 
+                height: '56px', 
+                borderRadius: '16px', 
                 background: 'var(--bg-accent-subtle)', 
                 color: 'var(--color-accent)', 
                 display: 'inline-flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                marginBottom: '14px',
-                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.15)'
+                marginBottom: '16px',
+                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.15)'
               }}>
-                {step === 'OPTIONAL_PHONE' ? (
-                  <Phone size={26} />
-                ) : (
-                  <ShieldCheck size={28} />
-                )}
+                {showPasswordLogin ? <Lock size={26} /> : <ShieldCheck size={28} />}
               </div>
 
               <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-                {step === 'EMAIL' && (showPasswordLogin ? 'Administrator Sign In' : 'Sign in with Email')}
-                {step === 'OTP' && 'Verify Your Email'}
-                {step === 'OPTIONAL_PHONE' && 'Add Mobile Number'}
+                {showPasswordLogin ? 'Administrator Sign In' : 'Sign in with Google'}
               </h1>
 
               <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                {step === 'EMAIL' && !showPasswordLogin && (
-                  'Enter your email address to receive a secure 6-digit one-time code. No password needed.'
-                )}
-                {step === 'EMAIL' && showPasswordLogin && (
-                  'Sign in using your administrator username and master password.'
-                )}
-                {step === 'OTP' && (
-                  <>
-                    Enter the 6-digit code sent to <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>
-                  </>
-                )}
-                {step === 'OPTIONAL_PHONE' && (
-                  'Optionally add your mobile number to your scholar profile for recovery and notifications.'
-                )}
+                {showPasswordLogin 
+                  ? 'Sign in using your administrator username and master password.'
+                  : 'Access academic discussions, post questions, and share solutions with your verified Google account.'}
               </p>
             </div>
 
-            {/* Current user session alert if already logged in */}
-            {currentUser && step === 'EMAIL' && (
+            {/* Currently authenticated notice */}
+            {currentUser && !showPasswordLogin && (
               <div style={{
-                marginBottom: '20px',
-                padding: '12px 16px',
+                marginBottom: '22px',
+                padding: '14px 16px',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--bg-accent-subtle)',
                 border: '1px solid var(--border-light)',
@@ -438,7 +276,7 @@ function LoginFormContent() {
                 gap: '10px'
               }}>
                 <div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Currently authenticated:</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Currently signed in:</div>
                   <strong style={{ color: 'var(--text-primary)' }}>{currentUser.name}</strong>{' '}
                   <span style={{ fontSize: '11px', color: currentUser.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)' }}>
                     ({currentUser.role === 'admin' ? 'Admin' : `@${currentUser.id}`})
@@ -454,7 +292,7 @@ function LoginFormContent() {
               </div>
             )}
 
-            {/* Error Message Alert */}
+            {/* Error Banner */}
             {error && (
               <div style={{ 
                 display: 'flex', 
@@ -473,108 +311,89 @@ function LoginFormContent() {
               </div>
             )}
 
-            {/* Success Message Alert */}
-            {successMessage && !error && (
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'flex-start', 
-                gap: '10px', 
-                padding: '12px 14px', 
-                borderRadius: 'var(--radius-md)', 
-                background: 'var(--color-success-bg)', 
-                color: 'var(--color-success)', 
-                fontSize: '13px', 
-                marginBottom: '20px',
-                border: '1px solid rgba(5, 150, 105, 0.2)'
-              }}>
-                <CheckCircle2 size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ lineHeight: 1.4 }}>{successMessage}</span>
-              </div>
-            )}
-
-            {/* ---------------- STEP 1: EMAIL INPUT ---------------- */}
-            {step === 'EMAIL' && !showPasswordLogin && (
-              <form onSubmit={handleSendOtp} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" htmlFor="email-input">
-                    Email Address
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <Mail 
-                      size={18} 
-                      style={{ 
-                        position: 'absolute', 
-                        left: '14px', 
-                        top: '50%', 
-                        transform: 'translateY(-50%)', 
-                        color: 'var(--text-muted)' 
-                      }} 
-                    />
-                    <input
-                      id="email-input"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@domain.com"
-                      required
-                      autoFocus
-                      autoComplete="email"
-                      className="form-input"
-                      style={{ paddingLeft: '44px', height: '48px', fontSize: '15px' }}
-                    />
-                  </div>
-                </div>
-
+            {/* Main Google Sign-In Action */}
+            {!showPasswordLogin && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <button
-                  type="submit"
-                  disabled={loading || !email.trim()}
-                  className="btn btn-primary"
-                  style={{ 
-                    height: '48px', 
-                    fontSize: '15px', 
-                    fontWeight: 700, 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    gap: '8px',
-                    borderRadius: 'var(--radius-md)'
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '12px',
+                    width: '100%',
+                    height: '52px',
+                    padding: '0 20px',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border-medium)',
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-primary)',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    cursor: loading ? 'default' : 'pointer',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
+                    transition: 'all var(--transition-fast)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!loading) {
+                      e.currentTarget.style.boxShadow = '0 3px 8px rgba(0, 0, 0, 0.12)';
+                      e.currentTarget.style.borderColor = 'var(--color-accent)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.08)';
+                    e.currentTarget.style.borderColor = 'var(--border-medium)';
                   }}
                 >
                   {loading ? (
-                    'Sending Code...'
+                    <>
+                      <RefreshCw size={18} style={{ animation: 'spin 1.2s linear infinite', color: 'var(--color-accent)' }} />
+                      <span>Connecting to Google...</span>
+                    </>
                   ) : (
                     <>
-                      <span>Send Verification Code</span>
-                      <ArrowRight size={18} />
+                      <GoogleIcon />
+                      <span>Continue with Google</span>
                     </>
                   )}
                 </button>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', fontSize: '13px' }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!email.trim()) {
-                        setError('Please enter your email address first.');
-                        return;
-                      }
-                      setStep('OTP');
-                      setError(null);
-                      setSuccessMessage('Enter the 6-digit code received in your email.');
-                      setTimeout(() => inputRefs.current[0]?.focus(), 100);
-                    }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--color-accent)',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      padding: 0,
-                      textDecoration: 'underline'
-                    }}
-                  >
-                    Already have a code? Enter it here →
-                  </button>
+                {/* Dev Quick Fallback */}
+                {showDevFallback && (
+                  <form onSubmit={handleDevQuickLogin} style={{ marginTop: '12px', padding: '16px', background: 'var(--bg-accent-subtle)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--color-accent)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--color-accent)', marginBottom: '8px' }}>
+                      <Sparkles size={14} />
+                      <span>One-Click Development Sign-In</span>
+                    </div>
+                    <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '0 0 10px 0' }}>
+                      Sign in directly with your Google email while OAuth configuration is being finalized:
+                    </p>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="email"
+                        value={devEmail}
+                        onChange={(e) => setDevEmail(e.target.value)}
+                        placeholder="your-email@gmail.com"
+                        required
+                        className="form-input"
+                        style={{ height: '38px', fontSize: '13px' }}
+                      />
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn btn-primary"
+                        style={{ height: '38px', fontSize: '13px', padding: '0 14px', whiteSpace: 'nowrap' }}
+                      >
+                        Sign In →
+                      </button>
+                    </div>
+                  </form>
+                )}
 
+                <div style={{ textAlign: 'center', marginTop: '14px', paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
                   <button
                     type="button"
                     onClick={() => { setShowPasswordLogin(true); setError(null); }}
@@ -587,15 +406,15 @@ function LoginFormContent() {
                       textDecoration: 'underline'
                     }}
                   >
-                    Admin login
+                    Admin password login
                   </button>
                 </div>
-              </form>
+              </div>
             )}
 
-            {/* ---------------- FALLBACK: ADMIN PASSWORD LOGIN ---------------- */}
-            {step === 'EMAIL' && showPasswordLogin && (
-              <form onSubmit={handleLegacyPasswordLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Fallback: Admin Username & Password Login */}
+            {showPasswordLogin && (
+              <form onSubmit={handleAdminPasswordLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label" htmlFor="admin-userid">Admin Username</label>
                   <div style={{ position: 'relative' }}>
@@ -607,6 +426,7 @@ function LoginFormContent() {
                       onChange={(e) => setAdminUserId(e.target.value)}
                       placeholder="admin"
                       required
+                      autoFocus
                       className="form-input"
                       style={{ paddingLeft: '44px', height: '46px' }}
                     />
@@ -652,206 +472,7 @@ function LoginFormContent() {
                       fontWeight: 600
                     }}
                   >
-                    ← Back to Email OTP login
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* ---------------- STEP 2: 6-DIGIT OTP BOXES ---------------- */}
-            {step === 'OTP' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {/* 6 Digit Input Group */}
-                <div>
-                  <label className="form-label" style={{ display: 'block', textAlign: 'center', marginBottom: '12px' }}>
-                    Enter 6-Digit Code
-                  </label>
-                  <div 
-                    style={{ 
-                      display: 'flex', 
-                      gap: '8px', 
-                      justifyContent: 'center',
-                      direction: 'ltr'
-                    }}
-                    onPaste={handlePaste}
-                  >
-                    {otpDigits.map((digit, idx) => (
-                      <input
-                        key={idx}
-                        ref={(el) => { inputRefs.current[idx] = el; }}
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        maxLength={1}
-                        autoComplete="one-time-code"
-                        value={digit}
-                        onChange={(e) => handleDigitChange(idx, e.target.value)}
-                        onKeyDown={(e) => handleDigitKeyDown(idx, e)}
-                        className="form-input"
-                        style={{
-                          width: '48px',
-                          height: '56px',
-                          textAlign: 'center',
-                          fontSize: '22px',
-                          fontWeight: 700,
-                          borderRadius: 'var(--radius-md)',
-                          border: digit ? '2px solid var(--color-accent)' : '1px solid var(--border-medium)',
-                          background: digit ? 'var(--bg-accent-subtle)' : 'var(--bg-input)',
-                          color: 'var(--text-primary)',
-                          transition: 'all var(--transition-fast)'
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Verify Submit Button */}
-                <button
-                  type="button"
-                  onClick={() => handleVerifyOtp()}
-                  disabled={loading || otpDigits.join('').length !== 6}
-                  className="btn btn-primary"
-                  style={{ 
-                    height: '48px', 
-                    fontSize: '15px', 
-                    fontWeight: 700, 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    gap: '8px',
-                    borderRadius: 'var(--radius-md)'
-                  }}
-                >
-                  {loading ? 'Verifying Code...' : 'Verify & Continue'}
-                </button>
-
-                {/* Resend & Change Email Navigation */}
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  paddingTop: '12px',
-                  borderTop: '1px solid var(--border-light)',
-                  fontSize: '13px'
-                }}>
-                  <button
-                    type="button"
-                    onClick={() => { setStep('EMAIL'); setError(null); setSuccessMessage(null); }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--text-muted)',
-                      cursor: 'pointer',
-                      padding: 0
-                    }}
-                  >
-                    ← Change email
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleResendOtp}
-                    disabled={resendCooldown > 0 || loading}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: resendCooldown > 0 ? 'var(--text-muted)' : 'var(--color-accent)',
-                      fontWeight: 600,
-                      cursor: resendCooldown > 0 ? 'default' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: 0
-                    }}
-                  >
-                    <RotateCcw size={13} />
-                    <span>
-                      {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend code'}
-                    </span>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* ---------------- STEP 3: OPTIONAL MOBILE NUMBER ---------------- */}
-            {step === 'OPTIONAL_PHONE' && (
-              <form onSubmit={handleSavePhone} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-                <div style={{
-                  padding: '12px 14px',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-accent-subtle)',
-                  border: '1px solid var(--border-light)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  fontSize: '13px',
-                  color: 'var(--color-accent)'
-                }}>
-                  <Sparkles size={18} style={{ flexShrink: 0 }} />
-                  <span>Welcome! Your academic account has been verified.</span>
-                </div>
-
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <label className="form-label" htmlFor="phone-input" style={{ margin: 0 }}>
-                      Mobile Number
-                    </label>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Optional</span>
-                  </div>
-                  <div style={{ position: 'relative' }}>
-                    <Phone 
-                      size={18} 
-                      style={{ 
-                        position: 'absolute', 
-                        left: '14px', 
-                        top: '50%', 
-                        transform: 'translateY(-50%)', 
-                        color: 'var(--text-muted)' 
-                      }} 
-                    />
-                    <input
-                      id="phone-input"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+1 (555) 000-0000"
-                      autoFocus
-                      autoComplete="tel"
-                      className="form-input"
-                      style={{ paddingLeft: '44px', height: '48px', fontSize: '15px' }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '6px' }}>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn btn-primary"
-                    style={{ 
-                      height: '48px', 
-                      fontSize: '15px', 
-                      fontWeight: 700, 
-                      display: 'flex', 
-                      justifyContent: 'center',
-                      borderRadius: 'var(--radius-md)'
-                    }}
-                  >
-                    {phone.trim() ? 'Save and Continue' : 'Continue'}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleFinishLogin(currentUser)}
-                    className="btn btn-outline"
-                    style={{ 
-                      height: '42px', 
-                      fontSize: '14px', 
-                      fontWeight: 600, 
-                      color: 'var(--text-muted)',
-                      borderRadius: 'var(--radius-md)'
-                    }}
-                  >
-                    Skip for now
+                    ← Back to Google sign in
                   </button>
                 </div>
               </form>
@@ -859,13 +480,20 @@ function LoginFormContent() {
 
           </div>
 
-          {/* Security Note Footer */}
+          {/* Footer */}
           <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '12.5px', color: 'var(--text-muted)' }}>
-            <span>Protected by cryptographic one-time verification. Codes expire in 5 minutes.</span>
+            <span>Protected by Google Single Sign-On and cryptographic session tokens.</span>
           </div>
 
         </div>
       </main>
+
+      <style jsx global>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
