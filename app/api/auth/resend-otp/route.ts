@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error('resend-otp error:', err?.message || err);
     return NextResponse.json(
-      { error: 'Failed to resend verification code. Please try again.' },
+      { error: err?.message?.includes('SMTP') ? 'Email service temporarily unavailable. Please try again in a moment.' : (err?.message || 'Failed to resend verification code. Please try again.') },
       { status: 500 }
     );
   }

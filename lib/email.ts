@@ -27,10 +27,10 @@ export async function sendOtpEmail({ to, otp }: SendOtpEmailParams): Promise<{ s
 
   // SMTP Mode
   const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || 587);
+  const port = Number(process.env.SMTP_PORT || 465);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const from = process.env.EMAIL_FROM || '"RecursiveQnA Security" <no-reply@recursiveqna.org>';
+  const from = process.env.EMAIL_FROM || (user ? `"RecursiveQnA Security" <${user}>` : '"RecursiveQnA Security" <no-reply@recursiveqna.org>');
 
   if (!host || !user || !pass) {
     throw new Error('Incomplete SMTP configuration. Please define SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS.');
@@ -40,6 +40,8 @@ export async function sendOtpEmail({ to, otp }: SendOtpEmailParams): Promise<{ s
     host,
     port,
     secure: port === 465,
+    pool: true,
+    maxConnections: 5,
     auth: {
       user,
       pass,
