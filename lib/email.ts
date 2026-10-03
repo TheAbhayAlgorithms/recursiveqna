@@ -36,20 +36,29 @@ export async function sendOtpEmail({ to, otp }: SendOtpEmailParams): Promise<{ s
     throw new Error('Incomplete SMTP configuration. Please define SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS.');
   }
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    pool: true,
-    maxConnections: 5,
-    auth: {
-      user,
-      pass,
-    },
-    tls: {
-      rejectUnauthorized: isProd,
-    },
-  });
+  const isGmail = host?.includes('gmail') || user?.includes('gmail.com');
+  const transporterConfig: any = isGmail
+    ? {
+        service: 'gmail',
+        auth: { user, pass },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
+      }
+    : {
+        host,
+        port,
+        secure: port === 465,
+        auth: { user, pass },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
+        tls: {
+          rejectUnauthorized: isProd,
+        },
+      };
+
+  const transporter = nodemailer.createTransport(transporterConfig);
 
   const subject = `Your RecursiveQnA Verification Code: ${otp}`;
   const textContent = `Your RecursiveQnA verification code is: ${otp}\n\nThis code is valid for 5 minutes. If you didn't request this, ignore this email.\n\n— The RecursiveQnA Team`;

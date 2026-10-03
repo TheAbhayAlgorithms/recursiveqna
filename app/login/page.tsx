@@ -87,6 +87,7 @@ function LoginFormContent() {
   // Step 1: Send OTP
   const handleSendOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (loading) return; // Prevent concurrent duplicate submissions
     setError(null);
     setSuccessMessage(null);
 
@@ -108,10 +109,20 @@ function LoginFormContent() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(data.error || 'Failed to send verification code. Please try again.');
-        if (data.cooldownRemaining) {
-          setResendCooldown(data.cooldownRemaining);
+        // If an OTP was already dispatched within cooldown, transition directly to OTP step
+        if (data.cooldownRemaining || (data.error && data.error.toLowerCase().includes('wait'))) {
+          setStep('OTP');
+          setResendCooldown(data.cooldownRemaining || 30);
+          setSuccessMessage('A verification code was recently sent to your email. Enter it below.');
+          setError(null);
+          setTimeout(() => {
+            inputRefs.current[0]?.focus();
+          }, 100);
+          setLoading(false);
+          return;
         }
+
+        setError(data.error || 'Failed to send verification code. Please try again.');
         setLoading(false);
         return;
       }
@@ -538,7 +549,32 @@ function LoginFormContent() {
                   )}
                 </button>
 
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', fontSize: '13px' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!email.trim()) {
+                        setError('Please enter your email address first.');
+                        return;
+                      }
+                      setStep('OTP');
+                      setError(null);
+                      setSuccessMessage('Enter the 6-digit code received in your email.');
+                      setTimeout(() => inputRefs.current[0]?.focus(), 100);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-accent)',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                      padding: 0,
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Already have a code? Enter it here →
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => { setShowPasswordLogin(true); setError(null); }}
@@ -551,7 +587,7 @@ function LoginFormContent() {
                       textDecoration: 'underline'
                     }}
                   >
-                    Admin password login
+                    Admin login
                   </button>
                 </div>
               </form>
