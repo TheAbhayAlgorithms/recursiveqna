@@ -111,6 +111,18 @@
       "namedRegex": "^/api/auth/google(?:/)?$"
     },
     {
+      "page": "/api/auth/google/callback",
+      "regex": "^/api/auth/google/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/google/callback(?:/)?$"
+    },
+    {
+      "page": "/api/auth/google/login",
+      "regex": "^/api/auth/google/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/google/login(?:/)?$"
+    },
+    {
       "page": "/api/auth/login",
       "regex": "^/api/auth/login(?:/)?$",
       "routeKeys": {},

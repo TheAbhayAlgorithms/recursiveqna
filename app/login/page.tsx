@@ -8,11 +8,11 @@ import {
   Lock, 
   User as UserIcon,
   AlertCircle, 
-  CheckCircle2, 
-  ArrowRight,
   ShieldCheck,
   RefreshCw,
-  Sparkles
+  ExternalLink,
+  Copy,
+  Check
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { getSupabase } from '@/lib/supabase';
@@ -50,12 +50,17 @@ function LoginFormContent() {
   const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
-  const [showDevFallback, setShowDevFallback] = useState(false);
-  const [devEmail, setDevEmail] = useState('imabbhhhay@gmail.com');
+  const [showSupabaseSetup, setShowSupabaseSetup] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Admin password credentials
   const [adminUserId, setAdminUserId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const projectRef = supabaseUrl ? supabaseUrl.replace('https://', '').split('.')[0] : 'huadrmmnlvzdmtqkyldc';
+  const supabaseDashboardUrl = `https://supabase.com/dashboard/project/${projectRef}/auth/providers`;
+  const supabaseCallbackUrl = `https://${projectRef}.supabase.co/auth/v1/callback`;
 
   // Check existing session
   useEffect(() => {
@@ -84,6 +89,7 @@ function LoginFormContent() {
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setError(null);
+    setShowSupabaseSetup(false);
     setLoading(true);
 
     try {
@@ -100,7 +106,7 @@ function LoginFormContent() {
           redirectTo: callbackUrl,
           queryParams: {
             access_type: 'offline',
-            prompt: 'select_account',
+            prompt: 'select_account', // Forces Google to show the account picker
           },
         },
       });
@@ -108,8 +114,7 @@ function LoginFormContent() {
       if (oauthError) {
         const msg = oauthError.message || '';
         if (msg.toLowerCase().includes('not enabled') || msg.toLowerCase().includes('unsupported provider')) {
-          setError('Google OAuth provider is not yet enabled in your Supabase project dashboard. You can enable it under Authentication > Providers > Google, or use the dev quick sign-in below.');
-          setShowDevFallback(true);
+          setShowSupabaseSetup(true);
           setLoading(false);
           return;
         }
@@ -127,38 +132,10 @@ function LoginFormContent() {
     }
   };
 
-  // Fallback Dev Quick Sign-in (for development or if Supabase Google Provider is pending)
-  const handleDevQuickLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!devEmail || !devEmail.includes('@')) {
-      setError('Please enter a valid Google email address.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch('/api/auth/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: devEmail.trim().toLowerCase(),
-          name: devEmail.split('@')[0],
-          isDevFallback: true,
-        }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to authenticate.');
-      }
-
-      handleFinishLogin(data.user);
-    } catch (err: any) {
-      setError(err?.message || 'Authentication error.');
-      setLoading(false);
-    }
+  const handleCopyCallbackUrl = () => {
+    navigator.clipboard.writeText(supabaseCallbackUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   // Administrator Password Login
@@ -228,7 +205,7 @@ function LoginFormContent() {
 
       {/* Main Container */}
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
-        <div style={{ width: '100%', maxWidth: '440px' }}>
+        <div style={{ width: '100%', maxWidth: '460px' }}>
           
           {/* Card */}
           <div className="card" style={{ padding: '36px 32px', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)', borderRadius: 'var(--radius-lg)' }}>
@@ -257,7 +234,7 @@ function LoginFormContent() {
               <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
                 {showPasswordLogin 
                   ? 'Sign in using your administrator username and master password.'
-                  : 'Access academic discussions, post questions, and share solutions with your verified Google account.'}
+                  : 'Access academic discussions, post questions, and share solutions with your Google account.'}
               </p>
             </div>
 
@@ -293,7 +270,7 @@ function LoginFormContent() {
             )}
 
             {/* Error Banner */}
-            {error && (
+            {error && !showSupabaseSetup && (
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'flex-start', 
@@ -308,6 +285,91 @@ function LoginFormContent() {
               }}>
                 <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
                 <span style={{ lineHeight: 1.4 }}>{error}</span>
+              </div>
+            )}
+
+            {/* Supabase Provider Setup Guide (Shown only if Google provider is toggled OFF in Supabase) */}
+            {showSupabaseSetup && !showPasswordLogin && (
+              <div style={{
+                marginBottom: '20px',
+                padding: '18px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--bg-accent-subtle)',
+                border: '1px solid var(--border-medium)',
+                fontSize: '13px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-accent)', fontWeight: 700, marginBottom: '8px' }}>
+                  <AlertCircle size={18} />
+                  <span>One-Time Supabase Setup Required</span>
+                </div>
+                
+                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, margin: '0 0 12px 0' }}>
+                  To redirect to the Google account selection page, enable the <strong>Google provider</strong> in your Supabase Dashboard:
+                </p>
+
+                <ol style={{ paddingLeft: '18px', margin: '0 0 14px 0', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  <li>Open the Supabase Providers dashboard.</li>
+                  <li>Toggle <strong>Google</strong> to <strong>Enabled</strong>.</li>
+                  <li>Paste your Google OAuth <strong>Client ID</strong> and <strong>Secret</strong>.</li>
+                </ol>
+
+                <div style={{ background: 'var(--bg-card)', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-light)', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    Google Cloud Authorized Redirect URI:
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                    <code style={{ fontSize: '11.5px', wordBreak: 'break-all', color: 'var(--text-primary)' }}>
+                      {supabaseCallbackUrl}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={handleCopyCallbackUrl}
+                      title="Copy URI"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: copied ? 'var(--color-success)' : 'var(--color-accent)',
+                        cursor: 'pointer',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {copied ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <a
+                    href={supabaseDashboardUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                    style={{
+                      flex: 1,
+                      height: '38px',
+                      fontSize: '13px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    <span>Open Supabase Dashboard</span>
+                    <ExternalLink size={14} />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignIn}
+                    className="btn btn-outline"
+                    style={{ height: '38px', fontSize: '13px', padding: '0 14px' }}
+                  >
+                    Retry
+                  </button>
+                </div>
               </div>
             )}
 
@@ -351,7 +413,7 @@ function LoginFormContent() {
                   {loading ? (
                     <>
                       <RefreshCw size={18} style={{ animation: 'spin 1.2s linear infinite', color: 'var(--color-accent)' }} />
-                      <span>Connecting to Google...</span>
+                      <span>Opening Google...</span>
                     </>
                   ) : (
                     <>
@@ -360,38 +422,6 @@ function LoginFormContent() {
                     </>
                   )}
                 </button>
-
-                {/* Dev Quick Fallback */}
-                {showDevFallback && (
-                  <form onSubmit={handleDevQuickLogin} style={{ marginTop: '12px', padding: '16px', background: 'var(--bg-accent-subtle)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--color-accent)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--color-accent)', marginBottom: '8px' }}>
-                      <Sparkles size={14} />
-                      <span>One-Click Development Sign-In</span>
-                    </div>
-                    <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '0 0 10px 0' }}>
-                      Sign in directly with your Google email while OAuth configuration is being finalized:
-                    </p>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input
-                        type="email"
-                        value={devEmail}
-                        onChange={(e) => setDevEmail(e.target.value)}
-                        placeholder="your-email@gmail.com"
-                        required
-                        className="form-input"
-                        style={{ height: '38px', fontSize: '13px' }}
-                      />
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn btn-primary"
-                        style={{ height: '38px', fontSize: '13px', padding: '0 14px', whiteSpace: 'nowrap' }}
-                      >
-                        Sign In →
-                      </button>
-                    </div>
-                  </form>
-                )}
 
                 <div style={{ textAlign: 'center', marginTop: '14px', paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
                   <button
