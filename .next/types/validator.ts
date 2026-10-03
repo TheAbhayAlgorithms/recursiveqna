@@ -128,6 +128,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/auth/google/configure/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/google/configure">> = Specific
+  const handler = {} as typeof import("../../app/api/auth/google/configure/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/auth/google/login/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/google/login">> = Specific
@@ -141,6 +150,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/google">> = Specific
   const handler = {} as typeof import("../../app/api/auth/google/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/auth/google/status/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/google/status">> = Specific
+  const handler = {} as typeof import("../../app/api/auth/google/status/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

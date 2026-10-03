@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { signToken, setAuthCookies, UserSession } from '@/lib/auth';
+import { signToken, setAuthCookies, getPublicOrigin, UserSession } from '@/lib/auth';
 
 function generateHandleFromEmail(email: string): string {
   const prefix = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
@@ -9,10 +9,12 @@ function generateHandleFromEmail(email: string): string {
 }
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
+  const origin = getPublicOrigin(request);
   const code = searchParams.get('code');
   const state = searchParams.get('state');
   const error = searchParams.get('error');
+
 
   let redirectDestination = '/';
   if (state) {
@@ -28,9 +30,10 @@ export async function GET(request: Request) {
     return NextResponse.redirect(loginUrl.toString());
   }
 
-  const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const googleClientId = (process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)?.trim();
+  const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
   const redirectUri = `${origin}/api/auth/google/callback`;
+
 
   if (!googleClientId || !googleClientSecret) {
     const loginUrl = new URL('/login', origin);

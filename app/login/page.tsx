@@ -6,16 +6,18 @@ import Link from 'next/link';
 import { 
   GraduationCap, 
   Lock, 
-  User as UserIcon,
+  User as UserIcon, 
   AlertCircle, 
-  ShieldCheck,
-  RefreshCw,
-  ExternalLink,
-  Copy,
-  Check
+  ShieldCheck, 
+  RefreshCw, 
+  ExternalLink, 
+  Copy, 
+  Check, 
+  KeyRound, 
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
-import { getSupabase } from '@/lib/supabase';
 
 function GoogleIcon() {
   return (
@@ -44,26 +46,45 @@ function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get('redirect') || '/';
+  const urlError = searchParams.get('error');
 
   // State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
-  const [showSupabaseSetup, setShowSupabaseSetup] = useState(false);
+  const [showGoogleSetup, setShowGoogleSetup] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [clientOrigin, setClientOrigin] = useState('');
+
+  // Quick Google Config in modal/banner
+  const [configClientId, setConfigClientId] = useState('');
+  const [configClientSecret, setConfigClientSecret] = useState('');
+  const [savingConfig, setSavingConfig] = useState(false);
 
   // Admin password credentials
   const [adminUserId, setAdminUserId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const projectRef = supabaseUrl ? supabaseUrl.replace('https://', '').split('.')[0] : 'huadrmmnlvzdmtqkyldc';
-  const supabaseDashboardUrl = `https://supabase.com/dashboard/project/${projectRef}/auth/providers`;
-  const supabaseCallbackUrl = `https://${projectRef}.supabase.co/auth/v1/callback`;
+  const callbackUrl = clientOrigin 
+    ? `${clientOrigin}/api/auth/google/callback` 
+    : 'http://localhost:3000/api/auth/google/callback';
 
-  // Check existing session
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setClientOrigin(window.location.origin);
+    }
+
+    if (urlError === 'google_not_configured' || urlError === 'google_credentials_missing') {
+      setShowGoogleSetup(true);
+      setError(null);
+    } else if (urlError === 'google_auth_failed') {
+      setError('Google authentication was cancelled or could not be completed.');
+    } else if (urlError) {
+      setError(`Sign-in error: ${urlError}`);
+    }
+
+    // Check existing session
     fetch('/api/auth/me')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
@@ -72,7 +93,7 @@ function LoginFormContent() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [urlError]);
 
   const handleFinishLogin = (userObj: any) => {
     if (redirectParam && redirectParam !== '/') {
@@ -85,55 +106,65 @@ function LoginFormContent() {
     router.refresh();
   };
 
-  // Google Sign-In Handler via Supabase OAuth
+  // Google Sign-In Handler
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setError(null);
-    setShowSupabaseSetup(false);
     setLoading(true);
 
     try {
-      const supabase = getSupabase();
-      if (!supabase) {
-        throw new Error('Supabase client is not configured.');
+      const res = await fetch('/api/auth/google/status');
+      const data = await res.json().catch(() => ({}));
+      
+      if (data?.configured) {
+        // Automatically jump to Google's official sign-in page!
+        window.location.href = `/api/auth/google/login?redirect=${encodeURIComponent(redirectParam)}`;
+        return;
       }
 
-      const callbackUrl = `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectParam)}`;
-      
-      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: callbackUrl,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'select_account', // Forces Google to show the account picker
-          },
-        },
+      // If credentials not configured yet, show setup guide
+      setShowGoogleSetup(true);
+      setLoading(false);
+    } catch {
+      window.location.href = `/api/auth/google/login?redirect=${encodeURIComponent(redirectParam)}`;
+    }
+  };
+
+  // Save Google OAuth Credentials
+  const handleSaveGoogleConfig = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!configClientId.trim() || !configClientSecret.trim()) {
+      setError('Please provide both Google Client ID and Google Client Secret.');
+      return;
+    }
+    setSavingConfig(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/auth/google/configure', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientId: configClientId.trim(),
+          clientSecret: configClientSecret.trim(),
+        }),
       });
 
-      if (oauthError) {
-        const msg = oauthError.message || '';
-        if (msg.toLowerCase().includes('not enabled') || msg.toLowerCase().includes('unsupported provider')) {
-          setShowSupabaseSetup(true);
-          setLoading(false);
-          return;
-        }
-        throw oauthError;
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || 'Failed to save configuration.');
       }
 
-      // If data.url is returned, navigate to Google auth
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      // Immediately and automatically jump to Google page!
+      window.location.href = `/api/auth/google/login?redirect=${encodeURIComponent(redirectParam)}`;
     } catch (err: any) {
-      console.error('Google Sign In Error:', err);
-      setError(err?.message || 'Failed to initiate Google sign in. Please try again.');
-      setLoading(false);
+      setError(err?.message || 'Failed to save Google configuration.');
+      setSavingConfig(false);
     }
   };
 
   const handleCopyCallbackUrl = () => {
-    navigator.clipboard.writeText(supabaseCallbackUrl);
+    navigator.clipboard.writeText(callbackUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -205,7 +236,7 @@ function LoginFormContent() {
 
       {/* Main Container */}
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
-        <div style={{ width: '100%', maxWidth: '460px' }}>
+        <div style={{ width: '100%', maxWidth: '480px' }}>
           
           {/* Card */}
           <div className="card" style={{ padding: '36px 32px', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)', borderRadius: 'var(--radius-lg)' }}>
@@ -249,20 +280,34 @@ function LoginFormContent() {
                 fontSize: '13px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '10px'
+                justifyContent: 'space-between'
               }}>
-                <div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Currently signed in:</div>
-                  <strong style={{ color: 'var(--text-primary)' }}>{currentUser.name}</strong>{' '}
-                  <span style={{ fontSize: '11px', color: currentUser.role === 'admin' ? 'var(--color-danger)' : 'var(--text-muted)' }}>
-                    ({currentUser.role === 'admin' ? 'Admin' : `@${currentUser.id}`})
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: 'var(--color-accent)',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 700,
+                    fontSize: '13px'
+                  }}>
+                    {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{currentUser.name}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{currentUser.email || currentUser.id}</div>
+                  </div>
                 </div>
-                <button 
+
+                <button
+                  type="button"
                   onClick={() => handleFinishLogin(currentUser)}
-                  className="btn btn-primary" 
-                  style={{ fontSize: '12px', padding: '6px 14px' }}
+                  className="btn btn-primary"
+                  style={{ fontSize: '12.5px', padding: '6px 14px', height: '34px' }}
                 >
                   Continue →
                 </button>
@@ -270,12 +315,12 @@ function LoginFormContent() {
             )}
 
             {/* Error Banner */}
-            {error && !showSupabaseSetup && (
+            {error && (
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'flex-start', 
                 gap: '10px', 
-                padding: '12px 14px', 
+                padding: '14px 16px', 
                 borderRadius: 'var(--radius-md)', 
                 background: 'var(--color-danger-bg)', 
                 color: 'var(--color-danger)', 
@@ -288,43 +333,61 @@ function LoginFormContent() {
               </div>
             )}
 
-            {/* Supabase Provider Setup Guide (Shown only if Google provider is toggled OFF in Supabase) */}
-            {showSupabaseSetup && !showPasswordLogin && (
+            {/* Google OAuth Setup Guide Form */}
+            {showGoogleSetup && !showPasswordLogin && (
               <div style={{
-                marginBottom: '20px',
-                padding: '18px',
+                marginBottom: '22px',
+                padding: '20px',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--bg-accent-subtle)',
                 border: '1px solid var(--border-medium)',
                 fontSize: '13px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-accent)', fontWeight: 700, marginBottom: '8px' }}>
-                  <AlertCircle size={18} />
-                  <span>One-Time Supabase Setup Required</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-accent)', fontWeight: 700, marginBottom: '6px' }}>
+                  <KeyRound size={18} />
+                  <span>Google Cloud OAuth Setup</span>
                 </div>
                 
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, margin: '0 0 12px 0' }}>
-                  To redirect to the Google account selection page, enable the <strong>Google provider</strong> in your Supabase Dashboard:
+                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, margin: '0 0 14px 0' }}>
+                  To allow the button to jump directly to Google, connect your Google Cloud OAuth Client ID & Secret:
                 </p>
 
-                <ol style={{ paddingLeft: '18px', margin: '0 0 14px 0', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  <li>Open the Supabase Providers dashboard.</li>
-                  <li>Toggle <strong>Google</strong> to <strong>Enabled</strong>.</li>
-                  <li>Paste your Google OAuth <strong>Client ID</strong> and <strong>Secret</strong>.</li>
-                </ol>
-
-                <div style={{ background: 'var(--bg-card)', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-light)', marginBottom: '14px' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                    Google Cloud Authorized Redirect URI:
+                {/* Step Instructions */}
+                <div style={{ 
+                  background: 'var(--bg-card)', 
+                  padding: '12px 14px', 
+                  borderRadius: '6px', 
+                  border: '1px solid var(--border-light)', 
+                  marginBottom: '14px' 
+                }}>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                    Quick 2-Minute Steps:
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                    <code style={{ fontSize: '11.5px', wordBreak: 'break-all', color: 'var(--text-primary)' }}>
-                      {supabaseCallbackUrl}
+                  <ol style={{ paddingLeft: '18px', margin: '0 0 10px 0', color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '12.5px' }}>
+                    <li>
+                      Open{' '}
+                      <a 
+                        href="https://console.cloud.google.com/apis/credentials" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--color-accent)', fontWeight: 600, textDecoration: 'underline' }}
+                      >
+                        Google Cloud Console Credentials <ExternalLink size={11} style={{ display: 'inline' }} />
+                      </a>
+                    </li>
+                    <li>Click <strong>+ CREATE CREDENTIALS</strong> → <strong>OAuth client ID</strong>.</li>
+                    <li>Select Application type: <strong>Web application</strong>.</li>
+                    <li>Under <strong>Authorized redirect URIs</strong>, paste the URI below:</li>
+                  </ol>
+
+                  <div style={{ background: 'var(--bg-main)', padding: '8px 10px', borderRadius: '6px', border: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                    <code style={{ fontSize: '11px', wordBreak: 'break-all', color: 'var(--text-primary)' }}>
+                      {callbackUrl}
                     </code>
                     <button
                       type="button"
                       onClick={handleCopyCallbackUrl}
-                      title="Copy URI"
+                      title="Copy Redirect URI"
                       style={{
                         background: 'none',
                         border: 'none',
@@ -332,7 +395,8 @@ function LoginFormContent() {
                         cursor: 'pointer',
                         padding: '4px',
                         display: 'flex',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        flexShrink: 0
                       }}
                     >
                       {copied ? <Check size={16} /> : <Copy size={16} />}
@@ -340,36 +404,78 @@ function LoginFormContent() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <a
-                    href={supabaseDashboardUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary"
-                    style={{
-                      flex: 1,
-                      height: '38px',
-                      fontSize: '13px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      textDecoration: 'none'
-                    }}
-                  >
-                    <span>Open Supabase Dashboard</span>
-                    <ExternalLink size={14} />
-                  </a>
+                {/* Direct Configuration Form */}
+                <form onSubmit={handleSaveGoogleConfig} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                      Google Client ID
+                    </label>
+                    <input
+                      type="text"
+                      value={configClientId}
+                      onChange={(e) => setConfigClientId(e.target.value)}
+                      placeholder="xxxxxxxxxxxx-xxxxxxxxxxxxxxxx.apps.googleusercontent.com"
+                      required
+                      className="form-input"
+                      style={{ height: '38px', fontSize: '12.5px' }}
+                    />
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={handleGoogleSignIn}
-                    className="btn btn-outline"
-                    style={{ height: '38px', fontSize: '13px', padding: '0 14px' }}
-                  >
-                    Retry
-                  </button>
-                </div>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                      Google Client Secret
+                    </label>
+                    <input
+                      type="password"
+                      value={configClientSecret}
+                      onChange={(e) => setConfigClientSecret(e.target.value)}
+                      placeholder="GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxx"
+                      required
+                      className="form-input"
+                      style={{ height: '38px', fontSize: '12.5px' }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                    <button
+                      type="submit"
+                      disabled={savingConfig || !configClientId.trim() || !configClientSecret.trim()}
+                      className="btn btn-primary"
+                      style={{
+                        flex: 1,
+                        height: '40px',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      {savingConfig ? (
+                        <>
+                          <RefreshCw size={15} style={{ animation: 'spin 1.2s linear infinite' }} />
+                          <span>Saving & Jumping to Google...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={15} />
+                          <span>Save & Jump to Google</span>
+                          <ArrowRight size={14} />
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowGoogleSetup(false)}
+                      className="btn btn-outline"
+                      style={{ height: '40px', fontSize: '13px', padding: '0 14px' }}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </form>
               </div>
             )}
 
@@ -378,8 +484,9 @@ function LoginFormContent() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <button
                   type="button"
+                  id="google-signin-btn"
                   onClick={handleGoogleSignIn}
-                  disabled={loading}
+                  disabled={loading || savingConfig}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
